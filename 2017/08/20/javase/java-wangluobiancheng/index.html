@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaSE," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="java基础之网络编程网络编程就是在两个或两个以上的设备(例如计算机)之间传输数据。程序员所作的事情就是把数据发送到指定的位置，或者接收到指定的数据，这个就是狭义的网络编程范畴">
+<meta name="keywords" content="JavaSE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA基础(十)网络编程">
+<meta property="og:url" content="http://yoursite.com/2017/08/20/javase/java-wangluobiancheng/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="java基础之网络编程网络编程就是在两个或两个以上的设备(例如计算机)之间传输数据。程序员所作的事情就是把数据发送到指定的位置，或者接收到指定的数据，这个就是狭义的网络编程范畴">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/08/20/javase/java-wangluobiancheng/ip00.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/08/20/javase/java-wangluobiancheng/ip01.jpg">
+<meta property="og:updated_time" content="2018-07-29T08:34:30.179Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JAVA基础(十)网络编程">
+<meta name="twitter:description" content="java基础之网络编程网络编程就是在两个或两个以上的设备(例如计算机)之间传输数据。程序员所作的事情就是把数据发送到指定的位置，或者接收到指定的数据，这个就是狭义的网络编程范畴">
+<meta name="twitter:image" content="http://yoursite.com/2017/08/20/javase/java-wangluobiancheng/ip00.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/20/javase/java-wangluobiancheng/"/>
+
+
+
+
+
+  <title>JAVA基础(十)网络编程 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/20/javase/java-wangluobiancheng/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JAVA基础(十)网络编程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-20T16:59:28+08:00">
+                2017-08-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/JavaSE/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaSE</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/20/javase/java-wangluobiancheng/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/08/20/javase/java-wangluobiancheng/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/08/20/javase/java-wangluobiancheng/" class="leancloud_visitors" data-flag-title="JAVA基础(十)网络编程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="java基础之网络编程"><a href="#java基础之网络编程" class="headerlink" title="java基础之网络编程"></a>java基础之网络编程</h2><p>网络编程就是在两个或两个以上的设备(例如计算机)之间传输数据。程序员所作的事情就是把数据发送到指定的位置，或者接收到指定的数据，这个就是狭义的网络编程范畴</p>
+<a id="more"></a>
+<h3 id="一、网络基本概念"><a href="#一、网络基本概念" class="headerlink" title="一、网络基本概念"></a>一、网络基本概念</h3><ol>
+<li><p>网络通信协议</p>
+<p>计算机网络中实现通信的一些约定即通信协议，对速率、传输代码、代码结构、传输控制步骤、出错控制等指定的标准</p>
+</li>
+<li><p>网络通信接口</p>
+<p>两个节点之间进行信息交流的接口，接口包括两部分：</p>
+<ul>
+<li>硬件装置：实现节点之间的信息传送</li>
+<li>软件装置：规定双方实现通信的约定协议</li>
+</ul>
+</li>
+<li><p>通信协议分层</p>
+<p>协议的复合方式是层次方式，同层间可以通信，上一层可以调用下一层，与下下一层不发生关系，各层互不影响，利于系统的开发和扩展</p>
+</li>
+<li><p>IP协议</p>
+<p>Internet Protocol协议网络层的主要协议，支持网间互连的数据报通信。它提供的主要功能有：</p>
+<ul>
+<li><p>无连接数据报传送</p>
+</li>
+<li><p>数据报路由选择和差错控制</p>
+</li>
+<li><p>网络号+主机号分为a、b、c类网</p>
+<p><img src="/2017/08/20/javase/java-wangluobiancheng/ip00.jpg" alt=""></p>
+</li>
+</ul>
+</li>
+<li><p>端口</p>
+<p>同一个ip地址上的不同的应用程序叫端口，分为TCP端口和UDP端口，TCP和UDP端口是分开的，分别有65536个</p>
+</li>
+</ol>
+<h3 id="二、OSI模型"><a href="#二、OSI模型" class="headerlink" title="二、OSI模型"></a>二、OSI模型</h3><p>OSI是Open System Interconnect，意为开放式系统互连，国际标准。</p>
+<table>
+<thead>
+<tr>
+<th>OSI</th>
+<th>TCP/IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用层</td>
+<td>应用层</td>
+</tr>
+<tr>
+<td>表示层</td>
+<td></td>
+</tr>
+<tr>
+<td>会话层</td>
+<td></td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>传输层(tcp/ip)</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>网络层（ip）</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td></td>
+</tr>
+<tr>
+<td>物理层</td>
+<td>物理+数据链路层</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-物理层"><a href="#1-物理层" class="headerlink" title="1. 物理层"></a>1. 物理层</h4><h4 id="2-数据链路层"><a href="#2-数据链路层" class="headerlink" title="2. 数据链路层"></a>2. 数据链路层</h4><h4 id="3-网络层"><a href="#3-网络层" class="headerlink" title="3. 网络层"></a>3. 网络层</h4><h4 id="4-传输层"><a href="#4-传输层" class="headerlink" title="4. 传输层"></a>4. 传输层</h4><h4 id="5-会话层"><a href="#5-会话层" class="headerlink" title="5. 会话层"></a>5. 会话层</h4><h4 id="6-表示层"><a href="#6-表示层" class="headerlink" title="6. 表示层"></a>6. 表示层</h4><h4 id="7-应用层"><a href="#7-应用层" class="headerlink" title="7. 应用层"></a>7. 应用层</h4><h3 id="三、TCP-UDP协议"><a href="#三、TCP-UDP协议" class="headerlink" title="三、TCP/UDP协议"></a>三、TCP/UDP协议</h3><p>TCP是transmission control protocol缩写，是专门设计用于在不可靠的因特网上提供可靠的，端到端的字节流通信的协议，是一种面向连接的协议。TCP连接的是字节流而非报文流。TCP负责发现传输的问题，一有问题就发出信号，要求重新传输，直到所有数据安全正确地传输到目的地。基于TCP/IP协议的应用程序分客户端和服务器端两部分</p>
+<p>TCP/IP特点：</p>
+<ul>
+<li>TCP/IP协议仅支持点对点通信，同一台消息不能同时发给多台计算机</li>
+<li>TCP/IP协议在通信前必须建立连接才能通信</li>
+<li>在通信连接建立前，服务器端必须首先建立侦听，客户端才能发出连接请求。当连接建立后服务端和客户端都能发送、接收数据</li>
+<li>TCP/IP协议会保证数据的正确性和传递的顺序，可靠性高</li>
+</ul>
+<p>UDP是user data protocol缩写，是ODI模型中一种无连接的传输层协议，UDP不提供数据包分组、组装、排序，UDP向应用程序提供了一种发送封装的原始IP数据包的方法，并且发送时无需建立连接，是不可靠的连接，但传输性能很高。网络视频会议系统这种客户/服务器模式的网络应用使用的是UDP协议</p>
+<p>TCP和UDP的区别：</p>
+<ul>
+<li>使用UDP时，每个数据报中都给出了完整的地址信息，因此无需要建立发送方和接收方的连接</li>
+<li>对于TCP协议，由于它是一个面向连接的协议，在socket之间进行数据传输之前必然要建立连接，所以在TCP中多了一个连接建立的时间</li>
+<li>使用UDP传输数据时是有大小限制的，每个被传输的数据报必须限定在64KB之内</li>
+<li>TCP没有这方面的限制，一旦连接建立起来，双方的socket就可以按统一的格式传输大量的数据</li>
+<li>UDP是一个不可靠的协议，发送方所发送的数据报并不一定以相同的次序到达接收方</li>
+<li>TCP是一个可靠的协议，它确保接收方完全正确地获取发送方所发送的全部数据</li>
+<li>TCP在网络通信上有极强的生命力，例如远程连接（Telnet）和文件传输（FTP）都需要不定长度的数据被可靠地传输</li>
+<li>相比之下UDP操作简单，而且仅需要较少的监护，因此通常用于局域网高可靠性的分散系统中client/server应用程序</li>
+</ul>
+<h3 id="四、Socket"><a href="#四、Socket" class="headerlink" title="四、Socket"></a>四、Socket</h3><p>两个应用程序可通过一个双向的网络通信连接实现数据交换，这个双向链路的一端称为socket</p>
+<ol>
+<li>socket用来实现client-server连接</li>
+<li>java.net包中的Socket和ServerSocket分别实现client和server</li>
+<li>建立连接时所需的寻址信息为远程计算机的IP地址和端口号</li>
+</ol>
+<h4 id="TCP-socket"><a href="#TCP-socket" class="headerlink" title="TCP-socket"></a>TCP-socket</h4><p>TCP-Socket通信模型：</p>
+<p><img src="/2017/08/20/javase/java-wangluobiancheng/ip01.jpg" alt=""></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//server端</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TCPServer</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		ServerSocket ss = <span class="keyword">new</span> ServerSocket(<span class="number">6666</span>);</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">			Socket s = ss.accept();<span class="comment">//accept()阻塞式方法，没连接就一直等待</span></span><br><span class="line">			System.out.println(<span class="string">"a client connect!"</span>);</span><br><span class="line">			DataInputStream dis = <span class="keyword">new</span> DataInputStream(s.getInputStream());</span><br><span class="line">			System.out.println(dis.readUTF());<span class="comment">//readUTF()也是阻塞式方法，同步式的，</span></span><br><span class="line">			dis.close();</span><br><span class="line">			s.close();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//client端</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TCPClient</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		Socket s = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>, <span class="number">6666</span>);</span><br><span class="line">		OutputStream os = s.getOutputStream();</span><br><span class="line">		DataOutputStream dos = <span class="keyword">new</span> DataOutputStream(os);</span><br><span class="line">		Thread.sleep(<span class="number">30000</span>);</span><br><span class="line">		dos.writeUTF(<span class="string">"hello server!"</span>);</span><br><span class="line">		dos.flush();</span><br><span class="line">		dos.close();</span><br><span class="line">		s.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//点对点通讯</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Talkserver</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			ServerSocket server = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">try</span>&#123;</span><br><span class="line">				server = <span class="keyword">new</span> ServerSocket(<span class="number">4700</span>);</span><br><span class="line">			&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">				System.out.println(<span class="string">"can not listen to:"</span> + e);</span><br><span class="line">				System.exit(<span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			Socket socket = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">try</span>&#123;</span><br><span class="line">				socket = server.accept();</span><br><span class="line">			&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">				System.out.println(<span class="string">"Error:"</span> + e);</span><br><span class="line">				System.exit(<span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			String line;</span><br><span class="line">			BufferedReader is = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</span><br><span class="line">			PrintWriter os = <span class="keyword">new</span> PrintWriter(socket.getOutputStream());</span><br><span class="line">			BufferedReader sin = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">			System.out.println(<span class="string">"Client:"</span> + is.readLine());</span><br><span class="line">			line = sin.readLine();</span><br><span class="line">			<span class="keyword">while</span> (!line.equals(<span class="string">"bye"</span>))	&#123;</span><br><span class="line">				os.println(line);</span><br><span class="line">				os.flush();</span><br><span class="line">				System.out.println(<span class="string">"Server:"</span> + line);</span><br><span class="line">				System.out.println(<span class="string">"Client:"</span> + is.readLine());</span><br><span class="line">				line = sin.readLine();</span><br><span class="line">			&#125;</span><br><span class="line">			is.close();</span><br><span class="line">			os.close();</span><br><span class="line">			socket.close();</span><br><span class="line">			server.close();</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">			System.out.println(<span class="string">"Error"</span> + e);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Talkclient</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			Socket socket = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>,<span class="number">4700</span>);</span><br><span class="line">			BufferedReader sin = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">			PrintWriter os = <span class="keyword">new</span> PrintWriter(socket.getOutputStream());</span><br><span class="line">			BufferedReader is = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</span><br><span class="line">			String readline;</span><br><span class="line">			readline = sin.readLine();</span><br><span class="line">			<span class="keyword">while</span> (!readline.equals(<span class="string">"bye"</span>))	&#123;</span><br><span class="line">				os.println(readline);</span><br><span class="line">				os.flush();</span><br><span class="line">				System.out.println(<span class="string">"Client:"</span> + readline);</span><br><span class="line">				System.out.println(<span class="string">"Server:"</span> + is.readLine());</span><br><span class="line">				readline = sin.readLine();</span><br><span class="line">			&#125;</span><br><span class="line">			os.close();</span><br><span class="line">			is.close();</span><br><span class="line">			socket.close();</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">			System.out.println(<span class="string">"Error"</span> + e);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="UDP-socket"><a href="#UDP-socket" class="headerlink" title="UDP-socket"></a>UDP-socket</h4><p>示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//传输long类型</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestUDPServer</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="keyword">byte</span> buf[] = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">		DatagramPacket dp = <span class="keyword">new</span> DatagramPacket(buf, buf.length);</span><br><span class="line">		DatagramSocket ds = <span class="keyword">new</span> DatagramSocket(<span class="number">5678</span>);</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			ds.receive(dp);</span><br><span class="line">			ByteArrayInputStream bais = <span class="keyword">new</span> ByteArrayInputStream(buf);</span><br><span class="line">			DataInputStream dis = <span class="keyword">new</span> DataInputStream(bais);</span><br><span class="line">			System.out.println(dis.readLong());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestUDPClient</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		<span class="keyword">long</span> n = <span class="number">10000L</span>;</span><br><span class="line">		ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">		DataOutputStream dos = <span class="keyword">new</span> DataOutputStream(baos);</span><br><span class="line">		dos.writeLong(n);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">byte</span>[] buf = baos.toByteArray();</span><br><span class="line">		System.out.println(buf.length);</span><br><span class="line">		</span><br><span class="line">		DatagramPacket dp = <span class="keyword">new</span> DatagramPacket(buf, buf.length, </span><br><span class="line">						    <span class="keyword">new</span> InetSocketAddress(<span class="string">"127.0.0.1"</span>, <span class="number">5678</span>));</span><br><span class="line">		DatagramSocket ds = <span class="keyword">new</span> DatagramSocket(<span class="number">9999</span>);</span><br><span class="line">		ds.send(dp);</span><br><span class="line">		ds.close();</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="五、基于URL的网络编程"><a href="#五、基于URL的网络编程" class="headerlink" title="五、基于URL的网络编程"></a>五、基于URL的网络编程</h3><ol>
+<li><p>创建一个URL</p>
+<p>为了表示URL， java.net中实现了类URL。我们可以通过下面的构造方法来初始化一个URL对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">URL</span> <span class="params">(String spec)</span></span>;</span><br><span class="line"><span class="comment">//通过一个表示URL地址的字符串可以构造一个URL对象</span></span><br><span class="line">URL urlBase=<span class="keyword">new</span> URL(<span class="string">"http://www. 263.net/"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">URL</span><span class="params">(URL context, String spec)</span></span>;</span><br><span class="line"><span class="comment">//通过基URL和相对URL构造一个URL对象。</span></span><br><span class="line">URL net263=<span class="keyword">new</span> URL (<span class="string">"http://www.263.net/"</span>);</span><br><span class="line">URL index263=<span class="keyword">new</span> URL(net263, <span class="string">"index.html"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">URL</span><span class="params">(String protocol, String host, String file)</span></span>;</span><br><span class="line"><span class="keyword">new</span> URL(<span class="string">"http"</span>, <span class="string">"www.gamelan.com"</span>, <span class="string">"/pages/Gamelan.net. html"</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">URL</span><span class="params">(String protocol, String host, <span class="keyword">int</span> port, String file)</span></span>;</span><br><span class="line">URL gamelan=<span class="keyword">new</span> URL(<span class="string">"http"</span>, <span class="string">"www.gamelan.com"</span>, <span class="number">80</span>, <span class="string">"Pages/Gamelan.network.html"</span>);</span><br></pre></td></tr></table></figure>
+<p>注意：类URL的构造方法都声明抛弃非运行时例外（MalformedURLException），因此生成URL对象时，我们必须要对这一例外进行处理，通常是用try-catch语句进行捕获</p>
+</li>
+<li><p>解析一个URL</p>
+<p>一个URL对象生成后，其属性是不能被改变的，但是我们可以通过类URL所提供的方法来获取这些属性：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getProtocol</span><span class="params">()</span> <span class="comment">//获取该URL的协议名。</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getHost</span><span class="params">()</span> <span class="comment">//获取该URL的主机名。</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPort</span><span class="params">()</span> <span class="comment">//获取该URL的端口号，如果没有设置端口，返回-1。</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getFile</span><span class="params">()</span><span class="comment">// 获取该URL的文件名。</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getRef</span><span class="params">()</span><span class="comment">// 获取该URL在文件中的相对位置。</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getQuery</span><span class="params">()</span> <span class="comment">//获取该URL的查询信息。</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getPath</span><span class="params">()</span> <span class="comment">//获取该URL的路径</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getAuthority</span><span class="params">()</span> <span class="comment">//获取该URL的权限信息</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getUserInfo</span><span class="params">()</span> <span class="comment">//获得使用者的信息</span></span></span><br><span class="line"><span class="function">　　　 <span class="keyword">public</span> String <span class="title">getRef</span><span class="params">()</span>获得该URL的锚</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从URL读取WWW网络资源</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当我们得到一个URL对象后，就可以通过它读取指定的WWW资源。这时我们将使用URL的方法openStream()，其定义为：</span></span><br><span class="line"><span class="function">InputStream <span class="title">openStream</span><span class="params">()</span></span>;</span><br><span class="line">　　</span><br><span class="line">openSteam()<span class="comment">//与指定的URL建立连接并返回InputStream类的对象以从这一连接中读取数据。</span></span><br><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.baidu.com"</span>);</span><br><span class="line"><span class="comment">//使用openStream得到一输入流并由此构造一个BufferedReader对象</span></span><br><span class="line">BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader( url.openStream()));</span><br><span class="line">String line = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">null</span> != (line = br.readLine()))&#123;</span><br><span class="line">	System.out.println(line);</span><br><span class="line">&#125;</span><br><span class="line">br.close();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="六、客户端-服务端编程"><a href="#六、客户端-服务端编程" class="headerlink" title="六、客户端/服务端编程"></a>六、客户端/服务端编程</h3><h4 id="1-客户端"><a href="#1-客户端" class="headerlink" title="1. 客户端"></a>1. 客户端</h4><p><strong>1） 建立网络连接</strong></p>
+<p>客户端网络编程的第一步都是建立网络连接。在建立网络连接时需要指定连接到的服务器的IP地址和端口号，建立完成以后，会形成一条虚拟的连接，后续的操作就可以通过该连接实现数据交换了。</p>
+<p><strong>2） 交换数据</strong></p>
+<p>连接建立以后，就可以通过这个连接交换数据了。交换数据严格按照请求响应模型进行，由客户端发送一个请求数据到服务器，服务器反馈一个响应数据给客户端，如果客户端不发送请求则服务器端就不响应。</p>
+<p>根据逻辑需要，可以多次交换数据，但是还是必须遵循请求响应模型。</p>
+<p><strong>3） 关闭网络连接</strong></p>
+<p>在数据交换完成以后，关闭网络连接，释放程序占用的端口、内存等系统资源，结束网络编程。</p>
+<p>最基本的步骤一般都是这三个步骤，在实际实现时，步骤2会出现重复，在进行代码组织时，由于网络编程是比较耗时的操作，所以一般开启专门的现场进行网络通讯。</p>
+<h4 id="2-服务端"><a href="#2-服务端" class="headerlink" title="2. 服务端"></a>2. 服务端</h4><p><strong>（1） 监听端口</strong></p>
+<p>服务器端属于被动等待连接，所以服务器端启动以后，不需要发起连接，而只需要监听本地计算机的某个固定端口即可。</p>
+<p>这个端口就是服务器端开放给客户端的端口，服务器端程序运行的本地计算机的IP地址就是服务器端程序的IP地址。</p>
+<p><strong>2） 获得连接</strong></p>
+<p>当客户端连接到服务器端时，服务器端就可以获得一个连接，这个连接包含客户端的信息，例如客户端IP地址等等，服务器端和客户端也通过该连接进行数据交换。</p>
+<p>一般在服务器端编程中，当获得连接时，需要开启专门的线程处理该连接，每个连接都由独立的线程实现。</p>
+<p><strong>3）交换数据</strong></p>
+<p>服务器端通过获得的连接进行数据交换。服务器端的数据交换步骤是首先接收客户端发送过来的数据，然后进行逻辑处理，再把处理以后的结果数据发送给客户端。简单来说，就是先接收再发送，这个和客户端的数据交换数序不同。</p>
+<p>其实，服务器端获得的连接和客户端连接是一样的，只是数据交换的步骤不同。</p>
+<p>当然，服务器端的数据交换也是可以多次进行的。</p>
+<p>在数据交换完成以后，关闭和客户端的连接。</p>
+<p><strong>4）关闭连接</strong></p>
+<p>当服务器程序关闭时，需要关闭服务器端，通过关闭服务器端使得服务器监听的端口以及占用的内存可以释放出来，实现了连接的关闭。</p>
+<h4 id="3-一个基础的网络类——InetAddress类"><a href="#3-一个基础的网络类——InetAddress类" class="headerlink" title="3. 一个基础的网络类——InetAddress类"></a>3. 一个基础的网络类——InetAddress类</h4><p>该类的功能是代表一个IP地址，并且将IP地址和域名相关的操作方法包含在该类的内部。注：</p>
+<ul>
+<li>InetAddress 类没有明显的构造函数。为生成一个InetAddress对象，必须运用一个可用的工厂方法</li>
+<li>工厂方法（factory method）仅是一个类中静态方法返回一个该类实例的约定。对于InetAddress，三个方法 getLocalHost( )、getByName( )以及getAllByName( )可以用来创建InetAddress的实例</li>
+<li>如果这些方法不能解析主机名，它们引发一个UnknownHostException异常</li>
+</ul>
+<h3 id="七、TCP编程"><a href="#七、TCP编程" class="headerlink" title="七、TCP编程"></a>七、TCP编程</h3><p>java.net.Socket类代表客户端连接，以java.net.ServerSocket类代表服务器端连接。在进行网络编程时，底层网络通讯的细节已经实现了比较高的封装，所以在程序员实际编程时，只需要指定IP地址和端口号码就可以建立连接了</p>
+<h4 id="1-客户端-1"><a href="#1-客户端-1" class="headerlink" title="1. 客户端"></a>1. 客户端</h4><p><strong>1) 建立Socket连接</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket socket = <span class="keyword">new</span> Socket(“www.sohu.com”,<span class="number">80</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>2）按照“请求-响应”模型进行网络数据交换</strong></p>
+<p>在Java语言中，数据传输功能由Java IO实现，也就是说只需要从连接中获得输入流和输出流即可，然后将需要发送的数据写入连接对象的输出流中，在发送完成以后从输入流中读取数据即可。示例代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">OutputStream os = socket1.getOutputStream(); <span class="comment">//获得输出流</span></span><br><span class="line">InputStream is = socket1.getInputStream(); <span class="comment">//获得输入流</span></span><br></pre></td></tr></table></figure>
+<p>这里获得的只是最基本的输出流和输入流对象，还可以根据前面学习到的IO知识，使用流的嵌套将这些获得到的基本流对象转换成需要的装饰流对象，从而方便数据的操作。</p>
+<p><strong>3）关闭网络连接</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket1.close();</span><br></pre></td></tr></table></figure>
+<h4 id="2-服务端-1"><a href="#2-服务端-1" class="headerlink" title="2. 服务端"></a>2. 服务端</h4><p><strong>1）监听端口</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket ss = <span class="keyword">new</span> ServerSocket(<span class="number">10000</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>2）获得连接</strong></p>
+<p>当有客户端连接到达时，建立一个和客户端连接对应的Socket连 接对象，从而释放客户端连接对于服务器端端口的占用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket socket = ss.accept();</span><br></pre></td></tr></table></figure>
+<p>该代码实现的功能是获得当前连接到服务器端的客户端连接。需要说明的是accept和前面IO部分介绍的read方法一样，都是一个阻塞方法，也就是当无连接时，该方法将阻塞程序的执行，直到连接到达时才执行该行代码。另外获得的连接会在服务器端的该端口注册，这样以后就可以通过在服务器端的注册信息直接通信，而注册以后服务器端的端口就被释放出来，又可以继续接受其它的连接了</p>
+<p><strong>3）按照“请求-响应”模型进行网络数据交换</strong></p>
+<p>这里获得的Socket类型的连接就和客户端的网络连接一样了，只是服务器端需要首先读取发送过来的数据，然后进行逻辑处理以后再发送给客户端，也就是交换数据的顺序和客户端交换数据的步骤刚好相反</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">InputStream is = ss.getInputStream(); <span class="comment">//获得输入流</span></span><br><span class="line">OutputStream os = ss.getOutputStream(); <span class="comment">//获得输出流</span></span><br></pre></td></tr></table></figure>
+<p><strong>4)关闭服务器端连接</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ss.close();</span><br></pre></td></tr></table></figure>
+<h3 id="八、UDP编程"><a href="#八、UDP编程" class="headerlink" title="八、UDP编程"></a>八、UDP编程</h3><p>用户数据报协议使用该种方式无需建立专用的虚拟连接，由于无需建立专用的连接，所以对于服务器的压力要比TCP小很多，所以也是一种常见的网络编程方式。但是使用该种方式最大的不足是传输不可靠，当然也不是说经常丢失，就像大家发短信息一样，理论上存在收不到的可能</p>
+<p>在Java API中，实现UDP方式的编程，包含客户端网络编程和服务器端网络编程，主要由两个类实现，分别是：</p>
+<p><strong>DatagramSocket</strong></p>
+<p>DatagramSocket类实现“网络连接”，包括客户端网络连接和服务器端网络连接。虽然UDP方式的网络通讯不需要建立专用的网络连接，但是毕竟还是需要发送和接收数据，DatagramSocket实现的就是发送数据时的发射器，以及接收数据时的监听器的角色。类比于TCP中的网络连接，该类既可以用于实现客户端连接，也可以用于实现服务器端连接</p>
+<p><strong>DatagramPacket</strong></p>
+<p>DatagramPacket类实现对于网络中传输的数据封装，也就是说，该类的对象代表网络中交换的数据。在UDP方式的网络编程中，无论是需要发送的数据还是需要接收的数据，都必须被处理成DatagramPacket类型的对象，该对象中包含发送到的地址、发送到的端口号以及发送的内容等。其实DatagramPacket类的作用类似于现实中的信件，在信件中包含信件发送到的地址以及接收人，还有发送的内容等，邮局只需要按照地址传递即可。在接收数据时，接收到的数据也必须被处理成DatagramPacket类型的对象，在该对象中包含发送方的地址、端口号等信息，也包含数据的内容。和TCP方式的网络传输相比，IO编程在UDP方式的网络编程中变得不是必须的内容，结构也要比TCP方式的网络编程简单一些</p>
+<h4 id="1-客户端-2"><a href="#1-客户端-2" class="headerlink" title="1. 客户端"></a>1. 客户端</h4><p><strong>1）建立连接：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DatagramSocket ds = <span class="keyword">new</span> DatagramSocket();<span class="comment">//该客户端连接使用系统随机分配的一个本地计算机的未用端口号</span></span><br><span class="line">DatagramSocket ds = <span class="keyword">new</span> DatagramSocket(<span class="number">5000</span>);<span class="comment">//一般在建立客户端连接时没有必要指定端口号码。</span></span><br></pre></td></tr></table></figure>
+<p><strong>2）发送数据</strong></p>
+<p>在发送数据时，需要将需要发送的数据内容首先转换为byte数组，然后将数据内容、服务器IP和服务器端口号一起构造成一个DatagramPacket类型的对象，这样数据的准备就完成了了，发送时调用网络连接对象中的send方法发送该对象即可</p>
+<p><strong>3）UDP客户端编程中接收数据</strong></p>
+<p>首先构造一个数据缓冲数组，该数组用于存储接收的服务器端反馈数据，该数组的长度必须大于或等于服务器端反馈的实际有效数据的长度。然后以该缓冲数组为基础构造一个DatagramPacket数据包对象，最后调用连接对象的receive方法接收数据即可。接收到的服务器端反馈数据存储在DatagramPacket类型的对象内部</p>
+<p><strong>4）关闭连接</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ds.close();</span><br></pre></td></tr></table></figure>
+<h4 id="2-服务端-2"><a href="#2-服务端-2" class="headerlink" title="2. 服务端"></a>2. 服务端</h4><p><strong>1）首先UDP方式服务器端网络编程需要建立一个连接，该连接监听某个端口：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DatagramSocket ds = <span class="keyword">new</span> DatagramSocket(<span class="number">10010</span>);<span class="comment">//由于服务器端的端口需要固定，所以一般在建立服务器端连接时，都指定端口号</span></span><br></pre></td></tr></table></figure>
+<p><strong>2）接收客户端发送过来的数据</strong></p>
+<p>其接收的方法和客户端接收的方法一致，其中receive方法的作用类似于TCP方式中accept方法的作用，该方法也是一个阻塞方法，其作用是接收数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ds.receive();<span class="comment">//接收数据。</span></span><br></pre></td></tr></table></figure>
+<p>接收到客户端发送过来的数据以后，服务器端对该数据进行逻辑处理，然后将处理以后的结果再发送给客户端，在这里发送时就比客户端要麻烦一些，因为服务器端需要获得客户端的IP和客户端使用的端口号，这个都可以从接收到的数据包中获得。示例代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获得客户端的IP</span></span><br><span class="line">InetAddress clientIP = receiveDp.getAddress();</span><br><span class="line"><span class="comment">//获得客户端的端口号</span></span><br><span class="line">Int clientPort = receiveDp.getPort();</span><br></pre></td></tr></table></figure>
+<p><strong>3)关闭连接</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ds.close()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaSE/" rel="tag"># JavaSE</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/17/javase/java-thread/" rel="next" title="JAVA基础(九)多线程">
+                <i class="fa fa-chevron-left"></i> JAVA基础(九)多线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/21/javase/java-swing/" rel="prev" title="JAVA基础(十一)Swing">
+                JAVA基础(十一)Swing <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java基础之网络编程"><span class="nav-number">1.</span> <span class="nav-text">java基础之网络编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、网络基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">一、网络基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、OSI模型"><span class="nav-number">1.2.</span> <span class="nav-text">二、OSI模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-物理层"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 物理层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据链路层"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 数据链路层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-网络层"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 网络层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-传输层"><span class="nav-number">1.2.4.</span> <span class="nav-text">4. 传输层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-会话层"><span class="nav-number">1.2.5.</span> <span class="nav-text">5. 会话层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-表示层"><span class="nav-number">1.2.6.</span> <span class="nav-text">6. 表示层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-应用层"><span class="nav-number">1.2.7.</span> <span class="nav-text">7. 应用层</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、TCP-UDP协议"><span class="nav-number">1.3.</span> <span class="nav-text">三、TCP/UDP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、Socket"><span class="nav-number">1.4.</span> <span class="nav-text">四、Socket</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-socket"><span class="nav-number">1.4.1.</span> <span class="nav-text">TCP-socket</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP-socket"><span class="nav-number">1.4.2.</span> <span class="nav-text">UDP-socket</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、基于URL的网络编程"><span class="nav-number">1.5.</span> <span class="nav-text">五、基于URL的网络编程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、客户端-服务端编程"><span class="nav-number">1.6.</span> <span class="nav-text">六、客户端/服务端编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-客户端"><span class="nav-number">1.6.1.</span> <span class="nav-text">1. 客户端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-服务端"><span class="nav-number">1.6.2.</span> <span class="nav-text">2. 服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-一个基础的网络类——InetAddress类"><span class="nav-number">1.6.3.</span> <span class="nav-text">3. 一个基础的网络类——InetAddress类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、TCP编程"><span class="nav-number">1.7.</span> <span class="nav-text">七、TCP编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-客户端-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">1. 客户端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-服务端-1"><span class="nav-number">1.7.2.</span> <span class="nav-text">2. 服务端</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#八、UDP编程"><span class="nav-number">1.8.</span> <span class="nav-text">八、UDP编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-客户端-2"><span class="nav-number">1.8.1.</span> <span class="nav-text">1. 客户端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-服务端-2"><span class="nav-number">1.8.2.</span> <span class="nav-text">2. 服务端</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/08/20/javase/java-wangluobiancheng/';
+          this.page.identifier = '2017/08/20/javase/java-wangluobiancheng/';
+          this.page.title = 'JAVA基础(十)网络编程';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

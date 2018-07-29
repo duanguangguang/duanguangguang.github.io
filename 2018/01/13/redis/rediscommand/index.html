@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Redis," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="字符串Redis的字符串就是一个由字节组成的序列，在Redis里面，字符串可以存储以下3中类型的值：  字节串（byte string） 整数 浮点数  自增自减操作Redis对字符串执行自增和自减的命令：    命令 用例和描述     INCR INCR key-name ———将键存储的值加1   DECR DECR key-name ———将键存储的值减去1   INCRBY INCRBY">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis命令">
+<meta property="og:url" content="http://yoursite.com/2018/01/13/redis/rediscommand/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="字符串Redis的字符串就是一个由字节组成的序列，在Redis里面，字符串可以存储以下3中类型的值：  字节串（byte string） 整数 浮点数  自增自减操作Redis对字符串执行自增和自减的命令：    命令 用例和描述     INCR INCR key-name ———将键存储的值加1   DECR DECR key-name ———将键存储的值减去1   INCRBY INCRBY">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-29T08:34:30.188Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis命令">
+<meta name="twitter:description" content="字符串Redis的字符串就是一个由字节组成的序列，在Redis里面，字符串可以存储以下3中类型的值：  字节串（byte string） 整数 浮点数  自增自减操作Redis对字符串执行自增和自减的命令：    命令 用例和描述     INCR INCR key-name ———将键存储的值加1   DECR DECR key-name ———将键存储的值减去1   INCRBY INCRBY">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/13/redis/rediscommand/"/>
+
+
+
+
+
+  <title>Redis命令 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/13/redis/rediscommand/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-13T15:12:39+08:00">
+                2018-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/13/redis/rediscommand/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/13/redis/rediscommand/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/13/redis/rediscommand/" class="leancloud_visitors" data-flag-title="Redis命令">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>Redis的字符串就是一个由字节组成的序列，在Redis里面，字符串可以存储以下3中类型的值：</p>
+<ul>
+<li>字节串（byte string）</li>
+<li>整数</li>
+<li>浮点数</li>
+</ul>
+<h3 id="自增自减操作"><a href="#自增自减操作" class="headerlink" title="自增自减操作"></a>自增自减操作</h3><p>Redis对字符串执行自增和自减的命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">INCR</td>
+<td style="text-align:center">INCR key-name ———将键存储的值加1</td>
+</tr>
+<tr>
+<td style="text-align:center">DECR</td>
+<td style="text-align:center">DECR key-name ———将键存储的值减去1</td>
+</tr>
+<tr>
+<td style="text-align:center">INCRBY</td>
+<td style="text-align:center">INCRBY key-name amount ——-将键存储的值加上整数amount</td>
+</tr>
+<tr>
+<td style="text-align:center">DECRBY</td>
+<td style="text-align:center">DECRBY key-name amount ——-将键存储的值减去整数amount</td>
+</tr>
+<tr>
+<td style="text-align:center">INCRBYFLOAT</td>
+<td style="text-align:center">INCRBYFLOAT key-name amount ——-将键存储的值加上浮点数amount，redis2.6及以上可用</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<p>注意：</p>
+<ol>
+<li>当存储在redis字符串里面的值可以被解释（interpret）为十进制整数或者浮点数时，redis允许用户对这个字符串执行各种<em>INCR</em>和<em>DECR</em>操作；</li>
+<li>当用户对一个不存在的键或者保存了空串的键执行自增或者自减操作，则redis会将这个键当作0来处理；</li>
+<li>当用户尝试对一个值无法解释为整数或者浮点数的字符串键执行自增或者自减操作，则redis会返回一个错误。</li>
+</ol>
+<p>Redis的INCR和DECR操作示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Jedis conn = <span class="keyword">new</span> Jedis(<span class="string">"localhost"</span>);</span><br><span class="line">conn.get(<span class="string">'key'</span>);   <span class="comment">//尝试获取一个不存在的键将得到一个none值，不显示</span></span><br><span class="line">conn.incr(<span class="string">'key'</span>);   <span class="comment">//1</span></span><br><span class="line">conn.incr(<span class="string">'key'</span>,<span class="number">15</span>);  <span class="comment">//16</span></span><br><span class="line">conn.decr(<span class="string">'key'</span>,<span class="number">5</span>);   <span class="comment">//11</span></span><br><span class="line">conn.get(<span class="string">'key'</span>);    <span class="comment">//'11'</span></span><br><span class="line">conn.set(<span class="string">'key'</span>,<span class="number">13</span>);   <span class="comment">//true</span></span><br><span class="line">conn.incr(<span class="string">'key'</span>);   <span class="comment">//14</span></span><br></pre></td></tr></table></figure>
+<h3 id="Redis对字符串进行读取和写入操作"><a href="#Redis对字符串进行读取和写入操作" class="headerlink" title="Redis对字符串进行读取和写入操作"></a>Redis对字符串进行读取和写入操作</h3><p>Redis处理子串和二进制位的命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">APPEND</td>
+<td style="text-align:center">APPEND key-name value —将值value追加到给定键key-name当前存储的值的末尾</td>
+</tr>
+<tr>
+<td style="text-align:center">GETRANGE</td>
+<td style="text-align:center">GETRANGE key-name start end —获取一个由偏移量start至end范围内的子串，包含start和end在内</td>
+</tr>
+<tr>
+<td style="text-align:center">SETRANGE</td>
+<td style="text-align:center">SETRANGE key-name offset value —将从offset偏移量开始的子串设置为给定值</td>
+</tr>
+<tr>
+<td style="text-align:center">GETBIT</td>
+<td style="text-align:center">GETBIT key-name offset — 将字节串看作是二进制位串（bit string），并返回位串中偏移量为offset的二进制位的值</td>
+</tr>
+<tr>
+<td style="text-align:center">SETBIT</td>
+<td style="text-align:center">SETBIT key-name offset value — 将字节串看作是二进制位串，并将位串中偏移量为offset的二进制位的值设置为value</td>
+</tr>
+<tr>
+<td style="text-align:center">BITCOUNT</td>
+<td style="text-align:center">BITCOUNT key-name [start end] — 统计二进制位串中值为1的二进制位的数量</td>
+</tr>
+<tr>
+<td style="text-align:center">BITOP</td>
+<td style="text-align:center">BITOP operation dest-key key-name [key-name …] — 对一个或多个二进制位串执行包括并（AND）、或（OR）、异或（XOR）、非（NOT）在内的任意一种按位运算操作（bitwise operation），并将计算得出的结果保存在dest-key键里面</td>
+</tr>
+</tbody>
+</table>
+<p>注意：</p>
+<ol>
+<li>redis现在的GETRANGE命令是由以前的SUBSTR命令改写而来的，因此，Python现在仍然可以使用substr()方法来获取子串；</li>
+<li>在使用SETRANGE或者SETBIT命令对字符串进行写入的时候，如果字符串当前的长度不能满足写入的要求，那么redis会自动地使用空字节null来将字符串扩展至所需的长度，然后才执行写入或者更新操作。</li>
+<li>在使用GETRANGE读取字符串的时候，超出字符串末尾的数据会被视为是空串，而在使用GETBIT读取二进制位串的时候，超出字符串末尾的二进制位会被视为是0。</li>
+</ol>
+<p>Redis的子串操作和二进制位操作示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将'hello'追加到目前并不存在的'new-string-key'键里</span></span><br><span class="line">conn.append(<span class="string">'new-string-key'</span>, <span class="string">'hello '</span>); <span class="comment">//返回6L，append命令会在执行之后返回字符串当前的长度</span></span><br><span class="line"></span><br><span class="line">conn.append(<span class="string">'new-string-key'</span>, <span class="string">'world!'</span>); <span class="comment">//12L</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//redis的索引以0开始，范围的终点（endpoint）默认包含在这个范围</span></span><br><span class="line">conn.substr(<span class="string">'new-string-key'</span>, <span class="number">3</span>, <span class="number">7</span>); <span class="comment">//'lo wo'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//将h和w从小写改成大写</span></span><br><span class="line">conn.setrange(<span class="string">'new-string-key'</span>, <span class="number">0</span>, <span class="string">'H'</span>); <span class="comment">//12 ，setrange命令会在执行之后同样返回字符串当前总长度</span></span><br><span class="line">conn.setrange(<span class="string">'new-string-key'</span>, <span class="number">6</span>, <span class="string">'W'</span>); <span class="comment">//12</span></span><br><span class="line">conn.get(<span class="string">'new-string-key'</span>); <span class="comment">//'Hello World!'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//setrange命令既可以用于替换字符串里已有的内容，又可以增长字符串</span></span><br><span class="line">conn.setrange(<span class="string">'new-string-key'</span>, <span class="number">11</span>, <span class="string">', how are you?'</span>); <span class="comment">//25</span></span><br><span class="line">conn.get(<span class="string">'new-string-key'</span>); <span class="comment">//'Hello World, how are you?'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//在对redis存储的二进制位进行解释（interpret）时，记住redis存储的二进制位是按照偏移量从高到低排列的</span></span><br><span class="line">conn.setbit(<span class="string">'another-key'</span>, <span class="number">2</span>, <span class="number">1</span>); <span class="comment">//0, setbit命令会返回二进制位被设置之前的值</span></span><br><span class="line">conn.setbit(<span class="string">'another-key'</span>, <span class="number">7</span>, <span class="number">1</span>); <span class="comment">//0</span></span><br><span class="line"><span class="comment">//通过将第2个二进制位以及第7个二进制位的值设置为1，键的值将变为'!'，也就是编码为33的字符</span></span><br><span class="line">conn.get(<span class="string">'another-key'</span>); <span class="comment">//'!'</span></span><br></pre></td></tr></table></figure>
+<p>Redis通过使用子串操作和二进制位操作，配合WATCH命令、MULTI命令和EXEC命令，用户可以自己动手去构建任何他们想要的数据结构。</p>
+<h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><p>列表是由多个字符串组成的有序序列结构。Redis的列表允许用户从序列的两端推入或者弹出元素，获取列表元素，以及执行各种常见的列表操作。除此之外，列表还可以用来存储任务信息、最近浏览过的文章或者常用联系人信息。</p>
+<p>一些常用的列表命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">RPUSH</td>
+<td style="text-align:center">RPUSH key-name value [value …] — 将一个或多个值推入列表的右端</td>
+</tr>
+<tr>
+<td style="text-align:center">LPUSH</td>
+<td style="text-align:center">LPUSH key-name value [value …] — 将一个或多个值推入列表的左端</td>
+</tr>
+<tr>
+<td style="text-align:center">RPOP</td>
+<td style="text-align:center">RPOP key-name — 移除并返回列表最右端的元素</td>
+</tr>
+<tr>
+<td style="text-align:center">LPOP</td>
+<td style="text-align:center">LPOP key-name — 移除并返回列表最左端的元素</td>
+</tr>
+<tr>
+<td style="text-align:center">LINDEX</td>
+<td style="text-align:center">LINDEX key-name offset — 返回列表偏移量为offset的元素</td>
+</tr>
+<tr>
+<td style="text-align:center">LRANGE</td>
+<td style="text-align:center">LRANGE key-name start end — 返回[start, end]范围内的所有元素</td>
+</tr>
+<tr>
+<td style="text-align:center">LTRIM</td>
+<td style="text-align:center">LTRIM key-name start end — 对列表进行修剪，只保留[start, end]范围内的元素</td>
+</tr>
+</tbody>
+</table>
+<p>常用命令示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">conn.rpush(<span class="string">'list-key'</span>, <span class="string">'last'</span>); <span class="comment">//1L 向列表推入元素，执行完毕会返回列表当前的长度</span></span><br><span class="line">conn.lpush(<span class="string">'list-key'</span>, <span class="string">'first'</span>); <span class="comment">//2L</span></span><br><span class="line">conn.rpush(<span class="string">'list-key'</span>, <span class="string">'new last'</span>);</span><br><span class="line">conn.lrange(<span class="string">'list-key'</span>, <span class="number">0</span>, -<span class="number">1</span>); <span class="comment">//['first', 'last', 'new last']</span></span><br><span class="line"><span class="comment">//通过重复地弹出列表左端的元素，可以按照从左到右的顺序来获取列表中的元素</span></span><br><span class="line">conn.lpop(<span class="string">'list-key'</span>); <span class="comment">//'first'</span></span><br><span class="line">conn.lpop(<span class="string">'list-key'</span>); <span class="comment">//'last' </span></span><br><span class="line">conn.lrange(<span class="string">'list-key'</span>, <span class="number">0</span>, -<span class="number">1</span>); <span class="comment">//['new last']</span></span><br><span class="line"><span class="comment">//可以同时推入多个元素</span></span><br><span class="line">conn.rpush(<span class="string">'list-key'</span>, <span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>); <span class="comment">//4L</span></span><br><span class="line">conn.lrange(<span class="string">'list-key'</span>, <span class="number">0</span>, -<span class="number">1</span>); <span class="comment">//['new last','a','b','c']</span></span><br><span class="line">conn.ltrim(<span class="string">'list-key'</span>, <span class="number">2</span>, -<span class="number">1</span>) <span class="comment">//true</span></span><br><span class="line">  </span><br><span class="line">conn.lrange(<span class="string">'list-key'</span>, <span class="number">0</span>, -<span class="number">1</span>); <span class="comment">//['b','c']</span></span><br></pre></td></tr></table></figure>
+<p>组合使用LTRIM和LRANGE可以构建一个在功能上类似于LPOP或RPOP，但能够一次返回并弹出多个元素的操作。下面的几个列表命令可以将元素从一个列表移动到另一个列表，或者阻塞（block）执行命令的客户端直到有其他客户端给列表添加元素为止。</p>
+<p>阻塞式的列表弹出命令以及在列表之间移动元素的命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">BLPOP</td>
+<td style="text-align:center">BLPOP key-name [key-name …] timeout — 从第一个非空列表中弹出位于最左端的元素，或者在timeout秒之内阻塞并等待可弹出的元素出现</td>
+</tr>
+<tr>
+<td style="text-align:center">BRPOP</td>
+<td style="text-align:center">BRPOP key-name [key-name …] timeout — 从第一个非空列表中弹出位于最右端的元素，或者在timeout秒之内阻塞并等待可弹出的元素出现</td>
+</tr>
+<tr>
+<td style="text-align:center">RPOPLPUSH</td>
+<td style="text-align:center">RPOPLPUSH source-key dest-key — 从source-key 列表中弹出最右端的元素，然后将这个元素推入dest-key 列表的最左端，并向用户返回这个元素</td>
+</tr>
+<tr>
+<td style="text-align:center">BRPOPLPUSH</td>
+<td style="text-align:center">BRPOPLPUSH source-key dest-key timeout — 从source-key 列表中弹出最右端的元素，然后将这个元素推入dest-key 列表的最左端，并向用户返回这个元素；如果source-key为空，那么在timeout秒之内阻塞并等待可弹出的元素出现</td>
+</tr>
+</tbody>
+</table>
+<p> 阻塞式命令示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">conn.rpush(<span class="string">'list'</span>, <span class="string">'item1'</span>); <span class="comment">//1</span></span><br><span class="line">conn.rpush(<span class="string">'list'</span>, <span class="string">'item2'</span>); <span class="comment">//2</span></span><br><span class="line">conn.rpush(<span class="string">'list2'</span>, <span class="string">'item3'</span>); <span class="comment">//1</span></span><br><span class="line"><span class="comment">//将一个元素从一个列表移动到另一个列表，并返回被移动的元素</span></span><br><span class="line">conn.brpoplpush(<span class="string">'list2'</span>, <span class="string">'list'</span>, <span class="number">1</span>); <span class="comment">//'item3'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//当列表不包含任何元素时，阻塞弹出操作会在给定的时限内等待可弹出的元素的出现，并在时限到达后返回None</span></span><br><span class="line">conn.brpoplpush(<span class="string">'list2'</span>, <span class="string">'list'</span>, <span class="number">1</span>); </span><br><span class="line">conn.lrange(<span class="string">'list'</span>, <span class="number">0</span>, -<span class="number">1</span>); <span class="comment">//['item3','iten1','item2']</span></span><br><span class="line">conn.brpoplpush(<span class="string">'list'</span>, <span class="string">'list2'</span>, <span class="number">1</span>); <span class="comment">//'item2'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//blpop命令会从左至右地检查传入的列表，并对最先遇到的非空列表执行弹出操作</span></span><br><span class="line">conn.blpop([<span class="string">'list'</span>, <span class="string">'list2'</span>], <span class="number">1</span>); <span class="comment">//('list', 'item3')</span></span><br><span class="line">conn.blpop([<span class="string">'list'</span>, <span class="string">'list2'</span>], <span class="number">1</span>); <span class="comment">//('list', 'item1')</span></span><br><span class="line">conn.blpop([<span class="string">'list'</span>, <span class="string">'list2'</span>], <span class="number">1</span>); <span class="comment">//('list2', 'item2')</span></span><br><span class="line">conn.blpop([<span class="string">'list'</span>, <span class="string">'list2'</span>], <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>对于阻塞弹出命令和弹出并推入命令，最常见的用例就是消息传递（messaging）和任务队列（task queue）。列表的一个主要优点在于它可以包含多个字符串值，这使得用户可以将数据集中在同一个地方。Redis的集合也提供了与列表类似的特性，但集合只能保存各不相同的元素。</p>
+<h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><p>Redis的集合以无序的方式来存储多个各不相同的元素，用户可以快速地对集合执行添加元素操作、移除元素操作以及检查一个元素是否存在于集合里。</p>
+<p>一些常用的集合命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">SADD</td>
+<td style="text-align:center">SADD key-name item [item … ] — 将一个或多个元素添加到集合里面，并返回被添加元素当中原本并不存在于集合里面的元素数量</td>
+</tr>
+<tr>
+<td style="text-align:center">SREM</td>
+<td style="text-align:center">SREM key-name item [item … ] — 从集合里面移除一个或多个元素，并返回被移除元素的数量</td>
+</tr>
+<tr>
+<td style="text-align:center">SISMEMBER</td>
+<td style="text-align:center">SISMEMBER key-name item — 检查元素是否存在于集合key-name里</td>
+</tr>
+<tr>
+<td style="text-align:center">SCARD</td>
+<td style="text-align:center">SCARD key-name — 返回集合包含的元素的数量</td>
+</tr>
+<tr>
+<td style="text-align:center">SMEMBERS</td>
+<td style="text-align:center">SMEMBERS key-name — 返回集合包含的所有元素</td>
+</tr>
+<tr>
+<td style="text-align:center">SRANDMEMBER</td>
+<td style="text-align:center">SRANDMEMBER key-name [count] — 从集合里面随机地返回一个或多个元素。当count为正数时，命令返回的随机元素不会重复，当count为负数时，命令返回的随机元素可能会出现重复</td>
+</tr>
+<tr>
+<td style="text-align:center">SPOP</td>
+<td style="text-align:center">SPOP key-name — 随机地移除集合中的一个元素，并返回被移除的元素</td>
+</tr>
+<tr>
+<td style="text-align:center">SMOVE</td>
+<td style="text-align:center">SMOVE source-key dest-key item — 如果集合source-key包含元素item，那么从集合source-key里面移除元素item，并将元素item添加到集合dest-key中；成功返回1，否则返回0</td>
+</tr>
+</tbody>
+</table>
+<p>redis集合示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">conn.sadd(<span class="string">'set-key'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>); <span class="comment">//3 --返回被添加元素的数量</span></span><br><span class="line">conn.srem(<span class="string">'set-key'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>); <span class="comment">//1 --返回被移除元素的数量</span></span><br><span class="line">conn.srem(<span class="string">'set-key'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>); <span class="comment">//0</span></span><br><span class="line">conn.scard(<span class="string">'set-key'</span>); <span class="comment">//2</span></span><br><span class="line">conn.smembers(<span class="string">'set-key'</span>); <span class="comment">//set(['a', 'b'])</span></span><br><span class="line"><span class="comment">//将元素移动到另一个集合</span></span><br><span class="line">conn.smove(<span class="string">'set-key'</span>, <span class="string">'set-key2'</span>, <span class="string">'a'</span>); <span class="comment">//true</span></span><br><span class="line">conn.smove(<span class="string">'set-key'</span>, <span class="string">'set-key2'</span>, <span class="string">'c'</span>); <span class="comment">//false</span></span><br><span class="line">conn.smembers(<span class="string">'set-key'</span>); <span class="comment">//set(['a'])</span></span><br></pre></td></tr></table></figure>
+<p>用于组合和处理多个集合的Redis命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">SDIFF</td>
+<td style="text-align:center">SDIFF key-name [key-name …] — 返回那些存在于第一个集合、但不存在于其他集合中的元素（差集运算）</td>
+</tr>
+<tr>
+<td style="text-align:center">SDIFFSTORE</td>
+<td style="text-align:center">SDIFFSTORE dest-key key-name [key-name … ] — 将差集运算存储到dest-key键里面</td>
+</tr>
+<tr>
+<td style="text-align:center">SINTER</td>
+<td style="text-align:center">SINTER key-name [key-name …] — 返回那些同时存在于所有集合中的元素（交集运算）</td>
+</tr>
+<tr>
+<td style="text-align:center">SINTERSTORE</td>
+<td style="text-align:center">SINTERSTORE dest-key key-name [key-name … ] — 将交集运算存储到dest-key键里面</td>
+</tr>
+<tr>
+<td style="text-align:center">SUNION</td>
+<td style="text-align:center">SUNION key-name [key-name …] — 返回那些至少存在于一个集合中的元素（并集运算）</td>
+</tr>
+<tr>
+<td style="text-align:center">SUNIONSTORE</td>
+<td style="text-align:center">SUNIONSTORE dest-key key-name [key-name … ] — 将并集运算存储到dest-key键里面</td>
+</tr>
+</tbody>
+</table>
+<p>redis的差集、交集、并集示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conn.sadd(<span class="string">'skey1'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>); <span class="comment">//4</span></span><br><span class="line">conn.sadd(<span class="string">'skey2'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>); <span class="comment">//4</span></span><br><span class="line">conn.sdiff(<span class="string">'skey1'</span>, <span class="string">'skey2'</span>); <span class="comment">// set(['a', 'b'])</span></span><br><span class="line">conn.sinter(<span class="string">'skey1'</span>, <span class="string">'skey2'</span>); <span class="comment">// set(['c', 'd'])</span></span><br><span class="line">conn.sunion(<span class="string">'skey1'</span>, <span class="string">'skey2'</span>); <span class="comment">// set(['a', 'b', 'c', 'd', 'e', 'f'])</span></span><br></pre></td></tr></table></figure>
+<h2 id="散列"><a href="#散列" class="headerlink" title="散列"></a>散列</h2><p>Redis的散列可以让用户将多个键值对存储到一个Redis键里面。</p>
+<p>用于添加和删除键值对的散列操作：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">HMGET</td>
+<td style="text-align:center">HMGET key-name key [key … ] — 从散列获取一个或多个键的值</td>
+</tr>
+<tr>
+<td style="text-align:center">HMSET</td>
+<td style="text-align:center">HMSET key-name key value [key value … ] — 为散列里面的一个或多个键设置值</td>
+</tr>
+<tr>
+<td style="text-align:center">HDEL</td>
+<td style="text-align:center">HDEL key-name key [key …] — 删除散列里面的一个或多个键值对，返回成功找到并删除的键值对数量</td>
+</tr>
+<tr>
+<td style="text-align:center">HLEN</td>
+<td style="text-align:center">HLEN key-name — 返回散列包含的键值对数量</td>
+</tr>
+</tbody>
+</table>
+<p>hlen命令用于一次读取或者设置多个键的hmget和hmset，像hmget和hmset这种批量处理多个键的命令既可以给用户带来方便，又可以通过减少命令的调用次数以及客户端与Redis之间的通信往返次数来提升Redis的性能。</p>
+<p>redis散列命令示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conn.hmset(<span class="string">'hash-key'</span>, &#123;<span class="string">'k1'</span>:<span class="string">'v1'</span>, <span class="string">'k2'</span>:<span class="string">'k2'</span>, <span class="string">'k3'</span>:<span class="string">'k3'</span>&#125;); <span class="comment">//true</span></span><br><span class="line">conn.hmget(<span class="string">'hash-key'</span>, [<span class="string">'k2'</span>, <span class="string">'k3'</span>]); <span class="comment">//['v2', 'v3']</span></span><br><span class="line"><span class="comment">//hlen命令通常用于调试一个包含非常多键值对的散列</span></span><br><span class="line">conn.hlen(<span class="string">'hash-key'</span>); <span class="comment">//3</span></span><br><span class="line"><span class="comment">//hdel命令在成功地移除了至少一个键值对时返回true</span></span><br><span class="line">conn.hdel(<span class="string">'hash-key'</span>, <span class="string">'k1'</span>, <span class="string">'k3'</span>); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>redis更高级特性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">HEXISTS</td>
+<td style="text-align:center">HEXISTS key-name key — 检查给定键是否存在于散列中</td>
+</tr>
+<tr>
+<td style="text-align:center">HKEYS</td>
+<td style="text-align:center">HKEYS key-name — 获取散列包含的所有键</td>
+</tr>
+<tr>
+<td style="text-align:center">HVALS</td>
+<td style="text-align:center">HVALS key-name — 获取散列包含的所有值</td>
+</tr>
+<tr>
+<td style="text-align:center">HGETALL</td>
+<td style="text-align:center">HGETALL key-name — 获取散列包含的所有键值对</td>
+</tr>
+<tr>
+<td style="text-align:center">HINCRBY</td>
+<td style="text-align:center">HINCRBY key-name key increment — 将键key存储的值加上整数increment</td>
+</tr>
+<tr>
+<td style="text-align:center">HINCRBYFLOAT</td>
+<td style="text-align:center">HINCRBYFLOAT key-name key increment — 将键key存储的值加上浮点数increment</td>
+</tr>
+</tbody>
+</table>
+<p>尽管有hgetall存在，但hkeys和hvals也是很有用，如果散列包含的值非常大，那么用户可以先使用hkeys取出散列包含的所有键，然后再使用hget一个一个地取出键的值，从而避免一次获取多个大体积的值而导致服务器阻塞。hincrby和hincrbyfloat类似于处理字符串的incrby和incrbyfloat，区别就是前者处理散列，后者处理字符串。</p>
+<p>散列高级特性示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conn.hmset(<span class="string">'hash-key2'</span>, &#123;<span class="string">'short'</span>:<span class="string">'hello'</span>, <span class="string">'long'</span>:<span class="number">1000</span>*<span class="string">'1'</span>&#125;); <span class="comment">//true</span></span><br><span class="line">conn.hkeys(<span class="string">'hash-key2'</span>); <span class="comment">//['long', 'short']</span></span><br><span class="line">conn.hexists(<span class="string">'hash-key2'</span>, <span class="string">'num'</span>); <span class="comment">//false</span></span><br><span class="line"><span class="comment">//和字符串一样，对散列中尚未存在的键执行自增操作时，redis会将键的值当作0来处理</span></span><br><span class="line">conn.hincrby(<span class="string">'hash-key2'</span>, <span class="string">'num'</span>); <span class="comment">//1L</span></span><br><span class="line">conn.hexists(<span class="string">'hash-key2'</span>, <span class="string">'num'</span>); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<h2 id="有序集合"><a href="#有序集合" class="headerlink" title="有序集合"></a>有序集合</h2><p>和散列存储着键与值之间的映射类似，有序集合也存储着成员与分值之间的映射，并且提供了分值处理命令，以及根据分值大小有序地获取（fetch）或扫描（scan）成员和分值的命令。</p>
+<p>一些常用的有序集合命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ZADD</td>
+<td style="text-align:center">ZADD key-name score member [score member … ] — 将带有给定分值的成员添加到有序集合里面</td>
+</tr>
+<tr>
+<td style="text-align:center">ZREM</td>
+<td style="text-align:center">ZREM key-name member [member … ] — 从有序集合里面移除给定的成员，并返回被移除成员的数量</td>
+</tr>
+<tr>
+<td style="text-align:center">ZCARD</td>
+<td style="text-align:center">ZCARD key-name — 返回有序集合包含的成员数量</td>
+</tr>
+<tr>
+<td style="text-align:center">ZINCRBY</td>
+<td style="text-align:center">ZINCRBY key-name increment member — 将member成员的分值加上increment</td>
+</tr>
+<tr>
+<td style="text-align:center">ZCOUNT</td>
+<td style="text-align:center">ZCOUNT key-name min max — 返回分值介于min和max之间的成员数量</td>
+</tr>
+<tr>
+<td style="text-align:center">ZRANK</td>
+<td style="text-align:center">ZRANK key-name member — 返回成员member在有序集合中的排名</td>
+</tr>
+<tr>
+<td style="text-align:center">ZSCORE</td>
+<td style="text-align:center">ZSCORE key-name member — 返回成员member的分值</td>
+</tr>
+<tr>
+<td style="text-align:center">ZRANGE</td>
+<td style="text-align:center">ZRANGE key-name start stop [WITHSCORES] — 返回有序集合中排名介于start和stop 之间的成员，如果给定了WITHSCORES选项，则将分值一并返回</td>
+</tr>
+</tbody>
+</table>
+<p>redis有序集合示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">conn.zadd(<span class="string">'zset-key'</span>, <span class="number">3</span>, <span class="string">'a'</span>, <span class="number">2</span>, <span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'c'</span>); <span class="comment">//3</span></span><br><span class="line">conn.zcard(<span class="string">'zset-key'</span>); <span class="comment">//3</span></span><br><span class="line">conn.zincrby(<span class="string">'zset-key'</span>, <span class="string">'c'</span>, <span class="number">3</span>); <span class="comment">//4.0</span></span><br><span class="line"><span class="comment">//获取单个成员的分值对于实现计数器或者排行榜之类的功能非常有用</span></span><br><span class="line">conn.zscore(<span class="string">'zset-key'</span>, <span class="string">'b'</span>); <span class="comment">//2.0</span></span><br><span class="line"><span class="comment">//排名以0开始</span></span><br><span class="line">conn.zrank(<span class="string">'zset-key'</span>, <span class="string">'c'</span>); <span class="comment">//2</span></span><br><span class="line">conn.zcount(<span class="string">'zset-key'</span>, <span class="number">0</span>, <span class="number">3</span>); <span class="comment">//2L</span></span><br><span class="line">conn.zrem(<span class="string">'zset-key'</span>, <span class="string">'b'</span>); <span class="comment">//true</span></span><br><span class="line">conn.zrange(<span class="string">'zset-key'</span>, <span class="number">0</span>, -<span class="number">1</span>, withscores); <span class="comment">//[('a', 3.0), ('c', 4.0)]</span></span><br></pre></td></tr></table></figure>
+<p>有序集合的范围型数据获取和删除命令以及并集、交集命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ZREVRANK</td>
+<td style="text-align:center">ZREVRANK key-name member — 返回有序集合里成员member的排名，成员按照分值从大到小排列（逆序）</td>
+</tr>
+<tr>
+<td style="text-align:center">ZREVRANGE</td>
+<td style="text-align:center">ZREVRANGE key-name start stop [WITHSCORES] — 返回有序集合给定排名范围内的成员</td>
+</tr>
+<tr>
+<td style="text-align:center">ZRANGEBYSCORE</td>
+<td style="text-align:center">ZRANGEBYSCORE key min max [WITHSCORES]\</td>
+<td>[LIMIT offset count]返回有序集合中分值介于min和max之间的所有成员</td>
+</tr>
+<tr>
+<td style="text-align:center">ZREVRANGEBYSCORE</td>
+<td style="text-align:center">ZREVRANGEBYSCORE key max min [WITHSCORES]\</td>
+<td>[LIMIT offset count]获取有序集合中分值介于min和max之间的所有成员，并按分值从大到小的顺序来返回它们</td>
+</tr>
+<tr>
+<td style="text-align:center">ZREMRANGEBYRANK</td>
+<td style="text-align:center">ZREMRANGEBYRANK key-name start stop — 移除有序集合中排名介于start和stop之间的所有成员</td>
+</tr>
+<tr>
+<td style="text-align:center">ZREMRANGEBYSCORE</td>
+<td style="text-align:center">ZREMRANGEBYSCORE key-name min max — 移除有序集合中分值介于min和max之间的所有成员</td>
+</tr>
+<tr>
+<td style="text-align:center">ZINTERSTORE</td>
+<td style="text-align:center">ZINTERSTORE dest-key key-count key [key … ] \</td>
+<td>[WEIGHTS weight [weight … ]] \</td>
+<td>[AGGREGATE SUM\</td>
+<td>MIN\</td>
+<td>MAX] — 对给定的有序集合执行类似于集合的交集运算</td>
+</tr>
+<tr>
+<td style="text-align:center">ZUNIONSTORE</td>
+<td style="text-align:center">ZUNIONSTORE dest-key key-count key [key … ] \</td>
+<td>[WEIGHTS weight [weight … ]] \</td>
+<td>[AGGREGATE SUM\</td>
+<td>MIN\</td>
+<td>MAX] — 对给定的有序集合执行类似于集合的并集运算</td>
+</tr>
+</tbody>
+</table>
+<p>ZINTERSTORE和ZUNIONSTORE命令示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">conn.zadd(<span class="string">'zset-1'</span>, <span class="number">1</span>, <span class="string">'a'</span>, <span class="number">2</span>, <span class="string">'b'</span>, <span class="number">3</span>, <span class="string">'c'</span>); <span class="comment">//3</span></span><br><span class="line">conn.zadd(<span class="string">'zset-1'</span>, <span class="number">4</span>, <span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'c'</span>, <span class="number">0</span>, <span class="string">'d'</span>); <span class="comment">//3</span></span><br><span class="line">conn.zinterstore(<span class="string">'zset-i'</span>, [<span class="string">'zset-1'</span>, <span class="string">'zset-2'</span>]); <span class="comment">//2L</span></span><br><span class="line"><span class="comment">//默认使用的聚合函数是SUM</span></span><br><span class="line">conn.zrange(<span class="string">'zset-i'</span>, <span class="number">0</span>, -<span class="number">1</span>, withscore=<span class="keyword">true</span>); <span class="comment">//[(4.0, 'c'), (6.0, 'b')]</span></span><br><span class="line">conn.zunionstore(<span class="string">'zset-u'</span>, [<span class="string">'zset-1'</span>, <span class="string">'zset-2'</span>], aggregate=<span class="string">'min'</span>); <span class="comment">//4L</span></span><br><span class="line">conn.zrange(<span class="string">'zset-u'</span>, <span class="number">0</span>, -<span class="number">1</span>, withscore=<span class="keyword">true</span>); <span class="comment">//[(0.0, 'd'), (1.0, 'a'), (1.0, 'c'), (2.0, 'b')]</span></span><br><span class="line"><span class="comment">//用户还可以把集合作为输入传给zinterstore和zunionstore，命令会将集合看作是成员分值全为1的有序集合来处理</span></span><br><span class="line">conn.sadd(<span class="string">'set-1'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>); <span class="comment">//2</span></span><br><span class="line">conn.zunionstore(<span class="string">'zset-u2'</span>, [<span class="string">'zset-1'</span>, <span class="string">'zset-2'</span>, <span class="string">'set-1'</span>]); <span class="comment">//4L</span></span><br><span class="line">conn.zrange(<span class="string">'zset-u2'</span>, <span class="number">0</span>, -<span class="number">1</span>, withscore=<span class="keyword">true</span>); <span class="comment">//[(1.0, 'd'), (2.0, 'a'), (4.0, 'c'), (6.0, 'b')]</span></span><br></pre></td></tr></table></figure>
+<h2 id="发布与订阅"><a href="#发布与订阅" class="headerlink" title="发布与订阅"></a>发布与订阅</h2><p>发布与订阅（publish/subscribe）模式，又称pub/sub模式，redis也实现了这种模式。发布与订阅特点是订阅者（listener）负责订阅频道（channel），发送者（publisher）负责向频道发送二进制字符串消息（binary string message）。每当有消息被发送至给定频道时，频道的所有订阅者都会收到消息。</p>
+<p>redis提供的发布与订阅命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">SUBSCRIBE</td>
+<td style="text-align:center">SUBSCRIBE channel [channel … ] — 订阅给定的一个或多个频道</td>
+</tr>
+<tr>
+<td style="text-align:center">UNSUBSCRIBE</td>
+<td style="text-align:center">UNSUBSCRIBE [channel [channel … ]] — 退订给定的一个或多个频道，如果执行时没有给定频道则退订所有频道</td>
+</tr>
+<tr>
+<td style="text-align:center">PUBLISH</td>
+<td style="text-align:center">PUBLISH channel message — 向给定频道发送消息</td>
+</tr>
+<tr>
+<td style="text-align:center">PSUBSCRIBE</td>
+<td style="text-align:center">PSUBSCRIBE pattern [pattern … ] — 订阅与给定模式相匹配的所有频道</td>
+</tr>
+<tr>
+<td style="text-align:center">PUNSUBSCRIBE</td>
+<td style="text-align:center">PUNSUBSCRIBE [pattern [pattern … ]] — 退订给定的模式，如果执行时没有给定频道则退订所有模式</td>
+</tr>
+</tbody>
+</table>
+<p>redis提供的发布与订阅很少用有两个原因：</p>
+<ol>
+<li>redis系统的稳定性有关。对于旧版redis，当用户读取速度慢导致消息积压，会使得redis输出缓冲区体积变大，导致redis速度变慢甚至奔溃，新版会设置client-output-buffer-limit pubsub选项，会自动断开不符合要求的订阅客户端。</li>
+<li>数据传输的可靠性有关。客户端在执行订阅的过程中断线则会丢失断线期间发送的消息。后面总结<a href="">解决方法</a>。</li>
+</ol>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><p>Redis的排序操作和其他编程语言的排序操作一样，都可以根据某种比较规则对一系列元素进行有序的排列。负责执行排序操作的SORT命令可以根据字符串、列表、集合、有序集合、散列这5种键里面存储着的数据，对列表、集合以及有序集合进行排序。SORT命令的定义：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">用例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">SORT</td>
+<td style="text-align:center">SORT source-key [BY pattern] \</td>
+<td>[LIMIT offset count] \</td>
+<td>[get pattern [get pattern … ]] \</td>
+<td>[ASC\</td>
+<td>DESC] \</td>
+<td>[ALPHA] \</td>
+<td>[STORE dest-key] — 根据给定的选项，对输入列表、集合或者有序集合进行排序，然后返回或者存储排序的结果</td>
+</tr>
+</tbody>
+</table>
+<p>使用SORT命令提供的选项可以实现以下功能：</p>
+<ol>
+<li>根据降序而不是默认的升序来排序元素；</li>
+<li>将元素看作是数字来进行排序，或者将元素看作是二进制字符串来进行排序；</li>
+<li>使用被排序元素之外的其他值作为权重来进行排序，甚至还可以从输入的列表、集合、有序集合以外的其他地方进行取值。</li>
+</ol>
+<p>SORT命令示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">conn.rpush(<span class="string">'sort-input'</span>, <span class="number">23</span>, <span class="number">15</span>, <span class="number">110</span>, <span class="number">7</span>); <span class="comment">//4</span></span><br><span class="line"><span class="comment">//根据数字大小排序</span></span><br><span class="line">conn.sort(<span class="string">'sort-input'</span>); <span class="comment">//['7', '15', '23', '110']</span></span><br><span class="line"><span class="comment">//根据字母表顺序排序</span></span><br><span class="line">conn.sort(<span class="string">'sort-input'</span>, alpha=<span class="keyword">true</span>); <span class="comment">//['110', '23', '15', '7']</span></span><br><span class="line"><span class="comment">//添加一些用于执行排序操作和获取操作的附加数据</span></span><br><span class="line">conn.hset(<span class="string">'d-7'</span>, <span class="string">'field'</span>, <span class="number">5</span>); <span class="comment">//1L</span></span><br><span class="line">conn.hset(<span class="string">'d-15'</span>, <span class="string">'field'</span>, <span class="number">1</span>); <span class="comment">//1L</span></span><br><span class="line">conn.hset(<span class="string">'d-23'</span>, <span class="string">'field'</span>, <span class="number">9</span>); <span class="comment">//1L</span></span><br><span class="line">conn.hset(<span class="string">'d-110'</span>, <span class="string">'field'</span>, <span class="number">3</span>); <span class="comment">//1L</span></span><br><span class="line"><span class="comment">//将散列的域（field）用作权重，对sort-input列表进行排序</span></span><br><span class="line">conn.sort(<span class="string">'sort-input'</span>, by=<span class="string">'d-*-&gt;field'</span>); <span class="comment">//['15', '110', '7', '23']</span></span><br><span class="line"><span class="comment">//获取外部数据，并将它们用作命令的返回值，而不是返回被排序的数据</span></span><br><span class="line">conn.sort(<span class="string">'sort-input'</span>, by=<span class="string">'d-*-&gt;field'</span>, get=<span class="string">'d-*-&gt;field'</span>); <span class="comment">//['1', '3', '5', '9']</span></span><br></pre></td></tr></table></figure>
+<p>SORT是redis唯一一个可以同时处理3种不同类型的数据的命令，但基本的redis事务同样可以让我们在一连串不间断执行的命令里面操作多种不同类型的数据。</p>
+<h2 id="基本的Redis事务"><a href="#基本的Redis事务" class="headerlink" title="基本的Redis事务"></a>基本的Redis事务</h2><p>Redis的基本事务（basic transaction）需要用到MULTI命令和EXEC命令，这种事务可以让一个客户端在不被其他客户端打断的情况下执行多个命令。Redis有5个命令可以让用户在不被打断（interruption）的情况下多个键执行操作，它们分别是WATCH、MULTI、EXEC、UNWATCH和DISCARD。和关系数据库那种可以在执行的过程中进行回滚（rollback）的事务不同，在redis里面，被multi命令和exec命令包围的所有命令会一个接一个地执行，直到所有命令都执行完毕为止。当一个事务执行完毕之后，redis才会处理其他客户端的命令。</p>
+<p>在redis里面执行事务，当redis从一个客户端那里接收到multi命令时，redis会将这个客户端之后发送的所有命令都放到一个队列里面，直到这个客户端发送exec命令为止，然后redis就会在不被打断的情况下，一个接一个地执行存储在队列里面的命令。</p>
+<p>说明：</p>
+<ol>
+<li>multi和exec事务的一个主要作用是移除竞争条件；</li>
+<li>在redis里面使用流水线的另一个目的是提高性能，在执行一连串命令时，减少redis与客户端之间的通信往返次数可以大幅度降低客户端等待回复所需要的时间。</li>
+</ol>
+<h2 id="键的过期时间"><a href="#键的过期时间" class="headerlink" title="键的过期时间"></a>键的过期时间</h2><p>过期时间特性对于清理缓存数据非常有用，但是只有少数几个命令可以原子地为键设置过期时间，并且对于列表、集合、散列和有序集合这样的容器（container）来说，键的过期时间命令只能为整个键设置而没有办法为键里面的单个元素设置过期时间，为了解决这个问题，我们可以用存储时间戳的有序集合来实现针对单个元素的过期时间。用于处理过期时间的redis命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">示例和描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">PERSIST</td>
+<td style="text-align:center">PERSIST key-name — 移除键的过期时间</td>
+</tr>
+<tr>
+<td style="text-align:center">TTL</td>
+<td style="text-align:center">TTL key-name — 查看给定键距离过期时间还有多少秒</td>
+</tr>
+<tr>
+<td style="text-align:center">EXPIRE</td>
+<td style="text-align:center">EXPIRE key-name seconds — 让给定键在指定的秒数之后过期</td>
+</tr>
+<tr>
+<td style="text-align:center">EXPIREAT</td>
+<td style="text-align:center">EXPIREAT key-name timestsmp — 将给定键的过期时间设置为给定的UNIX时间戳</td>
+</tr>
+<tr>
+<td style="text-align:center">PTTL</td>
+<td style="text-align:center">PTTL key-name 查看给定键距离过期时间还有多少毫秒</td>
+</tr>
+<tr>
+<td style="text-align:center">PEXPIRE</td>
+<td style="text-align:center">PEXPIRE key-name milliseconds — 让给定键在指定的毫秒数之后过期</td>
+</tr>
+<tr>
+<td style="text-align:center">PEXPIREAT</td>
+<td style="text-align:center">PEXPIREAT key-name timestsmp-milliseconds — 将一个毫秒级精度的UNIX时间戳设置为给定键的过期时间</td>
+</tr>
+</tbody>
+</table>
+<p>redis过期时间命令示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conn.set(<span class="string">'key'</span>, <span class="string">'value'</span>); <span class="comment">//true</span></span><br><span class="line">conn.get(<span class="string">'key'</span>); <span class="comment">//'value'</span></span><br><span class="line">conn.expire(<span class="string">'key'</span>, <span class="number">2</span>); <span class="comment">//true</span></span><br><span class="line">time.sleep(<span class="number">2</span>);</span><br><span class="line">conn.get(<span class="string">'key'</span>);</span><br><span class="line">conn.set(<span class="string">'key'</span>, <span class="string">'value2'</span>); <span class="comment">//true</span></span><br><span class="line">conn.expire(<span class="string">'key'</span>, <span class="number">100</span>); conn.ttl(<span class="string">'key'</span>); <span class="comment">//true 100</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/08/redis/redisBasics/" rel="next" title="Redis数据结构">
+                <i class="fa fa-chevron-left"></i> Redis数据结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/20/dataBase/sqlindex/" rel="prev" title="索引实现原理">
+                索引实现原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串"><span class="nav-number">1.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自增自减操作"><span class="nav-number">1.1.</span> <span class="nav-text">自增自减操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis对字符串进行读取和写入操作"><span class="nav-number">1.2.</span> <span class="nav-text">Redis对字符串进行读取和写入操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表"><span class="nav-number">2.</span> <span class="nav-text">列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集合"><span class="nav-number">3.</span> <span class="nav-text">集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#散列"><span class="nav-number">4.</span> <span class="nav-text">散列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有序集合"><span class="nav-number">5.</span> <span class="nav-text">有序集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布与订阅"><span class="nav-number">6.</span> <span class="nav-text">发布与订阅</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序"><span class="nav-number">7.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本的Redis事务"><span class="nav-number">8.</span> <span class="nav-text">基本的Redis事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#键的过期时间"><span class="nav-number">9.</span> <span class="nav-text">键的过期时间</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/01/13/redis/rediscommand/';
+          this.page.identifier = '2018/01/13/redis/rediscommand/';
+          this.page.title = 'Redis命令';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

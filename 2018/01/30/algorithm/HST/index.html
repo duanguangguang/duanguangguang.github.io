@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="查找," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍用一个数组来实现无序的符号表，将键作为数组的索引而数组中键i处存储的就是它对应的值。这样我们就可以快速访问任意键的值。散列表就是这种简易方法的扩展并能够处理更加复杂的类型的键。我们需要用算术操作将键转化为数组的索引来访问数组中的键值对。 使用散列的查找算法分为两步。第一步是用散列函数将被查找的键转化为数组的一个索引。第二步是一个处理碰撞冲突的过程。两种解决碰撞的方法：拉链法 和 线性探测法 。">
+<meta name="keywords" content="查找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="散列表">
+<meta property="og:url" content="http://yoursite.com/2018/01/30/algorithm/HST/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍用一个数组来实现无序的符号表，将键作为数组的索引而数组中键i处存储的就是它对应的值。这样我们就可以快速访问任意键的值。散列表就是这种简易方法的扩展并能够处理更加复杂的类型的键。我们需要用算术操作将键转化为数组的索引来访问数组中的键值对。 使用散列的查找算法分为两步。第一步是用散列函数将被查找的键转化为数组的一个索引。第二步是一个处理碰撞冲突的过程。两种解决碰撞的方法：拉链法 和 线性探测法 。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/01/30/algorithm/HST/hst01.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/30/algorithm/HST/hst02.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/30/algorithm/HST/hst03.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/30/algorithm/HST/hst04.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/30/algorithm/HST/hst05.jpg">
+<meta property="og:updated_time" content="2018-07-29T08:34:29.893Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="散列表">
+<meta name="twitter:description" content="介绍用一个数组来实现无序的符号表，将键作为数组的索引而数组中键i处存储的就是它对应的值。这样我们就可以快速访问任意键的值。散列表就是这种简易方法的扩展并能够处理更加复杂的类型的键。我们需要用算术操作将键转化为数组的索引来访问数组中的键值对。 使用散列的查找算法分为两步。第一步是用散列函数将被查找的键转化为数组的一个索引。第二步是一个处理碰撞冲突的过程。两种解决碰撞的方法：拉链法 和 线性探测法 。">
+<meta name="twitter:image" content="http://yoursite.com/2018/01/30/algorithm/HST/hst01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/30/algorithm/HST/"/>
+
+
+
+
+
+  <title>散列表 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/30/algorithm/HST/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">散列表</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-30T20:03:10+08:00">
+                2018-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/30/algorithm/HST/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/30/algorithm/HST/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/30/algorithm/HST/" class="leancloud_visitors" data-flag-title="散列表">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>用一个数组来实现无序的符号表，将键作为数组的索引而数组中键i处存储的就是它对应的值。这样我们就可以快速访问任意键的值。<strong>散列表</strong>就是这种简易方法的扩展并能够处理更加复杂的类型的键。我们需要用算术操作将键转化为数组的索引来访问数组中的键值对。</p>
+<p>使用散列的查找算法分为两步。第一步是用<strong>散列函数</strong>将被查找的键转化为数组的一个索引。第二步是一个<strong>处理碰撞冲突</strong>的过程。两种解决碰撞的方法：<strong>拉链法</strong> 和 <strong>线性探测法</strong> 。散列表的核心问题碰撞冲突如下图：</p>
+<p><img src="/2018/01/30/algorithm/HST/hst01.png" alt=""></p>
+<a id="more"></a>
+<p>散列表是算法在<strong>时间</strong> 和 <strong>空间上作出权衡</strong> 的经典例子。如果没有内存限制，我们可以直接将键作为数组的索引，那么所有查找操作只需要访问内存一次即可完成。另一方面，如果没有时间限制，我们可以使用无序数组并进行顺序查找，这样就只需要很少的内存。事实上，只需要调整散列表的参数就可以在空间和时间之间做出取舍。</p>
+<h2 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h2><p>散列函数能够将键转化为数组的索引。散列函数和键的类型有关。严格来说，<strong>对于每种类型的键我们都需要一个与之对应的散列函数</strong> 。如果键是一个数，那我们就可以直接使用这个数；如果键是一个字符串，我们就需要将这个字符串转化为一个数；如果键含有多个部分，比如邮件地址，我们需要用某种方法将这些部分结合起来。</p>
+<h3 id="1-正整数"><a href="#1-正整数" class="headerlink" title="1. 正整数"></a>1. 正整数</h3><p>将整数散列最常用的方法是<strong>除留余数法</strong> 。我们选择大小为素数M的数组，对于任意正整数k，计算k除以M的余数 。这个计算能够有效地将键散布在0到M-1的范围内。除留余数法如下图：</p>
+<p><img src="/2018/01/30/algorithm/HST/hst02.png" alt=""></p>
+<h3 id="2-浮点数"><a href="#2-浮点数" class="headerlink" title="2. 浮点数"></a>2. 浮点数</h3><p>如果键是0到1之间的实数，我们可以将它乘以M并四舍五入得到一个0至M-1之间的索引值。但这个方法是有缺陷的，因为这种情况下键的高位起的作用更大，最低位对散列的结果没有影响。修正这个问题的办法是将键表示为二进制数然后再使用除留余数法（java是这么做的）。</p>
+<h3 id="3-字符串"><a href="#3-字符串" class="headerlink" title="3. 字符串"></a>3. 字符串</h3><p>除留余数法可以处理较长的键，例如字符串，我们只需将它们当作大整数即可。下面代码是用除留余数法计算String s的散列值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> hash = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++)&#123;</span><br><span class="line">  	hash = (R * hash + s.charAt(i)) % M;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>java的charAt()函数能够返回一个char值，即一个非负16位整数。如果R比任何字符的值都大，这种计算相当于将字符串当作一个N位的R进制值，将它除以M并取余。一种叫Horner方法的经典算法用N次乘法、加法和取余来计算一个字符串的散列值。只要R足够小，不造成溢出，那么结果就能够如我们所愿，落在0至M-1内。使用一个较小的素数，例如31，可以保证字符串中的所有字符都能发挥作用。java的String的默认实现使用了一个类似的方法。</p>
+<h3 id="4-组合键"><a href="#4-组合键" class="headerlink" title="4. 组合键"></a>4. 组合键</h3><p>如果键的类型含有多个整形变量，我们可以和String类型一样将它们混合起来。例如，假设被查找的键的类型是Date，其中含有几个整形的域：day，month和year。我们可以这样计算它的散列值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> hash = (((day * R + month) % M) * R + year) % M;</span><br></pre></td></tr></table></figure>
+<h3 id="5-java的约定"><a href="#5-java的约定" class="headerlink" title="5. java的约定"></a>5. java的约定</h3><p>每种数据类型都需要相应的散列函数，于是java令所有数据类型都继承了一个能够返回一个32比特整数的hashCode()方法。每一种数据类型的hashCode()方法都必须和equals()方法一致。这说明如果你要为自定义的数据类型定义散列函数，你需要同时重写hashCode()和equals()两个方法。默认散列函数会返回对象的内存地址，但这只适用于很少的情况。java为很多常用的数据类型重写了hashCode()方法（包括String、Integer、Double、File和URL）。</p>
+<h3 id="6-将hashCode-的返回值转化为一个数组索引"><a href="#6-将hashCode-的返回值转化为一个数组索引" class="headerlink" title="6. 将hashCode()的返回值转化为一个数组索引"></a>6. 将hashCode()的返回值转化为一个数组索引</h3><p>因为我们需要的是数组的索引而不是一个32位整数，我们在实现中会将默认的hashCode()方法和除留余数法结合起来产生一个0到M-1的整数。方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Key x)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> (x.hashCode() &amp; <span class="number">0x7fffffff</span>) % M;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码会将符号位屏蔽（将一个32位整数变为一个31位非负整数），然后用除留余数法计算它除以M的余数。</p>
+<h3 id="7-自定义的hashCode-方法"><a href="#7-自定义的hashCode-方法" class="headerlink" title="7. 自定义的hashCode()方法"></a>7. 自定义的hashCode()方法</h3><p>散列表的用例希望hashCode()方法能够将键平均地散布为所有可能的32位整数。在java中所有数据类型都继承了hashCode()方法，因此我们可以将对象中的每个变量的hashCode()返回值转化为32位整数并计算得到散列值。如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Transaction</span></span>&#123;</span><br><span class="line">  	<span class="keyword">private</span> <span class="keyword">final</span> String who;</span><br><span class="line">  	<span class="keyword">private</span> <span class="keyword">final</span> Date when;</span><br><span class="line">  	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">double</span> amount;</span><br><span class="line">  </span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>&#123;</span><br><span class="line">      	<span class="keyword">int</span> hash = <span class="number">17</span>;</span><br><span class="line">      	hash = <span class="number">31</span> * hash + who.hashCode();</span><br><span class="line">      	hash = <span class="number">31</span> * hash + when.hashCode();</span><br><span class="line">      	hash = <span class="number">31</span> * hash + ((Double) amount).hashCode();</span><br><span class="line">      	<span class="keyword">return</span> hash;</span><br><span class="line">  	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于原始类型的对象，可以将其转化为对应的数据类型然后再调用hashCode()方法。</p>
+<h3 id="8-软缓存"><a href="#8-软缓存" class="headerlink" title="8. 软缓存"></a>8. 软缓存</h3><p>如果散列值的计算很耗时，可以将每个键的散列值缓存起来，即在每个键中使用一个hash变量来保存它的hashCode()的返回值。java中的String对象的hashCode()方法就是使用了这种缓存方法来减少计算量。总的来说，要为一个数据类型实现一个优秀的散列方法需要满足三个条件：</p>
+<ul>
+<li>一致性：等价的键必然产生相等的散列值；</li>
+<li>高效性：计算简便；</li>
+<li>均匀性：均匀地散列所有的键。</li>
+</ul>
+<h2 id="基于拉链法的散列表"><a href="#基于拉链法的散列表" class="headerlink" title="基于拉链法的散列表"></a>基于拉链法的散列表</h2><p>散列算法的第二步是碰撞处理，也就是处理两个或多个键的散列值相同的情况。一种直接的办法是将大小为M的数组中的每个元素指向一条链表，链表中的每个结点都存储了散列值为该元素的索引的键值对。这种方法称为<strong>拉链法</strong> 。查找分两步：首先根据散列值找到对应的链表，然后沿着链表顺序查找相应的键。</p>
+<p>基于拉链法的散列表SeparateChainingHashST使用了一个SequentialSearchST对象的数组，在put()和get()的实现中先计算散列函数来选定被查找的SequentialSearchST对象，然后使用符号表的put()和get()方法来完成相应的任务。</p>
+<p>标准索引用例使用基于拉链法的散列表如下图所示：</p>
+<p><img src="/2018/01/30/algorithm/HST/hst03.png" alt=""></p>
+<p>基于拉链法的散列表：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SeparateChainingHashST</span>&lt;<span class="title">Key</span>, <span class="title">Value</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INIT_CAPACITY = <span class="number">997</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> n;                                <span class="comment">// 键值对总数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> m;                                <span class="comment">// 散列表的大小</span></span><br><span class="line">    <span class="keyword">private</span> SequentialSearchST&lt;Key, Value&gt;[] st;  <span class="comment">// 存放链表对象的数组</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SeparateChainingHashST</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(INIT_CAPACITY);</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="comment">//创建m条链表</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SeparateChainingHashST</span><span class="params">(<span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.m = m;</span><br><span class="line">        st = (SequentialSearchST&lt;Key, Value&gt;[]) <span class="keyword">new</span> SequentialSearchST[m];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++)</span><br><span class="line">            st[i] = <span class="keyword">new</span> SequentialSearchST&lt;Key, Value&gt;();</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// hash value between 0 and m-1</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (key.hashCode() &amp; <span class="number">0x7fffffff</span>) % m;</span><br><span class="line">    &#125; </span><br><span class="line">  </span><br><span class="line">  	<span class="function"><span class="keyword">public</span> Value <span class="title">get</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = hash(key);</span><br><span class="line">        <span class="keyword">return</span> (Value)st[i].get(key);</span><br><span class="line">    &#125; </span><br><span class="line">  </span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(Key key, Value val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (val == <span class="keyword">null</span>) &#123;</span><br><span class="line">            delete(key);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// double table size if average length of list &gt;= 10</span></span><br><span class="line">        <span class="keyword">if</span> (n &gt;= <span class="number">10</span>*m) resize(<span class="number">2</span>*m);</span><br><span class="line">        <span class="keyword">int</span> i = hash(key);</span><br><span class="line">        <span class="keyword">if</span> (!st[i].contains(key)) n++;</span><br><span class="line">        st[i].put(key, val);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">   	<span class="function"><span class="keyword">public</span> Iterable&lt;Key&gt; <span class="title">keys</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Queue&lt;Key&gt; queue = <span class="keyword">new</span> Queue&lt;Key&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (Key key : st[i].keys())</span><br><span class="line">                queue.enqueue(key);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段符号表的实现维护着一条链表的数组，用散列函数来为每个键选择一条链表。在创建st[]时需要进行类型转换，因为java不允许泛型的数组。默认的构造函数使用了997条链表，当能够预知所需要的符号表的大小时，这种方案能够得到不错的性能，一种更可靠的方案是动态调整链表数组的大小。<strong>在一张含有M条链条和N个键的散列表中，未命中查找和插入操作所需的比较次数为~N/M</strong> 。</p>
+<h3 id="散列表的大小"><a href="#散列表的大小" class="headerlink" title="散列表的大小"></a>散列表的大小</h3><p>在实习拉链法的散列表时，我们的目标是选择适当的数组大小M，既不会因为空链表而浪费大量内存，也不会因为链表太长而在查找上浪费太多时间。而拉链法的一个好处就是这不是关键性的选择。如果存入的键多于预期，查找所需的时间只会比选择更大的数组稍长；如果少于预期，虽然有些浪费空间但查找会非常快。当内存不是很紧张时，可以选择一个足够大的M，使得查找变为常数；当内存紧张时，选择尽量大的M仍然能将性能提高M倍。</p>
+<h3 id="动态调整数组大小"><a href="#动态调整数组大小" class="headerlink" title="动态调整数组大小"></a>动态调整数组大小</h3><p>对于拉链法，如果能准确地估计用例所需的散列表大小N，调整数组大小的工作并不是必须的，只需要根据查找耗时和（1+N/M）成正比来选取一个适当的M即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> chains)</span> </span>&#123;</span><br><span class="line">      SeparateChainingHashST&lt;Key, Value&gt; temp = <span class="keyword">new</span> SeparateChainingHashST&lt;Key, Value&gt;(chains);</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">          <span class="keyword">for</span> (Key key : st[i].keys()) &#123;</span><br><span class="line">              temp.put(key, st[i].get(key));</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">this</span>.m  = temp.m;</span><br><span class="line">      <span class="keyword">this</span>.n  = temp.n;</span><br><span class="line">      <span class="keyword">this</span>.st = temp.st;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h3><p>要删除一个键值对，先用散列值找到含有该键的SequentialSearchST对象，然后调用该对象的delete()方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">int</span> i = hash(key);</span><br><span class="line">      <span class="keyword">if</span> (st[i].contains(key)) n--;</span><br><span class="line">      st[i].delete(key);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// halve table size if average length of list &lt;= 2</span></span><br><span class="line">      <span class="keyword">if</span> (m &gt; INIT_CAPACITY &amp;&amp; n &lt;= <span class="number">2</span>*m) resize(m/<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="有序性相关操作"><a href="#有序性相关操作" class="headerlink" title="有序性相关操作"></a>有序性相关操作</h3><p>散列最主要的饿目的在于均匀地将键散布开来，因此在计算散列后键的顺序信息就丢失了。所以要实现有序符号表的有序性相关操作，散列表不是合适的选择。在键的顺序不重要的应用中，它可能是最快的（也是使用最广泛的）符号表实现。当使用java的内置数据类型作为键，或是在使用含有经过完善测试的hashCode()方法的自定义类型作为键时，基于拉链法散列表算法能够提供快速而方便的查找和插入操作。</p>
+<h2 id="基于线性探测法的散列表"><a href="#基于线性探测法的散列表" class="headerlink" title="基于线性探测法的散列表"></a>基于线性探测法的散列表</h2><p>实现散列表的另一种方式是用大小为M的数组保存N个键值对，其中M&gt;N。我们需要依靠数组汇中的<strong>空位</strong>解决碰撞冲突。基于这种策略的所有方法被统称为<strong>开放地址散列表</strong> 。开放地址散列表中最简单的方法叫做<strong>线性探测法</strong> ：当碰撞发生时（当一个键的散列值已经被另一个不同的键占用），我们直接检查散列表中的下一个位置（将索引值加1）。这样的线性探测可能产生三种结果：</p>
+<ul>
+<li>命中，该位置的键和被查找的键相同；</li>
+<li>未命中，键为空（该位置没有键）；</li>
+<li>继续查找，该位置的键和被查找的键不同。</li>
+</ul>
+<p>我们用散列函数找到键在数组中的索引，检查其中的键和被查找的键是否相同。如果不同则继续查找（将索引增大，到达数组结尾时折回数组的开头），直到找到该键或者遇到一个空元素。如下图所示：</p>
+<p><img src="/2018/01/30/algorithm/HST/hst04.png" alt=""></p>
+<p>开放地址类的散列表的核心思想是与其将内存用作链表，不如将它们作为在散列表的空元素。这些空元素可以作为查找结束的标志。我们在实现中使用了并行数组，一条保存键，一条保存值，并像前面讨论那样使用散列函数产生访问数据所需的数组索引。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinearProbingHashST</span>&lt;<span class="title">Key</span>, <span class="title">Value</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> n;           <span class="comment">// 符号表中键值对的总数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> m;           <span class="comment">// 线性探测表的大小</span></span><br><span class="line">    <span class="keyword">private</span> Key[] keys;      <span class="comment">// 键</span></span><br><span class="line">    <span class="keyword">private</span> Value[] vals;    <span class="comment">// 值</span></span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinearProbingHashST</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        m = capacity;</span><br><span class="line">        n = <span class="number">0</span>;</span><br><span class="line">        keys = (Key[])   <span class="keyword">new</span> Object[m];</span><br><span class="line">        vals = (Value[]) <span class="keyword">new</span> Object[m];</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (key.hashCode() &amp; <span class="number">0x7fffffff</span>) % m;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(Key key, Value val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (val == <span class="keyword">null</span>) &#123;</span><br><span class="line">            delete(key);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// double table size if 50% full</span></span><br><span class="line">        <span class="keyword">if</span> (n &gt;= m/<span class="number">2</span>) resize(<span class="number">2</span>*m);</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">        <span class="keyword">for</span> (i = hash(key); keys[i] != <span class="keyword">null</span>; i = (i + <span class="number">1</span>) % m) &#123;</span><br><span class="line">            <span class="keyword">if</span> (keys[i].equals(key)) &#123;</span><br><span class="line">                vals[i] = val;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        keys[i] = key;</span><br><span class="line">        vals[i] = val;</span><br><span class="line">        n++;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Value <span class="title">get</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = hash(key); keys[i] != <span class="keyword">null</span>; i = (i + <span class="number">1</span>) % m)</span><br><span class="line">            <span class="keyword">if</span> (keys[i].equals(key))</span><br><span class="line">                <span class="keyword">return</span> vals[i];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Iterable&lt;Key&gt; <span class="title">keys</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Queue&lt;Key&gt; queue = <span class="keyword">new</span> Queue&lt;Key&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++)</span><br><span class="line">            <span class="keyword">if</span> (keys[i] != <span class="keyword">null</span>) queue.enqueue(keys[i]);</span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段符号表的实现使用空（null）来表示一簇键的结束。如果一个新键的散列值是一个空元素，那么就将它保存在那里；如果不是，我们就顺序查找一个空元素来保存它。要查找一个键，我们从它的散列值开始顺序查找，如果找到则命中，如果遇到空元素则未命中。</p>
+<h3 id="删除操作-1"><a href="#删除操作-1" class="headerlink" title="删除操作"></a>删除操作</h3><p>从基于线性探测的散列表中删除一个键，直接将该键所在的位置设为null是不行的，这样会导致此位置之后的元素无法被查找。因此，我们需要将被删除键的右侧的所有键重现插入散列表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!contains(key)) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// find position i of key</span></span><br><span class="line">    <span class="keyword">int</span> i = hash(key);</span><br><span class="line">    <span class="keyword">while</span> (!key.equals(keys[i])) &#123;</span><br><span class="line">      i = (i + <span class="number">1</span>) % m;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// delete key and associated value</span></span><br><span class="line">    keys[i] = <span class="keyword">null</span>;</span><br><span class="line">    vals[i] = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// rehash all keys in same cluster</span></span><br><span class="line">    i = (i + <span class="number">1</span>) % m;</span><br><span class="line">    <span class="keyword">while</span> (keys[i] != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="comment">// delete keys[i] an vals[i] and reinsert</span></span><br><span class="line">      Key   keyToRehash = keys[i];</span><br><span class="line">      Value valToRehash = vals[i];</span><br><span class="line">      keys[i] = <span class="keyword">null</span>;</span><br><span class="line">      vals[i] = <span class="keyword">null</span>;</span><br><span class="line">      n--;</span><br><span class="line">      put(keyToRehash, valToRehash);</span><br><span class="line">      i = (i + <span class="number">1</span>) % m;</span><br><span class="line">    &#125;</span><br><span class="line">    n--;</span><br><span class="line">    <span class="comment">// halves size of array if it's 12.5% full or less</span></span><br><span class="line">    <span class="keyword">if</span> (n &gt; <span class="number">0</span> &amp;&amp; n &lt;= m/<span class="number">8</span>) resize(m/<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和拉链法一样，开放地址类的散列表的性能也依赖于&amp;= N/M，我们将&amp;称为散列表的<strong>使用率</strong> 。对于基于拉链法的散列表，&amp;是每条链表的长度，因此一般大于1；对于基于线性探测法的散列表，&amp;是表中已经被占用的空间的比例，它是不可能大于1（散列表被占满）的，因为此时未命中的查找会导致无限循环。为了保证性能，我们会动态调整数组的大小来保证使用率在1/8到1/2之间。</p>
+<h3 id="键簇"><a href="#键簇" class="headerlink" title="键簇"></a>键簇</h3><p>线性探测的平均成本取决于元素在插入数组后聚集成的一组连续的条目，叫做<strong>键簇</strong> 。短小的键簇能保证较高的效率。如下图：</p>
+<p><img src="/2018/01/30/algorithm/HST/hst05.jpg" alt=""></p>
+<h3 id="动态调整数组大小-1"><a href="#动态调整数组大小-1" class="headerlink" title="动态调整数组大小"></a>动态调整数组大小</h3><p>对于线性探测法，调整数组的大小是必需的，因为当用例插入的键值对数量超过预期时它的查找时间不仅会变得非常长，还会在散列表被填满时进入无限循环。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">      LinearProbingHashST&lt;Key, Value&gt; temp = <span class="keyword">new</span> LinearProbingHashST&lt;Key, Value&gt;(capacity);</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">          <span class="keyword">if</span> (keys[i] != <span class="keyword">null</span>) &#123;</span><br><span class="line">              temp.put(keys[i], vals[i]);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      keys = temp.keys;</span><br><span class="line">      vals = temp.vals;</span><br><span class="line">      m    = temp.m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="内存使用"><a href="#内存使用" class="headerlink" title="内存使用"></a>内存使用</h2><p>符号表的内存使用：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:center">N个元素所需的内存（引用类型）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">基于拉链法的散列表</td>
+<td style="text-align:center">~48N+32M</td>
+</tr>
+<tr>
+<td style="text-align:center">基于线性探测的散列表</td>
+<td style="text-align:center">在~32N和~128N之间</td>
+</tr>
+<tr>
+<td style="text-align:center">各种二叉查找树</td>
+<td style="text-align:center">~56N</td>
+</tr>
+</tbody>
+</table>
+<p>拉链法和线性探测法的性能差别主要是因为拉链法为每个键值对都分配了一块内存而线性探测则为整张表使用了两个很大的数组。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/查找/" rel="tag"># 查找</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/29/algorithm/redblackBST/" rel="next" title="平衡查找树（红黑二叉查找树）">
+                <i class="fa fa-chevron-left"></i> 平衡查找树（红黑二叉查找树）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/02/algorithm/LSD/" rel="prev" title="字符串排序">
+                字符串排序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#散列函数"><span class="nav-number">2.</span> <span class="nav-text">散列函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-正整数"><span class="nav-number">2.1.</span> <span class="nav-text">1. 正整数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-浮点数"><span class="nav-number">2.2.</span> <span class="nav-text">2. 浮点数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-字符串"><span class="nav-number">2.3.</span> <span class="nav-text">3. 字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-组合键"><span class="nav-number">2.4.</span> <span class="nav-text">4. 组合键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-java的约定"><span class="nav-number">2.5.</span> <span class="nav-text">5. java的约定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-将hashCode-的返回值转化为一个数组索引"><span class="nav-number">2.6.</span> <span class="nav-text">6. 将hashCode()的返回值转化为一个数组索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-自定义的hashCode-方法"><span class="nav-number">2.7.</span> <span class="nav-text">7. 自定义的hashCode()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-软缓存"><span class="nav-number">2.8.</span> <span class="nav-text">8. 软缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于拉链法的散列表"><span class="nav-number">3.</span> <span class="nav-text">基于拉链法的散列表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#散列表的大小"><span class="nav-number">3.1.</span> <span class="nav-text">散列表的大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态调整数组大小"><span class="nav-number">3.2.</span> <span class="nav-text">动态调整数组大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除操作"><span class="nav-number">3.3.</span> <span class="nav-text">删除操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序性相关操作"><span class="nav-number">3.4.</span> <span class="nav-text">有序性相关操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于线性探测法的散列表"><span class="nav-number">4.</span> <span class="nav-text">基于线性探测法的散列表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#删除操作-1"><span class="nav-number">4.1.</span> <span class="nav-text">删除操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键簇"><span class="nav-number">4.2.</span> <span class="nav-text">键簇</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态调整数组大小-1"><span class="nav-number">4.3.</span> <span class="nav-text">动态调整数组大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存使用"><span class="nav-number">5.</span> <span class="nav-text">内存使用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/01/30/algorithm/HST/';
+          this.page.identifier = '2018/01/30/algorithm/HST/';
+          this.page.title = '散列表';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

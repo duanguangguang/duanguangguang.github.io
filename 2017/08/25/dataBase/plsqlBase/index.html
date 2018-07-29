@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Oracle," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PL/SQL基础PL/SQL操作oracle数据库效率最高，是学习存储过程，存储函数，触发器的前提。打印hello world： 1234567891011SQL&amp;gt; declare       --说明部分（变量，光标或者例外）     begin       -- 程序体	 dbms_output.put_line(&amp;apos;hello world&amp;apos;);	 end;	 /  -">
+<meta name="keywords" content="Oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PL&#x2F;SQL基础">
+<meta property="og:url" content="http://yoursite.com/2017/08/25/dataBase/plsqlBase/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="PL/SQL基础PL/SQL操作oracle数据库效率最高，是学习存储过程，存储函数，触发器的前提。打印hello world： 1234567891011SQL&amp;gt; declare       --说明部分（变量，光标或者例外）     begin       -- 程序体	 dbms_output.put_line(&amp;apos;hello world&amp;apos;);	 end;	 /  -">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/08/25/dataBase/plsqlBase/pl00.png">
+<meta property="og:updated_time" content="2018-07-29T08:34:30.030Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PL&#x2F;SQL基础">
+<meta name="twitter:description" content="PL/SQL基础PL/SQL操作oracle数据库效率最高，是学习存储过程，存储函数，触发器的前提。打印hello world： 1234567891011SQL&amp;gt; declare       --说明部分（变量，光标或者例外）     begin       -- 程序体	 dbms_output.put_line(&amp;apos;hello world&amp;apos;);	 end;	 /  -">
+<meta name="twitter:image" content="http://yoursite.com/2017/08/25/dataBase/plsqlBase/pl00.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/25/dataBase/plsqlBase/"/>
+
+
+
+
+
+  <title>PL/SQL基础 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/25/dataBase/plsqlBase/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PL/SQL基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-25T17:39:36+08:00">
+                2017-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/25/dataBase/plsqlBase/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/08/25/dataBase/plsqlBase/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/08/25/dataBase/plsqlBase/" class="leancloud_visitors" data-flag-title="PL/SQL基础">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="PL-SQL基础"><a href="#PL-SQL基础" class="headerlink" title="PL/SQL基础"></a>PL/SQL基础</h2><p><strong>PL/SQL</strong>操作oracle数据库效率最高，是学习存储过程，存储函数，触发器的前提。打印hello world：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">       --说明部分（变量，光标或者例外）</span><br><span class="line">     begin</span><br><span class="line">       -- 程序体</span><br><span class="line">	 dbms_output.put_line(&apos;hello world&apos;);</span><br><span class="line">	 end;</span><br><span class="line">	 /  --表示pl/sql完成并执行</span><br><span class="line"></span><br><span class="line">--打开输出开关</span><br><span class="line">SQL&gt; set serveroutput on;</span><br><span class="line">     /  --执行</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="一、PL-SQL概念"><a href="#一、PL-SQL概念" class="headerlink" title="一、PL/SQL概念"></a>一、PL/SQL概念</h3><p><strong>PL/SQL（procedure language/sql）</strong>是oracle对sql语言的过程化扩展</p>
+<blockquote>
+<p>SQL语言：数据操纵</p>
+<p>过程语言：数据处理</p>
+<p>组成pl/sql：简单、高效、灵活、实用</p>
+</blockquote>
+<p>不同的数据库对sql的扩展</p>
+<blockquote>
+<p>oracle ：pl/sql</p>
+<p>DB2：sql/pl</p>
+<p>SQL Server：Transac_SQL（T-SQL）</p>
+</blockquote>
+<h3 id="二、PL-SQL基础语法"><a href="#二、PL-SQL基础语法" class="headerlink" title="二、PL/SQL基础语法"></a>二、PL/SQL基础语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">       --说明部分</span><br><span class="line">	 begin</span><br><span class="line">	   --语句序列（DML语句）</span><br><span class="line">	 exception</span><br><span class="line">	   --例外处理语句</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="1-变量定义"><a href="#1-变量定义" class="headerlink" title="1. 变量定义"></a>1. 变量定义</h4><ol>
+<li><p>定义基本变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">--类型</span><br><span class="line">char, varchar2, date, number, boolean, long</span><br><span class="line">--例：</span><br><span class="line">varl char(15);</span><br><span class="line">married boolean := true;</span><br><span class="line">psal number(7,2);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>引用型变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--例：</span><br><span class="line">my_name emp.ename % type;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>记录型变量</p>
+<p>可以理解为是个数组，数组中的每个元素为列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--例：</span><br><span class="line">emp_rec emp % rowtype;--行类型</span><br><span class="line">--记录型变量的引用</span><br><span class="line">emp_rec.ename := &apos;ADAMS&apos;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例子</p>
+<p>查询并打印7839的姓名和薪水</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">--定义引用型变量</span><br><span class="line">SQL&gt; declare </span><br><span class="line">     --pename varchar2(20); --基本变量</span><br><span class="line">	 --psal number; --基本变量</span><br><span class="line"> 	 pename emp.ename % type;</span><br><span class="line">	 psal emp.sal % type;</span><br><span class="line">	 begin</span><br><span class="line">	 --得到7839的姓名和薪水</span><br><span class="line">	 select ename,sal into pename,psal from emp where empno = &apos;7839&apos;;</span><br><span class="line">	 --打印姓名和薪水</span><br><span class="line">	 dbms_output.put_line(pename||&apos;的薪水是&apos;||psal);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">--定义记录型变量实现上面的例子</span><br><span class="line">SQL&gt; declare</span><br><span class="line">	 emp_rec emp % rowtype;</span><br><span class="line">	 begin</span><br><span class="line">	 select * into emp_rec from emp where empno = &apos;7839&apos;;</span><br><span class="line">	 dbms_output.put_line(emp_rec.ename||&apos;的薪水是&apos;||emp_rec.sal);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="2-if语句"><a href="#2-if语句" class="headerlink" title="2. if语句"></a>2. if语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">--例：判断用户键盘输入的数字</span><br><span class="line">SQL&gt; accept num prompt &quot;请输入一个数字&quot;;</span><br><span class="line">     declare </span><br><span class="line">	 --num：地址值，含义是在该地址上保存了输入的值</span><br><span class="line">	 pnum number := &amp;num;--&amp;是地址符</span><br><span class="line">	 begin</span><br><span class="line">	 	if pnum = 0 then dbms_output.put_line(&quot;输入0&quot;);</span><br><span class="line">		elsif pnum = 1 then dbms_output.put_line(&quot;输入1&quot;);</span><br><span class="line">		else dbms_output.put_line(&quot;其他&quot;);</span><br><span class="line">		end if;</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="3-循环语句"><a href="#3-循环语句" class="headerlink" title="3. 循环语句"></a>3. 循环语句</h4><ol>
+<li><p>形式1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; while total &lt;= 2500 loop</span><br><span class="line">	 ...</span><br><span class="line">	 total := total+salary;</span><br><span class="line">	 end loop;</span><br></pre></td></tr></table></figure>
+<p>例：使用while循环打印1-10</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">	 	pnum number := 1;</span><br><span class="line">	 begin</span><br><span class="line">		while pnum &lt;= 10 loop</span><br><span class="line">			dbms_output.put_line(pnum);</span><br><span class="line">			pnum := pnum+1;</span><br><span class="line">		end loop;</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>形式2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; loop</span><br><span class="line">	 exit [when conditions];--当条件成立时退出循环</span><br><span class="line">	 ...</span><br><span class="line">	 end loop;</span><br></pre></td></tr></table></figure>
+<p>例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">	 	pnum number := 1;</span><br><span class="line">	 begin</span><br><span class="line">		loop</span><br><span class="line">		exit when pnum &gt;10;</span><br><span class="line">			dbms_output.put_line(pnum);</span><br><span class="line">			pnum := pnum+1;</span><br><span class="line">		end loop;</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>形式3</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; for i in 1...3 loop --必须是连续区间</span><br><span class="line">	 ...</span><br><span class="line">	 end loop;</span><br></pre></td></tr></table></figure>
+<p>例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">	 	pnum number := 1;</span><br><span class="line">	 begin</span><br><span class="line">		for pnum in 1...10 loop</span><br><span class="line">			dbms_output.put_line(pnum);</span><br><span class="line">		end loop;</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="三、光标"><a href="#三、光标" class="headerlink" title="三、光标"></a>三、光标</h3><p><strong>光标</strong>就是一个结果集（result set）。例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select job into ptilte from emp;</span><br><span class="line">--job是一个结果集合，不能直接赋给ptilte，too many rows。所以引入光标</span><br></pre></td></tr></table></figure>
+<h4 id="1-光标的语法"><a href="#1-光标的语法" class="headerlink" title="1. 光标的语法"></a>1. 光标的语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; cursor 光标名 [(参数名 参数类型,...)]</span><br><span class="line">	 is select 语句;</span><br><span class="line">--例：</span><br><span class="line">SQL&gt; cursor cl is select ename from emp;</span><br></pre></td></tr></table></figure>
+<p>从光标中取值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">--打开光标</span><br><span class="line">open cl;</span><br><span class="line">--取一行光标的值</span><br><span class="line">fetch cl into pename;</span><br><span class="line">--关闭光标</span><br><span class="line">close cl;--关闭光标，释放资源</span><br></pre></td></tr></table></figure>
+<h4 id="2-光标的属性"><a href="#2-光标的属性" class="headerlink" title="2. 光标的属性"></a>2. 光标的属性</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">%found;--fetch取到记录则为true</span><br><span class="line">%notfound;--</span><br><span class="line">%isopen;--光标是否打开</span><br><span class="line">%rowcount;--影响的行数，不是总行数</span><br></pre></td></tr></table></figure>
+<p>例：查询并打印员工的姓名和薪水</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; set serveroutput on;</span><br><span class="line">	 declare</span><br><span class="line">		cursor cemp is select ename,sal from emp;</span><br><span class="line">		--为光标定义对应的变量</span><br><span class="line">		pename emp.ename % type;</span><br><span class="line">		psal emp.sal % type;</span><br><span class="line">	 begin</span><br><span class="line">		open cemp;</span><br><span class="line">		loop</span><br><span class="line">			fetch cemp into pename,psal;</span><br><span class="line">			exit when cemp % notfound; --当取不到记录时退出循环</span><br><span class="line">			dbms_output.put_line(pename||&apos;的薪水是&apos;||psal);--fetch不一定能取到记录</span><br><span class="line">		end loop;</span><br><span class="line">		close cemp;</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="3-案例：给员工涨工资"><a href="#3-案例：给员工涨工资" class="headerlink" title="3. 案例：给员工涨工资"></a>3. 案例：给员工涨工资</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">--给员工涨工资，总裁1000，经理800，其他400</span><br><span class="line">SQL&gt; declare</span><br><span class="line">		cursor cemp is select pempno,pjob from emp;</span><br><span class="line">		--为光标定义对应的变量</span><br><span class="line">		pempno emp.empno % type;</span><br><span class="line">		pjob emp.empjob % type;</span><br><span class="line">	 begin</span><br><span class="line">		--rollback</span><br><span class="line">		open cemp;</span><br><span class="line">		loop</span><br><span class="line">			fetch cemp into pempno,pjob;</span><br><span class="line">			exit when cemp % notfound; --当取不到记录时退出循环</span><br><span class="line">			if pjob = &apos;zongcai&apos; then update emp set sal=sal+1000 where empno = pempno;</span><br><span class="line">			elsif pjob = &apos;jingli&apos; then update emp set sal=sal+800 where empno = pempno;</span><br><span class="line">			else update emp set sal=sal+400 where empno = pempno;</span><br><span class="line">			end if;</span><br><span class="line">		end loop;</span><br><span class="line">		close cemp;</span><br><span class="line">		commit;--当对数据库数据发生改变时需要提交</span><br><span class="line">		--对于oracle默认的事物隔离级别是read committed</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="4-光标数的限制"><a href="#4-光标数的限制" class="headerlink" title="4. 光标数的限制"></a>4. 光标数的限制</h4><p>默认情况下，oracle数据库只允许在同一个会话中打开300个光标</p>
+<ol>
+<li><p>查看参数值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; conn sys/orcl as sysdba;</span><br><span class="line">	 show parameter cursor;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改光标数的限制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter system set open_cursor = 400 scope = both;</span><br><span class="line">--scope取值</span><br><span class="line">both;--两者都更改（当前实例/改参数文件）</span><br><span class="line">memory;--只更改当前实例，不更改参数文件</span><br><span class="line">spfile;--只更改参数文件，不更改当前实例（需要重启数据库）</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="5-带参数的光标"><a href="#5-带参数的光标" class="headerlink" title="5. 带参数的光标"></a>5. 带参数的光标</h4><p>例：查询某个部门中员工的姓名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		cursor cemp(dno number) is select ename from emp where deptno = dno;</span><br><span class="line">		pename emp.ename % type;</span><br><span class="line">	 begin</span><br><span class="line">		open cemp(10);</span><br><span class="line">		loop</span><br><span class="line">			fetch cemp into pename;</span><br><span class="line">			exit when cemp % notfound;</span><br><span class="line">			dbms_output.put_line(pename);</span><br><span class="line">		end loop;</span><br><span class="line">		close cemp;</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h3 id="四、例外"><a href="#四、例外" class="headerlink" title="四、例外"></a>四、例外</h3><p>例外是程序设计语言提供的一种功能，用来增强程序的健壮性和容错性。系统例外：</p>
+<table>
+<thead>
+<tr>
+<th>no_data_found</th>
+<th>没有找到数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>too_many_rows</td>
+<td>select…into语句匹配多个行</td>
+</tr>
+<tr>
+<td>zero_divide</td>
+<td>被零除</td>
+</tr>
+<tr>
+<td>value_error</td>
+<td>算术或转换错误</td>
+</tr>
+<tr>
+<td>timeout_on_resource</td>
+<td>在等待资源时发生超时（典型场景：分布式数据库）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-系统例外之no-data-found"><a href="#1-系统例外之no-data-found" class="headerlink" title="1. 系统例外之no_data_found"></a>1. 系统例外之no_data_found</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		pename emp.ename % type;</span><br><span class="line">	 begin</span><br><span class="line">		select ename into pename from emp where empno = 123;</span><br><span class="line">	 exception</span><br><span class="line">		when no_data_found then dbms_output.put_line(&quot;没有找到员工&quot;);</span><br><span class="line">		when others then dbms_output.put_line(&quot;其他例外&quot;);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="2-系统例外之too-many-rows"><a href="#2-系统例外之too-many-rows" class="headerlink" title="2. 系统例外之too_many_rows"></a>2. 系统例外之too_many_rows</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		pename emp.ename % type;</span><br><span class="line">	 begin</span><br><span class="line">		--查询所有10号部门的员工</span><br><span class="line">		select ename into pename from emp where deptno = 10;</span><br><span class="line">	 exception</span><br><span class="line">		when too_many_rows then dbms_output.put_line(&quot;select into 匹配了多行&quot;);</span><br><span class="line">		when others then dbms_output.put_line(&quot;其他例外&quot;);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="3-系统例外之zero-divide"><a href="#3-系统例外之zero-divide" class="headerlink" title="3. 系统例外之zero_divide"></a>3. 系统例外之zero_divide</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		pnum number;</span><br><span class="line">	 begin</span><br><span class="line">		pnum := 10/0;</span><br><span class="line">	 exception</span><br><span class="line">		when zero_divide then dbms_output.put_line(&quot;0不能做除数&quot;);</span><br><span class="line">		when others then dbms_output.put_line(&quot;其他例外&quot;);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="4-系统例外之value-error"><a href="#4-系统例外之value-error" class="headerlink" title="4. 系统例外之value_error"></a>4. 系统例外之value_error</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		pnum number;</span><br><span class="line">	 begin</span><br><span class="line">		pnum := &apos;abc&apos;;</span><br><span class="line">	 exception</span><br><span class="line">		when value_error then dbms_output.put_line(&quot;转换错误&quot;);</span><br><span class="line">		when others then dbms_output.put_line(&quot;其他例外&quot;);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="5-系统例外之timeout-on-resource"><a href="#5-系统例外之timeout-on-resource" class="headerlink" title="5. 系统例外之timeout_on_resource"></a>5. 系统例外之timeout_on_resource</h4><p><img src="/2017/08/25/dataBase/plsqlBase/pl00.png" alt=""></p>
+<h4 id="6-自定义例外"><a href="#6-自定义例外" class="headerlink" title="6. 自定义例外"></a>6. 自定义例外</h4><p>定义变量，类型是exception，使用raise抛出自定义例外</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		cursor cemp is select ename from emp where deptno = 50;</span><br><span class="line">		pename emp.ename % type;</span><br><span class="line">		--自定义例外</span><br><span class="line">		no_emp_found exception;</span><br><span class="line">	 begin</span><br><span class="line">		open cemp;</span><br><span class="line">          loop</span><br><span class="line">            fetch cemp into pename;</span><br><span class="line">            if cemp % notfound then raise no_emp_found;</span><br><span class="line">            end if;</span><br><span class="line">          end loop;</span><br><span class="line">		--oracle自动启动pmon（processmonitor 进程监视器）</span><br><span class="line">        --自动释放资源（当抛出异常时，语句直接跳到exception，所以光标没有正确关闭）</span><br><span class="line">		close cemp;</span><br><span class="line">	 exception</span><br><span class="line">		when no_emp_found </span><br><span class="line">		--一般会将异常存入表中</span><br><span class="line">		then insert into emp values(&quot;fetch语句没有获得数据或数据已经处理完&quot;);</span><br><span class="line">		when others then dbms_output.put_line(&quot;其他例外&quot;);</span><br><span class="line">		close cemp;</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h3 id="五、PL-SQL综合案例"><a href="#五、PL-SQL综合案例" class="headerlink" title="五、PL/SQL综合案例"></a>五、PL/SQL综合案例</h3><h4 id="1-统计每年入职的员工数"><a href="#1-统计每年入职的员工数" class="headerlink" title="1. 统计每年入职的员工数"></a>1. 统计每年入职的员工数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		cursor cemp is select to_char(hiredate,&apos;yyyy&apos;) from emp;</span><br><span class="line">		phiredate varchar(4); --员工入职年份</span><br><span class="line">		count16 number := 0; --员工数</span><br><span class="line">		count17 number := 0; </span><br><span class="line">		countnum number := 0;</span><br><span class="line">	 begin</span><br><span class="line">		open cemp;</span><br><span class="line">          loop</span><br><span class="line">            fetch cemp into phiredate;</span><br><span class="line">			exit when cemp % notfound;</span><br><span class="line">            if phiredate = &apos;2016&apos; then count16 := count16 + 1;</span><br><span class="line">			elsif phiredate = &apos;2017&apos; then count17 := count17 + 1;</span><br><span class="line">			else countnum := countnum + 1;</span><br><span class="line">            end if;</span><br><span class="line">          end loop;</span><br><span class="line">		close cemp;</span><br><span class="line">		dbms_output.put_line(&quot;16年入职人数：&quot;|| count16);</span><br><span class="line">		dbms_output.put_line(&quot;17年入职人数：&quot;|| count17);</span><br><span class="line">		dbms_output.put_line(&quot;其他年份入职人数：&quot;|| countnum);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="2-员工涨工资"><a href="#2-员工涨工资" class="headerlink" title="2. 员工涨工资"></a>2. 员工涨工资</h4><p>从最低工资涨起，每人涨10%，但工资总额不能超过5万元，计算涨工资的人数（次数）和涨后的工资总额</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		cursor cemp is select empno,sal from emp order by sal;</span><br><span class="line">		pempno emp.empno % type;</span><br><span class="line">		psal emp.sal % type;</span><br><span class="line">		countemp number := 0;--涨工资的次数</span><br><span class="line">		saltotal number;</span><br><span class="line">	 begin</span><br><span class="line">		select sum(sal) into saltotal from emp;--得到工资总额初始值</span><br><span class="line">		open cemp;</span><br><span class="line">          loop</span><br><span class="line">			exit when saltotal &gt; 50000;--退出条件，工资总额初始值大于50000</span><br><span class="line">            fetch cemp into pempno,psal;</span><br><span class="line">			exit when cemp % notfound;</span><br><span class="line">            --涨工资</span><br><span class="line">			update emp set sal = sal*1.1 where empno = pempno;</span><br><span class="line">			countemp := countemp+1;--这里指涨工资的次数，人数的话还需要判断这个人涨工资后是否还进行过涨工资</span><br><span class="line">			saltotal ：= saltotal+psal*0.1;</span><br><span class="line">			----在涨工资后做判断，工资总额大于50000时不进行涨工资操作</span><br><span class="line">			if saltotal &gt; 50000 then update emp set sal = sal/1.1 where empno = pempno;</span><br><span class="line">			saltotal ：= saltotal-psal*0.1;</span><br><span class="line">          end loop;</span><br><span class="line">		close cemp;</span><br><span class="line">		commit;</span><br><span class="line">		dbms_output.put_line(&quot;涨工资次数数：&quot;|| countemp ||&quot;,涨后的工资总额：&quot; || saltotal);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<p>分析：涨后的工资总额</p>
+<ol>
+<li>select sum(sal) into saltotal from emp;</li>
+<li>涨后的工资总额 = 涨前的工资总额 + sal*0.1</li>
+<li><strong>因为不是每个人都会涨，所以需要得到工资总额初始值，一开始得不到涨后的工资总额</strong></li>
+<li>注意rollback的使用方法</li>
+</ol>
+<h4 id="3-涉及两张表的统计员工工资"><a href="#3-涉及两张表的统计员工工资" class="headerlink" title="3. 涉及两张表的统计员工工资"></a>3. 涉及两张表的统计员工工资</h4><p>实现按部门分段（6000以上、[6000,3000]、3000以下）统计各工资段的人数以及各个部门的工作总额，不涉及多表查询</p>
+<ul>
+<li><p>创建表保存统计结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table msg</span><br><span class="line">     (</span><br><span class="line">     	deptno number,--部门号</span><br><span class="line">        count1 number,--&lt;3000</span><br><span class="line">        count2 number,--[3000,6000]</span><br><span class="line">        count3 number,--&gt;6000</span><br><span class="line">        saltotal number--工资总额</span><br><span class="line">     )</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		cursor cdept is select deptno from dept;--部门光标</span><br><span class="line">		pdeptno dept.deptno % type;</span><br><span class="line">		cursor cemp(dno number) is select sal from emp where deptno = dno;--员工薪水光标</span><br><span class="line">		psal emp.sal % type;</span><br><span class="line">		count1 number;</span><br><span class="line">		count2 number;</span><br><span class="line">		count3 number;</span><br><span class="line">		saltotal number;</span><br><span class="line">	 begin</span><br><span class="line">		open cdept;</span><br><span class="line">		  loop</span><br><span class="line">			fetch cdept into pdeptno;</span><br><span class="line">			exit when cemp % notfound;</span><br><span class="line">			--初始化工作</span><br><span class="line">			count1 := 0; count2 := 0; count3 := 0;</span><br><span class="line">			--得到部门的工资总额</span><br><span class="line">			select sum(sal) into saltotal from emp where deptno = pdeptno;</span><br><span class="line">          open cemp(pdeptno);</span><br><span class="line">            loop</span><br><span class="line">              fetch cemp into psal;</span><br><span class="line">              exit when cemp % notfound;</span><br><span class="line">              if psal &lt; 3000 then count1 := count1+1;</span><br><span class="line">              elsif psal &gt;= 3000 and psal &lt;= 6000 then count2 := count2+1;</span><br><span class="line">              else count3 := count3+1;</span><br><span class="line">              end if;</span><br><span class="line">            end loop;</span><br><span class="line">          close cemp;</span><br><span class="line">          --保存当前部门的结果（退后进行部门统计）</span><br><span class="line">          insert into msg values (pdeptno,count1,count2,count3,nvl(saltotal,0))</span><br><span class="line">		  --nvl,预空函数，当saltotal为null时值为0</span><br><span class="line">          end loop;</span><br><span class="line">		  close cdept;</span><br><span class="line">          commit;</span><br><span class="line">          dbms_output.put_line(&quot;统计完成&quot;);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+<h4 id="4-成绩统计"><a href="#4-成绩统计" class="headerlink" title="4. 成绩统计"></a>4. 成绩统计</h4><p>按系名分段统计（&lt;60，[60,85]，&gt;85）”大学物理“课程各分段的学生人数以及各系学生的平均成绩。涉及多表查询（子查询）</p>
+<h5 id="1-分析"><a href="#1-分析" class="headerlink" title="1. 分析"></a>1. 分析</h5><ol>
+<li><p>sql语句</p>
+<ul>
+<li><p>得到哪些系</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select dno,dname from dep;</span><br><span class="line">--光标--循环--退出条件：notfound</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>得到系中选了”大学物理“课程学生的成绩</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select grade from sc where cno = (</span><br><span class="line">	 select cno from course where cname = ? --课程名</span><br><span class="line">	 )</span><br><span class="line">	 and sno in (</span><br><span class="line">     select sno from student where dno = ? --系名</span><br><span class="line">     );</span><br><span class="line">--带参数的光标--循环--退出条件：notfound</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>变量</p>
+<ul>
+<li>初始值</li>
+<li>最终值如何得到</li>
+</ul>
+</li>
+<li><p>每个分段的人数</p>
+<p>count1，count2，count3初始化的位置，第一个循环内，第二个循环外</p>
+</li>
+<li><p>每个系选了”大学物理“学生的平均成绩</p>
+<ul>
+<li><p>算术运算</p>
+</li>
+<li><p>查数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select avg(grade) into avggrade from sc where cno = (</span><br><span class="line">	 select cno from course where cname = ?</span><br><span class="line">     )</span><br><span class="line">	 and sno in (</span><br><span class="line">     select sno from student where dno = ?</span><br><span class="line">     );</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>性能问题</p>
+<ul>
+<li>算术运算比较好</li>
+<li>能不查数据库就不查数据库，查询数据库耗时大</li>
+</ul>
+</li>
+</ol>
+<h5 id="2-程序"><a href="#2-程序" class="headerlink" title="2. 程序"></a>2. 程序</h5><ol>
+<li><p>创建msg1保存结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table msg1</span><br><span class="line">     (</span><br><span class="line">     	coursename varchar2(20),--课程名称</span><br><span class="line">        dname varchar2(20),--系名</span><br><span class="line">        count1 number,--&lt;60</span><br><span class="line">        count2 number,--[60,85]</span><br><span class="line">        count3 number,--&gt;85</span><br><span class="line">        avggrade number--平均成绩</span><br><span class="line">     )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>成绩统计</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; declare</span><br><span class="line">		--系的光标</span><br><span class="line">		cursor cdept is select dno,dname from dep;</span><br><span class="line">		pdno dep.dno % type;</span><br><span class="line">		pdname dep.dname % type;</span><br><span class="line">		--成绩光标</span><br><span class="line">		cursor cgrade(coursename varchar2,depno number) is select grade from sc where cno = (</span><br><span class="line">               select cno from course where cname = coursename) and sno in (</span><br><span class="line">               select sno from student where dno = depno</span><br><span class="line">               );</span><br><span class="line">		pgrade sc.grade % type;</span><br><span class="line">		--每个分段的人数</span><br><span class="line">		count1 number;</span><br><span class="line">		count2 number;</span><br><span class="line">		count3 number;</span><br><span class="line">		--每个系选秀了&quot;&quot;大学物理&quot;学生的平均成绩</span><br><span class="line">		avggrade number;</span><br><span class="line">		--课程名称</span><br><span class="line">		pcoursename varchar2 := &apos;大学物理&apos;;</span><br><span class="line">	 begin</span><br><span class="line">		open cdept;</span><br><span class="line">		  loop</span><br><span class="line">			--取一个系的信息</span><br><span class="line">			fetch cdept into pdno,pdname;</span><br><span class="line">			exit when cemp % notfound;</span><br><span class="line">			--初始化工作</span><br><span class="line">			count1 := 0; count2 := 0; count3 := 0;</span><br><span class="line">			--系的平均成绩</span><br><span class="line">			select avg(grade) into avggrade from sc where cno = (</span><br><span class="line">            select cno from course where cname = pcoursename) and sno in (</span><br><span class="line">            select sno from student where dno = pdno);</span><br><span class="line">			--取系中选修了&quot;&quot;大学物理&quot;的学生成绩</span><br><span class="line">			open cgrade(pcoursename,pdno);</span><br><span class="line">            loop</span><br><span class="line">              fetch cgrade into pgrade; --取一个学生的成绩</span><br><span class="line">              exit when cgrade % notfound;</span><br><span class="line">              if pgrade &lt; 60 then count1 := count1+1;</span><br><span class="line">              elsif psal &gt;= 60 and psal &lt;= 85 then count2 := count2+1;</span><br><span class="line">              else count3 := count3+1;</span><br><span class="line">              end if;</span><br><span class="line">            end loop;</span><br><span class="line">          close cgrade;</span><br><span class="line">          --保存当前结果</span><br><span class="line">          insert into msg1 values (pcoursename,pdname,count1,count2,count3,avggrade);</span><br><span class="line">          end loop;</span><br><span class="line">		  close cdept;</span><br><span class="line">          commit;</span><br><span class="line">          dbms_output.put_line(&quot;统计完成&quot;);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Oracle/" rel="tag"># Oracle</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/24/dataBase/oracleBase/" rel="next" title="Oracle基础">
+                <i class="fa fa-chevron-left"></i> Oracle基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/27/dataBase/oracle-function/" rel="prev" title="oracle函数">
+                oracle函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PL-SQL基础"><span class="nav-number">1.</span> <span class="nav-text">PL/SQL基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、PL-SQL概念"><span class="nav-number">1.1.</span> <span class="nav-text">一、PL/SQL概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、PL-SQL基础语法"><span class="nav-number">1.2.</span> <span class="nav-text">二、PL/SQL基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-变量定义"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 变量定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-if语句"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. if语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-循环语句"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 循环语句</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、光标"><span class="nav-number">1.3.</span> <span class="nav-text">三、光标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-光标的语法"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 光标的语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-光标的属性"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 光标的属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-案例：给员工涨工资"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 案例：给员工涨工资</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-光标数的限制"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. 光标数的限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-带参数的光标"><span class="nav-number">1.3.5.</span> <span class="nav-text">5. 带参数的光标</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、例外"><span class="nav-number">1.4.</span> <span class="nav-text">四、例外</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-系统例外之no-data-found"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. 系统例外之no_data_found</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-系统例外之too-many-rows"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. 系统例外之too_many_rows</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-系统例外之zero-divide"><span class="nav-number">1.4.3.</span> <span class="nav-text">3. 系统例外之zero_divide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-系统例外之value-error"><span class="nav-number">1.4.4.</span> <span class="nav-text">4. 系统例外之value_error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-系统例外之timeout-on-resource"><span class="nav-number">1.4.5.</span> <span class="nav-text">5. 系统例外之timeout_on_resource</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-自定义例外"><span class="nav-number">1.4.6.</span> <span class="nav-text">6. 自定义例外</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、PL-SQL综合案例"><span class="nav-number">1.5.</span> <span class="nav-text">五、PL/SQL综合案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-统计每年入职的员工数"><span class="nav-number">1.5.1.</span> <span class="nav-text">1. 统计每年入职的员工数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-员工涨工资"><span class="nav-number">1.5.2.</span> <span class="nav-text">2. 员工涨工资</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-涉及两张表的统计员工工资"><span class="nav-number">1.5.3.</span> <span class="nav-text">3. 涉及两张表的统计员工工资</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-成绩统计"><span class="nav-number">1.5.4.</span> <span class="nav-text">4. 成绩统计</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-分析"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">1. 分析</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-程序"><span class="nav-number">1.5.4.2.</span> <span class="nav-text">2. 程序</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/08/25/dataBase/plsqlBase/';
+          this.page.identifier = '2017/08/25/dataBase/plsqlBase/';
+          this.page.title = 'PL/SQL基础';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

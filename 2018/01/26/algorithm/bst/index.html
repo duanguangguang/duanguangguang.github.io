@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="查找," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍定义：一颗二叉查找树（BST）是一颗二叉树，其中每个结点都含有一个Comparable的键（以及相关联的值）且每个结点的键都大于其左子树中的任意结点的键而小于右子树的任意结点的键。二叉查找树如下图：  在二叉树中，每个结点只能有一个父结点（根结点没有父结点），每个结点包含的链接可以为空或者只有左右两个链接，分别指向自己的左子结点和右子结点。因此可以将二叉查找树定义为一个空链接，或者是一个有左右">
+<meta name="keywords" content="查找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉查找树">
+<meta property="og:url" content="http://yoursite.com/2018/01/26/algorithm/bst/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍定义：一颗二叉查找树（BST）是一颗二叉树，其中每个结点都含有一个Comparable的键（以及相关联的值）且每个结点的键都大于其左子树中的任意结点的键而小于右子树的任意结点的键。二叉查找树如下图：  在二叉树中，每个结点只能有一个父结点（根结点没有父结点），每个结点包含的链接可以为空或者只有左右两个链接，分别指向自己的左子结点和右子结点。因此可以将二叉查找树定义为一个空链接，或者是一个有左右">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst01.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst02.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst03.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst04.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst05.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst06.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst07.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst08.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst09.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst10.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst11.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst12.jpg">
+<meta property="og:updated_time" content="2018-07-29T08:34:29.918Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="二叉查找树">
+<meta name="twitter:description" content="介绍定义：一颗二叉查找树（BST）是一颗二叉树，其中每个结点都含有一个Comparable的键（以及相关联的值）且每个结点的键都大于其左子树中的任意结点的键而小于右子树的任意结点的键。二叉查找树如下图：  在二叉树中，每个结点只能有一个父结点（根结点没有父结点），每个结点包含的链接可以为空或者只有左右两个链接，分别指向自己的左子结点和右子结点。因此可以将二叉查找树定义为一个空链接，或者是一个有左右">
+<meta name="twitter:image" content="http://yoursite.com/2018/01/26/algorithm/bst/bst01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/26/algorithm/bst/"/>
+
+
+
+
+
+  <title>二叉查找树 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/26/algorithm/bst/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">二叉查找树</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-26T17:17:51+08:00">
+                2018-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/26/algorithm/bst/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/26/algorithm/bst/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/26/algorithm/bst/" class="leancloud_visitors" data-flag-title="二叉查找树">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>定义：</strong>一颗二叉查找树（BST）是一颗二叉树，其中每个结点都含有一个Comparable的键（以及相关联的值）且每个结点的键都大于其左子树中的任意结点的键而小于右子树的任意结点的键。二叉查找树如下图：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst01.png" alt=""></p>
+<p>在二叉树中，每个结点只能有一个父结点（根结点没有父结点），每个结点包含的链接可以为空或者只有左右两个链接，分别指向自己的左子结点和右子结点。因此可以将二叉查找树定义为一个空链接，或者是一个有左右两个链接的结点，每个链接都指向一颗独立的子二叉树。二叉查找树是一种能够将链表插入的灵活性和有序数组查找的高效性结合起来的符号表实现。具体来说，就是使用每个结点含有<strong>两个链接</strong> （链表中每个结点只含有一个链接）的二叉查找树来高效的实现符号表。</p>
+<a id="more"></a>
+<h2 id="二叉查找树的实现"><a href="#二叉查找树的实现" class="headerlink" title="二叉查找树的实现"></a>二叉查找树的实现</h2><p>用二叉查找树实现有序符号表。采用递归实现。</p>
+<h3 id="1-数据类型"><a href="#1-数据类型" class="headerlink" title="1. 数据类型"></a>1. 数据类型</h3><p>和链表一样，我们嵌套定义了一个私有类来表示二叉查找树上的一个结点。每个结点都含有一个键、一个值、一条左链接、一条右链接和一个结点计数器。左链接指向一颗由小于该结点的所有键组成的二叉查找树，右链接指向一颗由大于该结点的所有键组成的二叉查找树。变量N给出以该结点为根的子树的结点总数。二叉查找树表示一条有序的键列图：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst02.png" alt=""></p>
+<p>基于二叉查找树的符号表：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BST</span>&lt;<span class="title">Key</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">Key</span>&gt;, <span class="title">Value</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Node root;             <span class="comment">// 二叉查找树的根结点</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> Key key;           <span class="comment">// 键</span></span><br><span class="line">        <span class="keyword">private</span> Value val;         <span class="comment">// 值</span></span><br><span class="line">        <span class="keyword">private</span> Node left, right;  <span class="comment">// 指向子树的链接</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> size;          <span class="comment">// 以该结点为根的子树中的结点总数</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Key key, Value val, <span class="keyword">int</span> size)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.key = key;</span><br><span class="line">            <span class="keyword">this</span>.val = val;</span><br><span class="line">            <span class="keyword">this</span>.size = size;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size(root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">(Node x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> x.size;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-查找"><a href="#2-查找" class="headerlink" title="2. 查找"></a>2. 查找</h3><p>在二叉查找树中查找一个键的递归算法：如果树是空的，则查找未命中；如果被查找的键和根结点的键相等，查找命中，否则我们就递归地在子树中继续查找。如果被查找的键较小就选择左子树，较大则选择右子树。当找到一个含有被查找的键的结点（命中）或者当前子树变为空（未命中）时结束。如图：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst03.png" alt=""></p>
+<p>二叉查找树的查找方法的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Value <span class="title">get</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> get(root, key);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Value <span class="title">get</span><span class="params">(Node x, Key key)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//在以x为根结点的子树中查找并返回key所对应的值</span></span><br><span class="line">    <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span> cmp = key.compareTo(x.key);</span><br><span class="line">    <span class="keyword">if</span>      (cmp &lt; <span class="number">0</span>) <span class="keyword">return</span> get(x.left, key);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) <span class="keyword">return</span> get(x.right, key);</span><br><span class="line">    <span class="keyword">else</span>              <span class="keyword">return</span> x.val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-插入"><a href="#3-插入" class="headerlink" title="3. 插入"></a>3. 插入</h3><p>插入的实现逻辑和递归查找很相似：如果树是空的，就返回一个含有该键值对的新结点；如果被查找的键小于根结点，我们会继续在左子树中插入该键，否则在右子树中插入该键。二叉查找树的插入操作：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst04.png" alt=""></p>
+<p>二叉查找树的插入方法的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(Key key, Value val)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (val == <span class="keyword">null</span>) &#123;</span><br><span class="line">         delete(key);</span><br><span class="line">         <span class="keyword">return</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     root = put(root, key, val);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">put</span><span class="params">(Node x, Key key, Value val)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">new</span> Node(key, val, <span class="number">1</span>);</span><br><span class="line">     <span class="keyword">int</span> cmp = key.compareTo(x.key);</span><br><span class="line">     <span class="keyword">if</span>      (cmp &lt; <span class="number">0</span>) x.left  = put(x.left,  key, val);</span><br><span class="line">     <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) x.right = put(x.right, key, val);</span><br><span class="line">     <span class="keyword">else</span>              x.val   = val;</span><br><span class="line">     x.size = <span class="number">1</span> + size(x.left) + size(x.right);</span><br><span class="line">     <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-查找和插入的递归实现"><a href="#4-查找和插入的递归实现" class="headerlink" title="4. 查找和插入的递归实现"></a>4. 查找和插入的递归实现</h3><p>可以将递归调用前的代码想象成沿着树向下走：它会将给定的键和每个结点的键相比较并根据结果向左或者向右移动到下一个结点。然后将递归调用后的代码想象成沿着树向上爬，对于get()方法，这对应着一系列的返回指令（return），但是对于put()方法，新结点会链接到树底层的空结点上，这意味着重置搜索路径上每个父结点指向子结点的链接，并增加路径上每个结点中的计数器的值。如图：一个二叉树的成长：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst05.jpg" alt=""></p>
+<h3 id="5-分析"><a href="#5-分析" class="headerlink" title="5. 分析"></a>5. 分析</h3><p>使用二叉查找树的算法的运行时间取决于树的形状，而树的形状取决于键被插入的先后顺序。在最好的情况下，一颗含有N个结点的树是完全平衡的，每条空链接和根结点的距离都为~lgN。在最坏的情况下搜索路径上可能有N个结点。如图所示：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst06.png" alt=""></p>
+<p>如下图3.2.8所示的简单模型：键的分布是均匀随机的，或者说它们插入的顺序是随机的。对这个模型的分析而言，二叉查找树和快速排序几乎就是双胞胎。树的根结点就是快速排序中的第一个切分元素（左侧的键都比它小，右侧的键都比它大），这对于所有的子树同样适用，这和快速排序中对子数组的递归排序完全对应。</p>
+<p><img src="/2018/01/26/algorithm/bst/bst07.jpg" alt=""></p>
+<p>说明：</p>
+<ul>
+<li>在由N个随机键构造的二叉查找树中，查找命中平均所需的比较次数为~2lnN（约1.39lgN）。</li>
+<li>在由N个随机键构造的二叉查找树中插入操作和查找未命中平均所需的比较次数为~2lnN（约1.39lgN）。</li>
+<li>第二条说明插入一个新键的成本是对数级别的，这是基于二分查找的有序数组所不具备的灵活性，因为它的插入操作所需访问数组的次数是线性级别的。</li>
+</ul>
+<h3 id="6-有序性相关的方法"><a href="#6-有序性相关的方法" class="headerlink" title="6. 有序性相关的方法"></a>6. 有序性相关的方法</h3><h4 id="最大键和最小键"><a href="#最大键和最小键" class="headerlink" title="最大键和最小键"></a>最大键和最小键</h4><p>如果根结点的左链接为空，那么一颗二叉查找树中最小的键就是跟结点；如果左链接非空，那么树中的最小键就是左树中的最小键。采用递归实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Key <span class="title">min</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> min(root).key;</span><br><span class="line">  &#125; </span><br><span class="line">  <span class="function"><span class="keyword">private</span> Node <span class="title">min</span><span class="params">(Node x)</span> </span>&#123; </span><br><span class="line">      <span class="keyword">if</span> (x.left == <span class="keyword">null</span>) <span class="keyword">return</span> x; </span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">return</span> min(x.left); </span><br><span class="line">  &#125; </span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Key <span class="title">max</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> max(root).key;</span><br><span class="line">  &#125; </span><br><span class="line">  <span class="function"><span class="keyword">private</span> Node <span class="title">max</span><span class="params">(Node x)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (x.right == <span class="keyword">null</span>) <span class="keyword">return</span> x; </span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">return</span> max(x.right); </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="向上取整和向下取整"><a href="#向上取整和向下取整" class="headerlink" title="向上取整和向下取整"></a>向上取整和向下取整</h4><p>如果给定的键key小于二叉查找树的根结点的键，那么小于等于key的最大建floor(key)一定在根结点的左子树中；如果给定的键key大于二叉查找树的根结点，那么只有当根结点右子树中存在小于等于key的结点时，小于等于key的最大键才会出现在右子树中，否则根结点就是小于等于key的最大键。向下取整函数的计算如下图：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst08.png" alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Key <span class="title">floor</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">     Node x = floor(root, key);</span><br><span class="line">     <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">     <span class="keyword">else</span> <span class="keyword">return</span> x.key;</span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">floor</span><span class="params">(Node x, Key key)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">     <span class="keyword">int</span> cmp = key.compareTo(x.key);</span><br><span class="line">     <span class="keyword">if</span> (cmp == <span class="number">0</span>) <span class="keyword">return</span> x;</span><br><span class="line">     <span class="keyword">if</span> (cmp &lt;  <span class="number">0</span>) <span class="keyword">return</span> floor(x.left, key);</span><br><span class="line">     Node t = floor(x.right, key); </span><br><span class="line">     <span class="keyword">if</span> (t != <span class="keyword">null</span>) <span class="keyword">return</span> t;</span><br><span class="line">     <span class="keyword">else</span> <span class="keyword">return</span> x; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Key <span class="title">ceiling</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">     Node x = ceiling(root, key);</span><br><span class="line">     <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">     <span class="keyword">else</span> <span class="keyword">return</span> x.key;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">ceiling</span><span class="params">(Node x, Key key)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">     <span class="keyword">int</span> cmp = key.compareTo(x.key);</span><br><span class="line">     <span class="keyword">if</span> (cmp == <span class="number">0</span>) <span class="keyword">return</span> x;</span><br><span class="line">     <span class="keyword">if</span> (cmp &lt; <span class="number">0</span>) &#123; </span><br><span class="line">         Node t = ceiling(x.left, key); </span><br><span class="line">         <span class="keyword">if</span> (t != <span class="keyword">null</span>) <span class="keyword">return</span> t;</span><br><span class="line">         <span class="keyword">else</span> <span class="keyword">return</span> x; </span><br><span class="line">     &#125; </span><br><span class="line">     <span class="keyword">return</span> ceiling(x.right, key); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="选择和排名"><a href="#选择和排名" class="headerlink" title="选择和排名"></a>选择和排名</h4><p>二叉查找树中的选择操作和基于切分的数组选择操作类似。在二叉查找树的每个结点中维护的子树结点计数器变量N就是用来支持此操作的。比如要找到排名为K的键（即树中正好有K个小于它的键）。如果左子树中的结点树t大于k，那就继续递归地在左子树中查找排名为K的键；如果t等于k，就返回根结点中的键；如果t小于k，就递归地在右子树中查找排名为</p>
+<p>（k-t-1）的键。二叉查找树中的select操作：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst09.png" alt=""></p>
+<p>排名rank()是select()的逆方法，它会返回给定键的排名。如果给定键和根结点相等，就返回左子树中的结点总数t；如果给定的键小于根结点，就返回该键在左子树中的排名（递归计算）；如果给定的键大于根结点，就返回t+1（根结点）加上它在右子树中的排名。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Key <span class="title">select</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    Node x = select(root, k);</span><br><span class="line">    <span class="keyword">return</span> x.key;</span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">select</span><span class="params">(Node x, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>; </span><br><span class="line">    <span class="keyword">int</span> t = size(x.left); </span><br><span class="line">    <span class="keyword">if</span>      (t &gt; k) <span class="keyword">return</span> select(x.left,  k); </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (t &lt; k) <span class="keyword">return</span> select(x.right, k-t-<span class="number">1</span>); </span><br><span class="line">    <span class="keyword">else</span>            <span class="keyword">return</span> x; </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">rank</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> rank(key, root);</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">rank</span><span class="params">(Key key, Node x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">    <span class="keyword">int</span> cmp = key.compareTo(x.key); </span><br><span class="line">    <span class="keyword">if</span>      (cmp &lt; <span class="number">0</span>) <span class="keyword">return</span> rank(key, x.left); </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span> + size(x.left) + rank(key, x.right); </span><br><span class="line">    <span class="keyword">else</span>              <span class="keyword">return</span> size(x.left); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="7-删除操作"><a href="#7-删除操作" class="headerlink" title="7. 删除操作"></a>7. 删除操作</h3><h4 id="删除最大键和最小键"><a href="#删除最大键和最小键" class="headerlink" title="删除最大键和最小键"></a>删除最大键和最小键</h4><p>和put()方法一样，我们的递归方法接受一个指向结点的链接，并返回一个指向结点的链接。这样我们就能方便地改变树的结构，将返回的链接赋给作为参数的链接。对于deleteMin()，我们要不断深入根结点的左子树中直至遇到一个空链接，然后将指向该结点的链接指向该结点的右子树。此时已经没有任何链接指向要被删除的结点，因此它会被垃圾收集器清理掉。在删除结点后正确的设置它的父结点并更新它到根结点的路径上的所有结点的计数器的值。</p>
+<p><img src="/2018/01/26/algorithm/bst/bst10.png" alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteMin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    root = deleteMin(root);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">deleteMin</span><span class="params">(Node x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x.left == <span class="keyword">null</span>) <span class="keyword">return</span> x.right;</span><br><span class="line">    x.left = deleteMin(x.left);</span><br><span class="line">    x.size = size(x.left) + size(x.right) + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteMax</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    root = deleteMax(root);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">deleteMax</span><span class="params">(Node x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x.right == <span class="keyword">null</span>) <span class="keyword">return</span> x.left;</span><br><span class="line">    x.right = deleteMax(x.right);</span><br><span class="line">    x.size = size(x.left) + size(x.right) + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>删除操作之后我们要处理两颗子树，但被删除结点的父结点只有一条空出来的链接。T.Hibbard在1962年提出了解决这个难题的第一个方法，在删除结点X后用它的<strong>后继结点</strong>补它的位置。因为X有一个右子结点，因此它的后继结点就是其右子树中的最小结点，这样的替换仍然能够保证树的有序性。可以用4个步骤完成X替换为它的后继结点的任务：如下图。</p>
+<ul>
+<li>将指向即将被删除的结点的链接保存为t；</li>
+<li>将X指向它的后继结点min（t.right）；</li>
+<li>将X的右链接指向deleteMin（t.right），也就是在删除后所有结点仍然都大于x.key的子二叉树；</li>
+<li>将X的左链接（本为空）设为t.left（其下所有的键都小于被删除的结点和它的后继结点）。</li>
+</ul>
+<p><img src="/2018/01/26/algorithm/bst/bst11.png" alt=""></p>
+<p>在递归调用后，我们会修正被删除的结点和父结点的链接，并将由此结点到根结点的路径上的所有结点的计数器减1（这里计数器的值仍然会被设为其所有子树中的结点总数加一）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">    root = delete(root, key);   </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">delete</span><span class="params">(Node x, Key key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> cmp = key.compareTo(x.key);</span><br><span class="line">    <span class="keyword">if</span>      (cmp &lt; <span class="number">0</span>) x.left  = delete(x.left,  key);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) x.right = delete(x.right, key);</span><br><span class="line">    <span class="keyword">else</span> &#123; </span><br><span class="line">        <span class="keyword">if</span> (x.right == <span class="keyword">null</span>) <span class="keyword">return</span> x.left;</span><br><span class="line">        <span class="keyword">if</span> (x.left  == <span class="keyword">null</span>) <span class="keyword">return</span> x.right;</span><br><span class="line">        Node t = x;</span><br><span class="line">        x = min(t.right);  <span class="comment">//上面二叉查找树最小键方法</span></span><br><span class="line">        x.right = deleteMin(t.right);</span><br><span class="line">        x.left = t.left;</span><br><span class="line">    &#125; </span><br><span class="line">    x.size = size(x.left) + size(x.right) + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法的缺陷在于选用后继结点时一个随意的决定，并且没有考虑树的对称性，在某些实际应用中可能产生性能问题。所以实际上，<strong>前趋结点</strong>和后继结点的选择应该是随机的。</p>
+<h3 id="8-范围查找"><a href="#8-范围查找" class="headerlink" title="8. 范围查找"></a>8. 范围查找</h3><p>要实现能够返回给定范围内键的keys()方法，我们首先需要一个遍历二叉查找树的基本方法，叫做<strong>中序遍历</strong> 。先打印出根结点的左子树中的所有键，再打印出根结点的键，最后打印出根结点的右子树中的所有键。为了实现接受两个参数并能够将给定范围内的键返回给用例的Keys()方法，我们将所有落在给定范围以内的键加入一个队列Queue并跳过那些不可能含有所查找键的子树。</p>
+<p>二叉查找树的范围查找操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Iterable&lt;Key&gt; <span class="title">keys</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">new</span> Queue&lt;Key&gt;();</span><br><span class="line">    <span class="keyword">return</span> keys(min(), max());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Iterable&lt;Key&gt; <span class="title">keys</span><span class="params">(Key lo, Key hi)</span> </span>&#123;</span><br><span class="line">    Queue&lt;Key&gt; queue = <span class="keyword">new</span> Queue&lt;Key&gt;();</span><br><span class="line">    keys(root, queue, lo, hi);</span><br><span class="line">    <span class="keyword">return</span> queue;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">keys</span><span class="params">(Node x, Queue&lt;Key&gt; queue, Key lo, Key hi)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span>; </span><br><span class="line">    <span class="keyword">int</span> cmplo = lo.compareTo(x.key); </span><br><span class="line">    <span class="keyword">int</span> cmphi = hi.compareTo(x.key); </span><br><span class="line">    <span class="keyword">if</span> (cmplo &lt; <span class="number">0</span>) keys(x.left, queue, lo, hi); </span><br><span class="line">    <span class="keyword">if</span> (cmplo &lt;= <span class="number">0</span> &amp;&amp; cmphi &gt;= <span class="number">0</span>) queue.enqueue(x.key); </span><br><span class="line">    <span class="keyword">if</span> (cmphi &gt; <span class="number">0</span>) keys(x.right, queue, lo, hi); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p><strong>在一颗二叉查找树中，所有操作在最坏情况下所需的时间都和树的高度成正比</strong> 。我们可以认为二叉查找树是符合<strong>随机构造的树</strong> 。对于构造树的键不是随机的可以使用<strong>平衡二叉查找树</strong> ，它能保证无论键的插入顺序如何，树的高度都将是总键数的对数。简单的符号表实现的成本总结如下图：</p>
+<p><img src="/2018/01/26/algorithm/bst/bst12.jpg" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/查找/" rel="tag"># 查找</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/26/algorithm/st/" rel="next" title="符号表">
+                <i class="fa fa-chevron-left"></i> 符号表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/29/algorithm/redblackBST/" rel="prev" title="平衡查找树（红黑二叉查找树）">
+                平衡查找树（红黑二叉查找树） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉查找树的实现"><span class="nav-number">2.</span> <span class="nav-text">二叉查找树的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-数据类型"><span class="nav-number">2.1.</span> <span class="nav-text">1. 数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-查找"><span class="nav-number">2.2.</span> <span class="nav-text">2. 查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-插入"><span class="nav-number">2.3.</span> <span class="nav-text">3. 插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-查找和插入的递归实现"><span class="nav-number">2.4.</span> <span class="nav-text">4. 查找和插入的递归实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-分析"><span class="nav-number">2.5.</span> <span class="nav-text">5. 分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-有序性相关的方法"><span class="nav-number">2.6.</span> <span class="nav-text">6. 有序性相关的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最大键和最小键"><span class="nav-number">2.6.1.</span> <span class="nav-text">最大键和最小键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向上取整和向下取整"><span class="nav-number">2.6.2.</span> <span class="nav-text">向上取整和向下取整</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择和排名"><span class="nav-number">2.6.3.</span> <span class="nav-text">选择和排名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-删除操作"><span class="nav-number">2.7.</span> <span class="nav-text">7. 删除操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#删除最大键和最小键"><span class="nav-number">2.7.1.</span> <span class="nav-text">删除最大键和最小键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除操作"><span class="nav-number">2.7.2.</span> <span class="nav-text">删除操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-范围查找"><span class="nav-number">2.8.</span> <span class="nav-text">8. 范围查找</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能分析"><span class="nav-number">3.</span> <span class="nav-text">性能分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/01/26/algorithm/bst/';
+          this.page.identifier = '2018/01/26/algorithm/bst/';
+          this.page.title = '二叉查找树';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

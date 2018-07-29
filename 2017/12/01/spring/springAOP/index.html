@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍在软件开发中，散布于应用中多处的功能被称为横切关注点（cross-cutting concern）。把这些横切关注点与业务逻辑相分离正是面向切面编程（AOP）所要解决的问题。DI有助于应用对象之间的解耦，而AOP可以实现横切关注点与它们所影响的对象之间的解耦。切面适用的场景包括日志、声明式事务、安全和缓存等。">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring面向切面">
+<meta property="og:url" content="http://yoursite.com/2017/12/01/spring/springAOP/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍在软件开发中，散布于应用中多处的功能被称为横切关注点（cross-cutting concern）。把这些横切关注点与业务逻辑相分离正是面向切面编程（AOP）所要解决的问题。DI有助于应用对象之间的解耦，而AOP可以实现横切关注点与它们所影响的对象之间的解耦。切面适用的场景包括日志、声明式事务、安全和缓存等。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/12/01/spring/springAOP/spring04.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/01/spring/springAOP/spring0401.png">
+<meta property="og:updated_time" content="2018-07-29T08:34:30.201Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring面向切面">
+<meta name="twitter:description" content="介绍在软件开发中，散布于应用中多处的功能被称为横切关注点（cross-cutting concern）。把这些横切关注点与业务逻辑相分离正是面向切面编程（AOP）所要解决的问题。DI有助于应用对象之间的解耦，而AOP可以实现横切关注点与它们所影响的对象之间的解耦。切面适用的场景包括日志、声明式事务、安全和缓存等。">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/01/spring/springAOP/spring04.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/01/spring/springAOP/"/>
+
+
+
+
+
+  <title>Spring面向切面 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/01/spring/springAOP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring面向切面</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T15:08:12+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/01/spring/springAOP/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/01/spring/springAOP/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/12/01/spring/springAOP/" class="leancloud_visitors" data-flag-title="Spring面向切面">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在软件开发中，散布于应用中多处的功能被称为横切关注点（cross-cutting concern）。把这些横切关注点与业务逻辑相分离正是面向切面编程（AOP）所要解决的问题。DI有助于应用对象之间的解耦，而AOP可以实现横切关注点与它们所影响的对象之间的解耦。切面适用的场景包括日志、声明式事务、安全和缓存等。</p>
+<a id="more"></a>
+<h2 id="面向切面基本原理"><a href="#面向切面基本原理" class="headerlink" title="面向切面基本原理"></a>面向切面基本原理</h2><p>切面能帮助我们模块化横切关注点。横切关注点可以被描述为影响应用多处的功能。横切关注点概念图：</p>
+<p><img src="/2017/12/01/spring/springAOP/spring04.png" alt=""></p>
+<p>切面提供了取代继承和委托的另一种要重用代码功能的可选方案。在使用切面时，我们仍然在一个地方定义通用功能（类似于辅助功能，辅助类），但是可以通过声明的方式定义这个功能要以何种方式在何处应用，而无需修改受影响的类。横切关注点可以被模块化为特殊的类，这些类被称为<strong>切面（aspect）</strong>。这样做的两个好处：</p>
+<ul>
+<li>每个关注点都集中在了一个地方，而不是分散在多处代码中；</li>
+<li>服务模块更简洁，它们只包含关注点（或核心代码），而次要关注点的代码被转移到了切面中。</li>
+</ul>
+<h2 id="通过切点来选择连接点"><a href="#通过切点来选择连接点" class="headerlink" title="通过切点来选择连接点"></a>通过切点来选择连接点</h2><p>切点用于准确定位应该在什么地方应用切面的通知。在Spring AOP 中，使用AspectJ的切点表达式语言来定义切点。 重点是Spring仅支持AspectJ切点指示器（pointcut designator）的一个子集，因为Spring是基于代理的，而某些切点表达式是与基于代理的AOP无关的。Spring AOP 所支持的AspectJ切点指示器：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">AspectJ指示器</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">arg()</td>
+<td style="text-align:center">限制连接点匹配参数为指定类型的执行方法</td>
+</tr>
+<tr>
+<td style="text-align:center">@args()</td>
+<td style="text-align:center">限制连接点匹配参数由指定注解标注的执行方法</td>
+</tr>
+<tr>
+<td style="text-align:center">execution()</td>
+<td style="text-align:center">用于匹配是连接点的执行方法</td>
+</tr>
+<tr>
+<td style="text-align:center">this()</td>
+<td style="text-align:center">限制连接点匹配AOP代理的bean引用为指定类型的类</td>
+</tr>
+<tr>
+<td style="text-align:center">target</td>
+<td style="text-align:center">限制连接点匹配目标对象为指定类型的类</td>
+</tr>
+<tr>
+<td style="text-align:center">@target()</td>
+<td style="text-align:center">限制连接点匹配待定的执行对象这些对象对应的类要具有指定类型的注解</td>
+</tr>
+<tr>
+<td style="text-align:center">within()</td>
+<td style="text-align:center">限制连接点匹配指定的类型</td>
+</tr>
+<tr>
+<td style="text-align:center">@within()</td>
+<td style="text-align:center">限制连接点匹配指定注解所标注的类型（aop中，方法定义在由指定的注解所标注的类里）</td>
+</tr>
+<tr>
+<td style="text-align:center">@annotation</td>
+<td style="text-align:center">限定匹配带有指定注解的连接点</td>
+</tr>
+</tbody>
+</table>
+<p>在Spring中使用AspectJ其他指示器时，将会抛出IllegalArgumentException异常。</p>
+<h3 id="编写切点"><a href="#编写切点" class="headerlink" title="编写切点"></a>编写切点</h3><p>一个Performance接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> concert;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Performance</span></span>&#123;</span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">perform</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用AspectJ切点表达式来当perform方法执行时触发通知的调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 1. * 表示返回任意类型</span></span><br><span class="line"><span class="comment"> * 2. concert.Performance.perform() 全限定的类名和方法名</span></span><br><span class="line"><span class="comment"> * 3. .. 表示任意参数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">execution(* concert.Performance.perform(..))</span><br><span class="line"></span><br><span class="line"><span class="comment">//限定仅匹配concert包</span></span><br><span class="line">execution(* concert.Performance.perform(..)) &amp;&amp; within(concert.*)</span><br><span class="line"><span class="comment">/*&amp;在XML中有特殊含义，所以在Spring的XML配置里面描述切点可以用 and,or,not代替&amp;&amp;,||*/</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">//限定切点只匹配特定的bean,bean()使用bean ID或bean名称作参数</span></span><br><span class="line">execution(* concert.Performance.perform(..)) <span class="function">and <span class="title">bean</span><span class="params">(<span class="string">'woodstock'</span>)</span></span></span><br><span class="line"><span class="function"><span class="title">execution</span><span class="params">(* concert.Performance.perform(..)</span>) and !<span class="title">bean</span><span class="params">(<span class="string">'woodstock'</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="使用注解创建切面"><a href="#使用注解创建切面" class="headerlink" title="使用注解创建切面"></a>使用注解创建切面</h2><p>使用注解来创建切面是AspectJ5所引入的关键特性。Spring使用AspectJ注解来声明通知方法：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">注解</th>
+<th style="text-align:center">通知</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">@After</td>
+<td style="text-align:center">通知方法会在目标方法返回或抛出异常后调用</td>
+</tr>
+<tr>
+<td style="text-align:center">@AfterReturning</td>
+<td style="text-align:center">通知方法会在目标返回后调用</td>
+</tr>
+<tr>
+<td style="text-align:center">@AfterThrowing</td>
+<td style="text-align:center">通知方法会在目标方法抛出异常后调用</td>
+</tr>
+<tr>
+<td style="text-align:center">@Around</td>
+<td style="text-align:center">通知方法会将目标方法封装起来</td>
+</tr>
+<tr>
+<td style="text-align:center">@Before</td>
+<td style="text-align:center">通知方法会在目标方法调用之前执行</td>
+</tr>
+</tbody>
+</table>
+<p>例：一个观看演出的切面：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 观众：观看演出的切面</span></span><br><span class="line"><span class="comment"> * 使用<span class="doctag">@Pointcut</span>注解定义可重用的切点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> guangguang_duan</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AudienceUsePointcut</span> </span>&#123;</span><br><span class="line">	 </span><br><span class="line">	 <span class="meta">@Pointcut</span>(<span class="string">"execution(** spring04.aop.Performance.perform(..))"</span>)</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performance</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 <span class="comment">//没有实际操作的方法，供@Pointcut注解依附的标识</span></span><br><span class="line">	 &#125;</span><br><span class="line">	</span><br><span class="line">	 <span class="comment">//表演之前</span></span><br><span class="line">	 <span class="meta">@Before</span>(<span class="string">"performance()"</span>)</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">silenceCellPhones</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"Silencing cell phones"</span>);</span><br><span class="line">	 &#125;</span><br><span class="line">	 </span><br><span class="line">	 <span class="comment">//表演之前</span></span><br><span class="line">	 <span class="meta">@Before</span>(<span class="string">"performance()"</span>)</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">takeSeats</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"Taking seats"</span>);</span><br><span class="line">	 &#125;</span><br><span class="line">	 </span><br><span class="line">	 <span class="comment">//表演之后</span></span><br><span class="line">	 <span class="meta">@AfterReturning</span>(<span class="string">"performance()"</span>)</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">applause</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"CLAP CLAP CLAP!!!"</span>);</span><br><span class="line">	 &#125;</span><br><span class="line">	 </span><br><span class="line">	 <span class="comment">//表演失败之后</span></span><br><span class="line">	 <span class="meta">@AfterThrowing</span>(<span class="string">"performance()"</span>)</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demandRefund</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"Demanding a refund"</span>);</span><br><span class="line">	 &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样AudienceUsePointcut依然是一个POJO，能够像其他java类一样调用它的方法，也可以将它装配为spring中的bean：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> AudienceUsePointcut <span class="title">audience</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> AudienceUsePointcut();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它通过注解表明会作为切面使用，下面进行注解的解析，将它转换成一个切面。</p>
+<p>在javaConfig中启用AspectJ注解的自动代理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableAspectJAutoProxy</span>    <span class="comment">//启用AspectJ自动代理</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcertConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Audience <span class="title">audience</span><span class="params">()</span></span>&#123; <span class="comment">//声明Audience bean</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Audience();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在XML中，通过Spring的aop命名空间启用AspectJ自动代理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;context:component-scan base-<span class="keyword">package</span>=<span class="string">"spring04.aop"</span> /&gt;</span><br><span class="line">&lt;aop:aspectj-autoproxy /&gt;                    &lt;!-- 启用AspectJ自动代理 --&gt;</span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring04.aop.Audience"</span> /&gt;       &lt;!-- 声明Audience bean --&gt;</span><br></pre></td></tr></table></figure>
+<p>不管使用何种方式，AspectJ自动代理都会为使用@Aspect注解的bean创建一个代理，这个代理会围绕着所有该切面的切点所匹配的bean。</p>
+<p>需要记住的是，Spring的AspectJ自动代理仅仅使用@AspectJ作为创建切面的指导，切面依然是基于代理的。在本质上，它依然是spring基于代理的切面。这意味着尽管使用的是@AspectJ注解，但我们仍然限于代理方法的调用。如果想利用AspectJ的所有能力，我们必须在运行时使用AspectJ并且不依赖Spring来创建基于代理的切面。</p>
+<h3 id="环绕通知"><a href="#环绕通知" class="headerlink" title="环绕通知"></a>环绕通知</h3><p>环绕通知是最强大的通知，它能让所编写的逻辑将被通知的目标方法完全包装起来，实际上就像在一个通知方法中同时编写前置通知和后置通知。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AudienceUseAround</span> </span>&#123;</span><br><span class="line">	 <span class="meta">@Pointcut</span>(<span class="string">"execution(** spring04.aop.Performance.perform(..))"</span>)</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performance</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 <span class="comment">//没有实际操作的方法，供@Pointcut注解依附的标识</span></span><br><span class="line">	 &#125;</span><br><span class="line">	 </span><br><span class="line">	 <span class="meta">@Around</span>(<span class="string">"performance()"</span>)</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">watchPerformance</span><span class="params">(ProceedingJoinPoint jp)</span></span>&#123;</span><br><span class="line">		 <span class="keyword">try</span> &#123;</span><br><span class="line">			 System.out.println(<span class="string">"Silencing cell phones"</span>);</span><br><span class="line">			 System.out.println(<span class="string">"Taking seats"</span>);</span><br><span class="line">			 jp.proceed();</span><br><span class="line">			 System.out.println(<span class="string">"CLAP CLAP CLAP!!!"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">			System.out.println(<span class="string">"Demanding a refund"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	 &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到这个通知所达到的效果与之前的前置通知和后置通知是一样的。它接受ProceedingJoinPoint作为参数，这个对象用来在通知中调用被通知的方法。如果不调用proceed()这个方法，那么通知实际上会阻塞对被通知方法的调用。也可以多次调用，这样做的一个场景就是重试逻辑，在通知方法失败后，进行重试尝试。</p>
+<h3 id="处理通知中的参数"><a href="#处理通知中的参数" class="headerlink" title="处理通知中的参数"></a>处理通知中的参数</h3><p>下面看一下切面所通知的方法带有参数的处理过程：记录每个磁道播放的次数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrackCounter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> Map&lt;Integer, Integer&gt; trackCounts = <span class="keyword">new</span> HashMap&lt;Integer,Integer&gt;();</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 接受int类型参数，并使用args指定参数为trackNumber</span></span><br><span class="line"><span class="comment">	 * args(trackNumber)限定符表明，传递给playTrack方法的int类型参数也会传递到通知中，</span></span><br><span class="line"><span class="comment">	 * 参数的名称也与切点方法签名中的参数相匹配</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Pointcut</span>(<span class="string">"execution(* spring04.aop.playTrack(int))"</span> + <span class="string">"&amp;&amp; args(trackNumber)"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">trackPlayed</span><span class="params">(<span class="keyword">int</span> trackNumber)</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Before</span>(<span class="string">"trackPlayed(trackNumber)"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">countTrack</span><span class="params">(<span class="keyword">int</span> trackNumber)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> currentCount = getPlayCount(trackNumber);</span><br><span class="line">		trackCounts.put(trackNumber, currentCount + <span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPlayCount</span><span class="params">(<span class="keyword">int</span> trackNumber)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> trackCounts.containsKey(trackNumber) ? trackCounts.get(trackNumber) : <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在Spring配置中，将BlankDisc和TrackCounter定义为bean，并启用AspectJ自动代理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableAspectJAutoProxy</span>    <span class="comment">//启用AspectJ自动代理</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrackCounterConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> CompactDisc <span class="title">sgtPeppers</span><span class="params">()</span></span>&#123;</span><br><span class="line">		BlankDisc cd = <span class="keyword">new</span> BlankDisc();</span><br><span class="line">		cd.setTitle(<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span>);</span><br><span class="line">		cd.setArtist(<span class="string">"The Beatles"</span>);</span><br><span class="line">		List&lt;String&gt; tracks = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">		tracks.add(<span class="string">"Love song"</span>);</span><br><span class="line">		tracks.add(<span class="string">"sheng ri kuai le"</span>);</span><br><span class="line">		tracks.add(<span class="string">"xiao chou"</span>);</span><br><span class="line">		tracks.add(<span class="string">"ni jiu bu yao xiang qi wo"</span>);</span><br><span class="line">		cd.setTracks(tracks);</span><br><span class="line">		<span class="keyword">return</span> cd;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> TrackCounter <span class="title">trackCounter</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> TrackCounter();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试并断言播放的数量：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(classes=TrackCounterConfig.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrackCounterTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	  <span class="meta">@Autowired</span></span><br><span class="line">	  <span class="keyword">private</span> BlankDisc cd;</span><br><span class="line">	  </span><br><span class="line">	  <span class="meta">@Autowired</span></span><br><span class="line">	  <span class="keyword">private</span> TrackCounter counter;</span><br><span class="line">	  </span><br><span class="line">	  <span class="meta">@Test</span></span><br><span class="line">	  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTrackCounter</span><span class="params">()</span></span>&#123;</span><br><span class="line">		  cd.playTrack(<span class="number">1</span>);</span><br><span class="line">		  cd.playTrack(<span class="number">2</span>);</span><br><span class="line">		  cd.playTrack(<span class="number">2</span>);</span><br><span class="line">		  cd.playTrack(<span class="number">3</span>);</span><br><span class="line">		  cd.playTrack(<span class="number">3</span>);</span><br><span class="line">		  cd.playTrack(<span class="number">3</span>);</span><br><span class="line">		  </span><br><span class="line">		  assertEquals(<span class="number">1</span>, counter.getPlayCount(<span class="number">1</span>));</span><br><span class="line">		  assertEquals(<span class="number">2</span>, counter.getPlayCount(<span class="number">2</span>));</span><br><span class="line">		  assertEquals(<span class="number">3</span>, counter.getPlayCount(<span class="number">3</span>));</span><br><span class="line">	  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="通过注解引入新功能"><a href="#通过注解引入新功能" class="headerlink" title="通过注解引入新功能"></a>通过注解引入新功能</h3><p>在Spring中，切面只是实现了它们所包装bean相同接口的代理，除了实现这些接口，代理也能暴露新接口。下图展示Spring AOP 通过引入为Spring bean添加新方法：</p>
+<p><img src="/2017/12/01/spring/springAOP/spring0401.png" alt=""></p>
+<p>当引入接口的方法被调用时，代理会把此调用委托给实现了新接口的某个其他对象。实际上，一个bean的实现被拆分到了多个类中。示例：为所有的Performance实现引入下面的Encoreable接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Encoreable</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">performEncore</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>借助AOP引入功能，我们不必修改所有的实现让其都实现Encoreable接口，下面创建一个新的切面：</p>
+<p>通过@DeclareParents注解将Encoreable接口引入到Performance bean中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EncoreableIntroducer</span> </span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * @DeclareParents注解由三个部分组成：</span></span><br><span class="line"><span class="comment">	 * 1. value：指定了哪种类型的bean要引入该接口。+表示Performance的所有子类型，而不是Performance本身。</span></span><br><span class="line"><span class="comment">	 * 2. defaultImpl：指定了为引入功能提供实现的类。</span></span><br><span class="line"><span class="comment">	 * 3. @DeclareParents注解所标注的静态属性指定了要引入的接口。</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@DeclareParents</span>(value=<span class="string">"spring04.aop.Performance+"</span>, defaultImpl=DefaultEncoreable.class)</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Encoreable encoreable;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和其他切面一样，我们需要在spring应用中将EncoreableIntroducer声明为一个bean：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring04.aop.EncoreableIntroducer"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<p>Spring的自动代理机制将会获取到它的声明，当Spring发现一个bean使用了@Aspect注解时，Spring就会创建一个代理，然后将调用委托给被代理的bean或被引入的实现，这取决于调用的方法属于被代理的bean还是被引入的接口。</p>
+<p>在Spring中，注解和自动代理提供了一种很便利的方式来创建切面。但面向注解的切面声明有一个明显的劣势就是，必须要有源码，才能为通知的类添加注解。所以当你没有源码，或者不想将AspectJ注解放到代码中时，就需要在Spring XML配置文件中声明切面。</p>
+<h2 id="在XML中声明切面"><a href="#在XML中声明切面" class="headerlink" title="在XML中声明切面"></a>在XML中声明切面</h2><p>在Spring的aop命名空间中，提供了多个元素用来在XML中声明切面。如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">AOP配置元素</th>
+<th style="text-align:center">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><a href="aop:advisor" target="_blank" rel="noopener">aop:advisor</a></td>
+<td style="text-align:center">定义AOP通知器</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:after" target="_blank" rel="noopener">aop:after</a></td>
+<td style="text-align:center">定义AOP后置通知（不管被通知的方法是否执行成功）</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:after-returning" target="_blank" rel="noopener">aop:after-returning</a></td>
+<td style="text-align:center">定义AOP返回通知</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:after-throwing" target="_blank" rel="noopener">aop:after-throwing</a></td>
+<td style="text-align:center">定义AOP异常通知</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:around" target="_blank" rel="noopener">aop:around</a></td>
+<td style="text-align:center">定义AOP环绕通知</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:aspect" target="_blank" rel="noopener">aop:aspect</a></td>
+<td style="text-align:center">定义一个切面</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:aspectj-autoproxy" target="_blank" rel="noopener">aop:aspectj-autoproxy</a></td>
+<td style="text-align:center">启用@AspectJ注解驱动的切面</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:before" target="_blank" rel="noopener">aop:before</a></td>
+<td style="text-align:center">定义一个AOP前置通知</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:config" target="_blank" rel="noopener">aop:config</a></td>
+<td style="text-align:center">顶层的AOP配置元素</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:declare-parents" target="_blank" rel="noopener">aop:declare-parents</a></td>
+<td style="text-align:center">以透明的方式为被通知的对象引入额外的接口</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="aop:pointcut" target="_blank" rel="noopener">aop:pointcut</a></td>
+<td style="text-align:center">定义一个切点</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="声明前置和后置通知"><a href="#声明前置和后置通知" class="headerlink" title="声明前置和后置通知"></a>声明前置和后置通知</h3><p>XML配置下的Audience类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Audience</span> </span>&#123;	</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">silenceCellPhones</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"Silencing cell phones"</span>);</span><br><span class="line">	 &#125;</span><br><span class="line">	 </span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">takeSeats</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"Taking seats"</span>);</span><br><span class="line">	 &#125;</span><br><span class="line">	 </span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">applause</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"CLAP CLAP CLAP!!!"</span>);</span><br><span class="line">	 &#125;</span><br><span class="line">	 </span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demandRefund</span><span class="params">()</span></span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"Demanding a refund"</span>);</span><br><span class="line">	 &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>xml配置：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;aop:config&gt;</span><br><span class="line">    &lt;aop:aspect ref=<span class="string">"audience"</span>&gt;</span><br><span class="line">    	&lt;aop:pointcut id=<span class="string">"performance"</span> expression=<span class="string">"execution(** spring04.aop.Performance.perform(..))"</span>/&gt;</span><br><span class="line">    		</span><br><span class="line">    	&lt;aop:before </span><br><span class="line">    		 pointcut-ref=<span class="string">"performance"</span></span><br><span class="line">    		 method=<span class="string">"silenceCellPhones"</span> /&gt;</span><br><span class="line">    		</span><br><span class="line">    	&lt;aop:before </span><br><span class="line">    		 pointcut-ref=<span class="string">"performance"</span></span><br><span class="line">    		 method=<span class="string">"takeSeats"</span> /&gt;</span><br><span class="line">    	</span><br><span class="line">    	&lt;aop:after-returning </span><br><span class="line">    		 pointcut-ref=<span class="string">"performance"</span></span><br><span class="line">    		 ethod=<span class="string">"applause"</span> /&gt;</span><br><span class="line">    		     </span><br><span class="line">    	&lt;aop:after-throwing </span><br><span class="line">    		 pointcut-ref=<span class="string">"performance"</span></span><br><span class="line">    		 method=<span class="string">"demandRefund"</span> /&gt;</span><br><span class="line">    &lt;/aop:aspect&gt;</span><br><span class="line">&lt;/aop:config&gt;</span><br></pre></td></tr></table></figure>
+<p>如果想让定义的切点能够在多个切面使用，可以把<a href="aop:pointcut" target="_blank" rel="noopener">aop:pointcut</a>元素放在<a href="aop:config" target="_blank" rel="noopener">aop:config</a>元素的范围内。</p>
+<h3 id="声明环绕通知"><a href="#声明环绕通知" class="headerlink" title="声明环绕通知"></a>声明环绕通知</h3><p>假设除了进场关闭手机和表演结束鼓掌，我们还希望观众确保一直关注演出，并报告每个表演者的演出时间。使用前置通知和后置通知实现该功能的唯一方式是在前置通知中记录开始时间并在某个后置通知中报告表演耗费的时间。但这样的话必须在一个成员变量中保存开始时间。因为Audience是单例的，如果像这样保存状态的话，将会存在线程安全问题。这时可以环绕通知就很有优势。</p>
+<p>XML配置下使用环绕通知的AudienceUseAround类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AudienceUseAround</span> </span>&#123;</span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">watchPerformance</span><span class="params">(ProceedingJoinPoint jp)</span></span>&#123;</span><br><span class="line">		 <span class="keyword">try</span> &#123;</span><br><span class="line">			 System.out.println(<span class="string">"Silencing cell phones"</span>);</span><br><span class="line">			 System.out.println(<span class="string">"Taking seats"</span>);</span><br><span class="line">			 jp.proceed();</span><br><span class="line">			 System.out.println(<span class="string">"CLAP CLAP CLAP!!!"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">			System.out.println(<span class="string">"Demanding a refund"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	 &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>xml配置：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;aop:config&gt;   </span><br><span class="line">    	&lt;aop:aspect ref=<span class="string">"audienceUseAround"</span>&gt;</span><br><span class="line">    		&lt;aop:pointcut </span><br><span class="line">    		     id=<span class="string">"performance"</span> </span><br><span class="line">    		     expression=<span class="string">"execution(** spring04.aop.Performance.perform(..))"</span>/&gt;</span><br><span class="line">    	</span><br><span class="line">    		&lt;aop:around </span><br><span class="line">    		     pointcut-ref=<span class="string">"performance"</span></span><br><span class="line">    			 method=<span class="string">"watchPerformance"</span> /&gt;</span><br><span class="line">    	&lt;/aop:aspect&gt;</span><br><span class="line">    &lt;/aop:config&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="为通知传递参数"><a href="#为通知传递参数" class="headerlink" title="为通知传递参数"></a>为通知传递参数</h3><p>在XML中实现：记录每个磁道播放的次数。</p>
+<p>无注解的TrackCounter：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrackCounter</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Map&lt;Integer, Integer&gt; trackCounts = <span class="keyword">new</span> HashMap&lt;Integer,Integer&gt;();</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">countTrack</span><span class="params">(<span class="keyword">int</span> trackNumber)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> currentCount = getPlayCount(trackNumber);</span><br><span class="line">		trackCounts.put(trackNumber, currentCount + <span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPlayCount</span><span class="params">(<span class="keyword">int</span> trackNumber)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> trackCounts.containsKey(trackNumber) ? trackCounts.get(trackNumber) : <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在XML中将TrackCount配置为参数化的切面：声明TrackCount bean和BlankDisc bean，并将TrackCount转化为切面。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 在XML中将TrackCount配置为参数化的切面 --&gt;  </span><br><span class="line">    &lt;!-- 声明TrackCounter bean和BlankDisc bean --&gt;</span><br><span class="line">    &lt;bean id = <span class="string">"trackCounter"</span> <span class="class"><span class="keyword">class</span> </span>= <span class="string">"spring04.aop.xml.TrackCounter"</span> /&gt;</span><br><span class="line">    &lt;bean id = <span class="string">"cd"</span> <span class="class"><span class="keyword">class</span> </span>= <span class="string">"spring04.aop.BlankDisc"</span>&gt;</span><br><span class="line">    	&lt;property name=<span class="string">"title"</span> value = <span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span> /&gt;</span><br><span class="line">    	&lt;property name=<span class="string">"artist"</span> value = <span class="string">"The Beatles"</span> /&gt;</span><br><span class="line">    	&lt;property name=<span class="string">"tracks"</span>&gt;</span><br><span class="line">    		&lt;list&gt;</span><br><span class="line">    			&lt;value&gt;Love song&lt;/value&gt;</span><br><span class="line">    			&lt;value&gt;sheng ri kuai le&lt;/value&gt;</span><br><span class="line">    			&lt;value&gt;xiao chou&lt;/value&gt;</span><br><span class="line">    			&lt;value&gt;ni jiu bu yao xiang qi wo&lt;/value&gt;</span><br><span class="line">    		&lt;/list&gt;</span><br><span class="line">    	&lt;/property&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 将TrackCount声明为切面 --&gt;</span><br><span class="line">    &lt;aop:config&gt;   </span><br><span class="line">    	&lt;aop:aspect ref=<span class="string">"trackCounter"</span>&gt;</span><br><span class="line">    		&lt;aop:pointcut </span><br><span class="line">    		     id=<span class="string">"trackPlayed"</span> </span><br><span class="line">    		     expression=<span class="string">"execution(* spring04.aop.CompactDisc.playTrack(int)) and args(trackNumber)"</span>/&gt;</span><br><span class="line">    	</span><br><span class="line">    		&lt;aop:before </span><br><span class="line">    		     pointcut-ref=<span class="string">"trackPlayed"</span></span><br><span class="line">    			 method=<span class="string">"countTrack"</span> /&gt;</span><br><span class="line">    	&lt;/aop:aspect&gt;</span><br><span class="line">    &lt;/aop:config&gt;</span><br></pre></td></tr></table></figure>
+<p>注意：在XML中切点表达式需要使用and、or、not，不要使用&amp;&amp;、||、!。</p>
+<h3 id="通过切面引入新的功能"><a href="#通过切面引入新的功能" class="headerlink" title="通过切面引入新的功能"></a>通过切面引入新的功能</h3><p>如下的XML代码与之前基于AspectJ的引入功能相同：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;aop:aspect&gt;</span><br><span class="line">	&lt;aop:declare-parents </span><br><span class="line">		types-matching=<span class="string">"spring04.aop.Performance+"</span> </span><br><span class="line">		implement-<span class="class"><span class="keyword">interface</span></span>=<span class="string">"spring04.aop.Encoreable"</span></span><br><span class="line">		<span class="keyword">default</span>-impl=<span class="string">"spring04.aop.DefaultEncoreable"</span> /&gt; <span class="comment">//Encoreable接口中的方法实现来源</span></span><br><span class="line">&lt;/aop:aspect&gt;  </span><br><span class="line">  </span><br><span class="line"><span class="comment">//引入接口的实现还有另一种方式</span></span><br><span class="line">&lt;bean id=<span class="string">"encoreableDelegate"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring04.aop.DefaultEncoreable"</span> /&gt;</span><br><span class="line">&lt;aop:aspect&gt;</span><br><span class="line">	&lt;aop:declare-parents </span><br><span class="line">		types-matching=<span class="string">"spring04.aop.Performance+"</span> </span><br><span class="line">		implement-<span class="class"><span class="keyword">interface</span></span>=<span class="string">"spring04.aop.Encoreable"</span></span><br><span class="line">		delegate-ref=<span class="string">"encoreableDelegate"</span>  /&gt; </span><br><span class="line">&lt;/aop:aspect&gt;</span><br></pre></td></tr></table></figure>
+<p>使用default-impl来直接标识委托和间接使用delegate-ref的区别在于后者是Spring bean，它本身可以被注入、通知或使用其他的Spring配置。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/29/spring/seniorassembling/" rel="next" title="Spring高级装配">
+                <i class="fa fa-chevron-left"></i> Spring高级装配
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/07/spring/aspectj/" rel="prev" title="Spring注入AspectJ切面">
+                Spring注入AspectJ切面 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向切面基本原理"><span class="nav-number">2.</span> <span class="nav-text">面向切面基本原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过切点来选择连接点"><span class="nav-number">3.</span> <span class="nav-text">通过切点来选择连接点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编写切点"><span class="nav-number">3.1.</span> <span class="nav-text">编写切点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用注解创建切面"><span class="nav-number">4.</span> <span class="nav-text">使用注解创建切面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环绕通知"><span class="nav-number">4.1.</span> <span class="nav-text">环绕通知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理通知中的参数"><span class="nav-number">4.2.</span> <span class="nav-text">处理通知中的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过注解引入新功能"><span class="nav-number">4.3.</span> <span class="nav-text">通过注解引入新功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在XML中声明切面"><span class="nav-number">5.</span> <span class="nav-text">在XML中声明切面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#声明前置和后置通知"><span class="nav-number">5.1.</span> <span class="nav-text">声明前置和后置通知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明环绕通知"><span class="nav-number">5.2.</span> <span class="nav-text">声明环绕通知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为通知传递参数"><span class="nav-number">5.3.</span> <span class="nav-text">为通知传递参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过切面引入新的功能"><span class="nav-number">5.4.</span> <span class="nav-text">通过切面引入新的功能</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/12/01/spring/springAOP/';
+          this.page.identifier = '2017/12/01/spring/springAOP/';
+          this.page.title = 'Spring面向切面';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

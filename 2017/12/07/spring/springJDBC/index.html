@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍Spring自带了一组数据访问框架，集成了多种数据访问技术。不管是直接通过JDBC还是像Hibernate这样的对象关系映射（object-relational mapping，ORM）框架实现数据持久化，或是java持久化API（Java Persistence API，JPA），或是NoSQL数据库等。Spring都能够消除持久化代码中那些单调枯燥的数据访问逻辑。">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring访问数据库">
+<meta property="og:url" content="http://yoursite.com/2017/12/07/spring/springJDBC/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍Spring自带了一组数据访问框架，集成了多种数据访问技术。不管是直接通过JDBC还是像Hibernate这样的对象关系映射（object-relational mapping，ORM）框架实现数据持久化，或是java持久化API（Java Persistence API，JPA），或是NoSQL数据库等。Spring都能够消除持久化代码中那些单调枯燥的数据访问逻辑。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/12/07/spring/springJDBC/sjdbc01.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/07/spring/springJDBC/sjdbc02.png">
+<meta property="og:updated_time" content="2018-07-29T08:34:30.204Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring访问数据库">
+<meta name="twitter:description" content="介绍Spring自带了一组数据访问框架，集成了多种数据访问技术。不管是直接通过JDBC还是像Hibernate这样的对象关系映射（object-relational mapping，ORM）框架实现数据持久化，或是java持久化API（Java Persistence API，JPA），或是NoSQL数据库等。Spring都能够消除持久化代码中那些单调枯燥的数据访问逻辑。">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/07/spring/springJDBC/sjdbc01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/07/spring/springJDBC/"/>
+
+
+
+
+
+  <title>Spring访问数据库 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/07/spring/springJDBC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring访问数据库</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-07T16:10:01+08:00">
+                2017-12-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/07/spring/springJDBC/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/07/spring/springJDBC/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/12/07/spring/springJDBC/" class="leancloud_visitors" data-flag-title="Spring访问数据库">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Spring自带了一组数据访问框架，集成了多种数据访问技术。不管是直接通过JDBC还是像Hibernate这样的对象关系映射（object-relational mapping，ORM）框架实现数据持久化，或是java持久化API（Java Persistence API，JPA），或是NoSQL数据库等。Spring都能够消除持久化代码中那些单调枯燥的数据访问逻辑。</p>
+<a id="more"></a>
+<h2 id="Spring访问数据的原理"><a href="#Spring访问数据的原理" class="headerlink" title="Spring访问数据的原理"></a>Spring访问数据的原理</h2><p>Spring对数据库访问的支持也是遵循面向对象原则中的<strong>针对接口编程</strong>。为了避免持久化的逻辑分散到应用的各个组件中，Spring将数据访问的功能放到一个或多个专注于此项任务的组件中，这样的组件通常称为<strong>数据访问对象（data access object，DAO）</strong>或<strong>Repository</strong>。为了避免应用于特定的数据访问策略耦合在一起，编写良好的Repository应该以接口的方式暴露功能。如下图：</p>
+<p><img src="/2017/12/07/spring/springJDBC/sjdbc01.png" alt=""></p>
+<p>这里说明一点，尽管Spring鼓励使用接口，但并不是强制的，你也可以使用Spring将bean（DAO或其他类型）直接装配到另一个bean的某个属性中，而不需要一定通过接口注入。</p>
+<h3 id="Spring数据访问异常体系"><a href="#Spring数据访问异常体系" class="headerlink" title="Spring数据访问异常体系"></a>Spring数据访问异常体系</h3><p>Spring提供多个数据访问异常，分别描述了它们抛出时所对应的问题。Spring所提供的持久化异常是与平台无关的，这意味着我们可以使用Spring抛出一致的异常，而不用关心所选择的持久化方案。Spring所提供的异常都继承自DataAccessException，这是一个非检查型异常。换句话说，没必要捕获Spring所抛出的数据访问异常。因为Spring认为触发异常的很多问题是不能再catch块中修复的，所以使用了非检查型异常，而不是强制开发人员编写catch块代码（里面经常是空的）。</p>
+<h3 id="数据访问模板"><a href="#数据访问模板" class="headerlink" title="数据访问模板"></a>数据访问模板</h3><p>为了利用Spring的数据访问异常，我们必须使用Spring所支持的数据访问模板。Spring将数据访问过程中固定的和可变的部分明确划分为两个不同的类：模板（template）和回调（callback）。模板管理过程中固定的部分，而回调处理自定义的数据访问代码。如下图：</p>
+<p><img src="/2017/12/07/spring/springJDBC/sjdbc02.png" alt=""></p>
+<p>如图所示，Spring的模板类处理数据访问的固定部分——事务控制、管理资源以及处理异常。 同时， 应用程序相关的数据访问——语句、绑定参数以及整理结果集——在回调的实现中处理。 针对不同的持久化平台， Spring提供了多个可选的模板 。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">模板类（org.springframework.*）</th>
+<th style="text-align:center">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">jca.cci.core.CciTemplate</td>
+<td style="text-align:center">JCA CCI连接</td>
+</tr>
+<tr>
+<td style="text-align:center">jdbc.core.JdbcTemplate</td>
+<td style="text-align:center">JDBC连接</td>
+</tr>
+<tr>
+<td style="text-align:center">jdbc.core.namedparam.NamedParameterJdbcTemplate</td>
+<td style="text-align:center">支持命名参数的JDBC连接</td>
+</tr>
+<tr>
+<td style="text-align:center">jdbc.core.simple.SimpleJdbcTemplate</td>
+<td style="text-align:center">通过java5简化的jdbc连接</td>
+</tr>
+<tr>
+<td style="text-align:center">orm.hibernate3.HibernateTemplate</td>
+<td style="text-align:center">Hibernate 3.x以上的Session</td>
+</tr>
+<tr>
+<td style="text-align:center">orm.ibatis.SqlMapClientTemplate</td>
+<td style="text-align:center">IBATIS SqlMap客户端</td>
+</tr>
+<tr>
+<td style="text-align:center">orm.jdo.JdoTemplate</td>
+<td style="text-align:center">java数据对象（Java Data Object）实现</td>
+</tr>
+<tr>
+<td style="text-align:center">orm.jpa.JpaTemplate</td>
+<td style="text-align:center">java持久化API的实体管理器</td>
+</tr>
+</tbody>
+</table>
+<h2 id="配置数据源"><a href="#配置数据源" class="headerlink" title="配置数据源"></a>配置数据源</h2><p>无论选择哪种数据访问方式， 都需要配置一个数据源的引用。 Spring提供了在Spring上下文中配置数据源bean的多种方式， 包括：</p>
+<ul>
+<li>通过JDBC驱动程序定义的数据源；</li>
+<li>通过JNDI查找的数据源；</li>
+<li>连接池的数据源。 </li>
+</ul>
+<h3 id="使用JNDI数据源"><a href="#使用JNDI数据源" class="headerlink" title="使用JNDI数据源"></a>使用JNDI数据源</h3><p>Spring应用程序经常部署在Java EE应用服务器中， 如WebSphere、JBoss或甚至像Tomcat这样的Web容器中。 这些服务器允许你配置通过JNDI获取数据源。 这种配置的好处在于数据源完全可以在应用程序之外进行管理， 这样应用程序只需在访问数据库的时候查找数据源就可以了。 另外， 在应用服务器中管理的数据源通常以池的方式组织， 从而具备更好的性能， 并且还支持系统管理员对其进行热切换。</p>
+<p>使用Spring bean将JNDI中数据源的引用装配到需要的类中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;jee:jndi-lookup id=<span class="string">"dataSource"</span> jndi-name=<span class="string">"/jdbc/SpitterDS"</span> resource-ref=<span class="string">"true"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<p>其中jndi-name属性用于指定JNDI中资源的名称。 如果只设置了jndi-name属性， 那么就会根据指定的名称查找数据源。 但是， 如果应用程序运行在Java应用服务器中， 你需要将resource-ref属性设置为true， 这样给定的jndi-name将会自动添加“java:comp/env/”前缀。</p>
+<p>使用java配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> JndiObjectFactoryBean <span class="title">dataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">  	JndiObjectFactoryBean jndiObjectFB = <span class="keyword">new</span> JndiObjectFactoryBean();</span><br><span class="line">  	jndiObjectFB.setJndiName(<span class="string">"jdbc/SpitterDS"</span>);</span><br><span class="line">  	jndiObjectFB.setResourceRef(<span class="keyword">true</span>);</span><br><span class="line">  	jndiObjectFB.setProxyInterface(javax.sql.DataSource.class);</span><br><span class="line">  	<span class="keyword">return</span> jndiObjectFB;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用数据源连接池"><a href="#使用数据源连接池" class="headerlink" title="使用数据源连接池"></a>使用数据源连接池</h3><p>Spring没有提供数据源连接池实现，我们可以使用如下的开源实现：</p>
+<ul>
+<li><a href="http://jakarta.apache.org/commons/dbcp" target="_blank" rel="noopener">Apache Commons DBCP</a></li>
+<li><a href="http://sourceforge.net/projects/c3p0/" target="_blank" rel="noopener">c3p0</a></li>
+<li><a href="http://jolbox.com/" target="_blank" rel="noopener">BoneCP</a></li>
+</ul>
+<p>例：配置DBCP BasicDataSource:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//xml配置</span></span><br><span class="line">&lt;bean id=<span class="string">"dataSource"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span></span><br><span class="line">   p:driverClassName=<span class="string">"org.h2.Driver"</span></span><br><span class="line">   p:url=<span class="string">"jdbc:h2:tcp://localhost/~/spitter"</span></span><br><span class="line">   p:username=<span class="string">"sa"</span></span><br><span class="line">   p:password=<span class="string">""</span></span><br><span class="line">   p:initialSize=<span class="string">"5"</span></span><br><span class="line">   p:maxActive=<span class="string">"10"</span></span><br><span class="line">/&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//java配置</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BasicDataSource <span class="title">dataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">  	BasicDataSource ds = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    ds.setDriverClassName(<span class="string">"org.h2.Driver"</span>);</span><br><span class="line">    ds.setUrl(<span class="string">"jdbc:h2:tcp://localhost/~/spitter"</span>);</span><br><span class="line">    ds.setUsername(<span class="string">"sa"</span>)</span><br><span class="line">    ds.setPassword(<span class="string">""</span>);</span><br><span class="line">    ds.setInitialSize(<span class="number">5</span>);</span><br><span class="line">    ds.setMaxActive(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">return</span> ds;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*其中前四个属性是配置BasicDataSource所必需的，在示例中， 连接池启动时会创建5个连接； 当需要的时候， 允</span></span><br><span class="line"><span class="comment">许BasicDataSource创建新的连接， 但最大活跃连接数为10*/</span></span><br></pre></td></tr></table></figure>
+<p>DBCP BasicDataSource的池配置属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">池配置属性</th>
+<th style="text-align:center">所指定的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">initialSize</td>
+<td style="text-align:center">池启动时创建的连接数量</td>
+</tr>
+<tr>
+<td style="text-align:center">maxActive</td>
+<td style="text-align:center">同一时间可从池中分配的最多的连接数。设置0表示无限制</td>
+</tr>
+<tr>
+<td style="text-align:center">maxIdle</td>
+<td style="text-align:center">池里被释放的最多空闲连接数。设置0表示无限制</td>
+</tr>
+<tr>
+<td style="text-align:center">maxOpenPreparedStatements</td>
+<td style="text-align:center">在同一时间能够从语句池中分配的预处理语句（prepared statement）的最大数量。设置0表示无限制</td>
+</tr>
+<tr>
+<td style="text-align:center">maxWait</td>
+<td style="text-align:center">在抛出异常前，池等待连接回收的最大时间。设置-1表示无限等待</td>
+</tr>
+<tr>
+<td style="text-align:center">minEvictableIdleTimeMillis</td>
+<td style="text-align:center">连接在池中保持空闲而不被回收的最大时间</td>
+</tr>
+<tr>
+<td style="text-align:center">minIdle</td>
+<td style="text-align:center">在不创建新连接的情况下，池中保持空闲的最小连接数</td>
+</tr>
+<tr>
+<td style="text-align:center">poolPreparedStatements</td>
+<td style="text-align:center">是否对预处理语句进行池管理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="基于JDBC驱动的数据源"><a href="#基于JDBC驱动的数据源" class="headerlink" title="基于JDBC驱动的数据源"></a>基于JDBC驱动的数据源</h3><p>Spring提供了三个这样的数据源类（ 均位于org.springframework.jdbc.datasource包中） 供选择：</p>
+<ul>
+<li>DriverManagerDataSource： 在每个连接请求时都会返回一个新建的连接。 与DBCP的BasicDataSource不同，由DriverManagerDataSource提供的连接并没有进行池化管理；</li>
+<li>SimpleDriverDataSource：与DriverManagerDataSource的工作方式类似， 但是它直接使用JDBC驱动， 来解决在特定环境下的类加载问题， 这样的环境包括OSGi容器；</li>
+<li>SingleConnectionDataSource： 在每个连接请求时都会返回同一个的连接。 尽管SingleConnectionDataSource不是<br>严格意义上的连接池数据源， 但是你可以将其视为只有一个连接的池。</li>
+</ul>
+<p>例：DriverManagerDataSource配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//xml配置</span></span><br><span class="line">&lt;bean id=<span class="string">"dataSource"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span></span><br><span class="line">   p:driverClassName=<span class="string">"org.h2.Driver"</span></span><br><span class="line">   p:url=<span class="string">"jdbc:h2:tcp://localhost/~/spitter"</span></span><br><span class="line">   p:username=<span class="string">"sa"</span></span><br><span class="line">   p:password=<span class="string">""</span></span><br><span class="line">/&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//java配置</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BasicDataSource <span class="title">dataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">  	DriverManagerDataSource ds = <span class="keyword">new</span> DriverManagerDataSource();</span><br><span class="line">    ds.setDriverClassName(<span class="string">"org.h2.Driver"</span>);</span><br><span class="line">    ds.setUrl(<span class="string">"jdbc:h2:tcp://localhost/~/spitter"</span>);</span><br><span class="line">    ds.setUsername(<span class="string">"sa"</span>)</span><br><span class="line">    ds.setPassword(<span class="string">""</span>);</span><br><span class="line">    <span class="keyword">return</span> ds;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*与具备池功能的数据源相比， 唯一的区别在于这些数据源bean都没有提供连接池功能， 所以没有可配置的池相关的属性*/</span></span><br></pre></td></tr></table></figure>
+<p>局限性：</p>
+<p>尽管这些数据源对于小应用或开发环境来说是不错的， 但是要将其用于生产环境， 你还是需要慎重考虑。 因为SingleConnectionDataSource有且只有一个数据库连接， 所以不适合用于多线程的应用程序， 最好只在测试的时候使用。<br>而DriverManagerDataSource和SimpleDriverDataSource尽管支持多线程， 但是在每次请求连接的时候都会创建新连接， 这是以性能为代价的。 鉴于以上的这些限制，所以建议应该使用数据源连接池。</p>
+<h3 id="使用嵌入式的数据源"><a href="#使用嵌入式的数据源" class="headerlink" title="使用嵌入式的数据源"></a>使用嵌入式的数据源</h3><p>嵌入式数据库（ embedded database）作为应用的一部分运行， 而不是应用连接的独立数据库服务器。 尽管在生产环境的设置中， 它并没有太大的用处， 但是对于开发和测试来讲， 嵌入式数据库都是很好的可选方案。 这是因为每次重启应用或运行测试的时候， 都能够重新填充测试数据。</p>
+<p>使用jdbc命名空间配置嵌入式数据库：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//xml配置</span></span><br><span class="line">&lt;beans xmlns:jdbc=<span class="string">"http://www.springframework.org/schema/jdbc"</span>   </span><br><span class="line">  xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/jdbc</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    &lt;jdbc:embedded-database id="</span>dataSource<span class="string">" type="</span>H2<span class="string">"&gt;</span></span><br><span class="line"><span class="string">      	&lt;jdbc:script location="</span>com/habuma/spitter/db/jdbc/schema.sql<span class="string">" /&gt;</span></span><br><span class="line"><span class="string">        &lt;jdbc:script location="</span>com/habuma/spitter/db/jdbc/test-data.sql<span class="string">" /&gt;</span></span><br><span class="line"><span class="string">    &lt;/jdbc:embedded-database&gt;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">/beans&gt;</span></span><br><span class="line"><span class="string">/*</span></span><br><span class="line"><span class="string"> * 1. 将type属性设置为H2， 表明嵌入式数据库应该是H2数据库, 将type设置为DERBY，使用嵌入式的ApacheDerby数据库</span></span><br><span class="line"><span class="string"> * 2. &lt;jdbc:embedded-database&gt;元素还会暴露一个数据源， 我们可以像使用其他的数据源那样来使用它。在这里， id属性被       设置成了dataSource， 这也是所暴露数据源的bean ID。 因此， 当我们需要javax.sql.DataSource的时候， 就可</span></span><br><span class="line"><span class="string">      以注入dataSource bean。</span></span><br><span class="line"><span class="string"> */</span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">//java配置</span></span><br><span class="line"><span class="string">@Bean</span></span><br><span class="line"><span class="string">public DataSource dataSource()&#123;</span></span><br><span class="line"><span class="string">  	return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)</span></span><br><span class="line"><span class="string">           .addScript("</span>classpath:schema.sql<span class="string">")</span></span><br><span class="line"><span class="string">      	   .addScript("</span>classpath:test-data.sql<span class="string">")</span></span><br><span class="line"><span class="string">      	   .build();</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用profile选择数据源"><a href="#使用profile选择数据源" class="headerlink" title="使用profile选择数据源"></a>使用profile选择数据源</h3><p>对于开发期来说， <a href="jdbc:embedded-database" target="_blank" rel="noopener">jdbc:embedded-database</a>元素是很合适的， 而在QA环境中， 你可能希望使用DBCP的BasicDataSource， 在生产部署环境下， 可能需要使用<a href="jee:jndi-lookup" target="_blank" rel="noopener">jee:jndi-lookup</a>。借助<strong>Spring</strong>的<strong>profile</strong>特性能够在运行时选择数据源：取决于profile的激活状态</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//java配置</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSourceConfiguration</span></span>&#123;</span><br><span class="line">  	<span class="meta">@profile</span>(<span class="string">"development"</span>)</span><br><span class="line">  	<span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">embeddedDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">      	<span class="comment">//开发数据源</span></span><br><span class="line">    &#125;</span><br><span class="line">  	<span class="meta">@profile</span>(<span class="string">"qa"</span>)</span><br><span class="line">  	<span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">BasicDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">      	<span class="comment">//QA数据源</span></span><br><span class="line">    &#125;</span><br><span class="line">  	<span class="meta">@profile</span>(<span class="string">"production"</span>)</span><br><span class="line">  	<span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">JndiObjectFactoryBeanDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">      	<span class="comment">//生产环境数据源</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//xml配置</span></span><br><span class="line">&lt;beans profile=<span class="string">"development"</span> </span><br><span class="line">    &lt;jdbc:embedded-database id="dataSource" type="H2"&gt; ... &lt;/jdbc:embedded-database&gt;</span><br><span class="line">/beans&gt;</span><br><span class="line">&lt;beans profile=<span class="string">"qa"</span> </span><br><span class="line">    &lt;bean id=<span class="string">"dataSource"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span> ... /&gt;</span><br><span class="line">/beans&gt;</span><br><span class="line">&lt;beans profile=<span class="string">"production"</span> </span><br><span class="line">    &lt;jee:jndi-lookup id=<span class="string">"dataSource"</span> jndi-name=<span class="string">"/jdbc/SpitterDS"</span> resource-ref=<span class="string">"true"</span> /&gt;</span><br><span class="line">/beans&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="Spring中使用JDBC"><a href="#Spring中使用JDBC" class="headerlink" title="Spring中使用JDBC"></a>Spring中使用JDBC</h2><p>Spring为JDBC提供了三个模板类供选择：</p>
+<ul>
+<li>JdbcTemplate： 最基本的Spring JDBC模板， 这个模板支持简单的JDBC数据库访问功能以及基于索引参数的查询；</li>
+<li>NamedParameterJdbcTemplate： 使用该模板类执行查询时可以将值以命名参数的形式绑定到SQL中， 而不是使用简单的索引参数；</li>
+<li>SimpleJdbcTemplate： 该模板类利用Java 5的一些特性如自动装箱、 泛型以及可变参数列表来简化JDBC模板的使用。（spring3.1废弃，java 5特性转移到JdbcTemplate）</li>
+</ul>
+<h3 id="使用JdbcTemplate来操作数据"><a href="#使用JdbcTemplate来操作数据" class="headerlink" title="使用JdbcTemplate来操作数据"></a>使用<strong>JdbcTemplate</strong>来操作数据</h3><p>在spring中配置JdbcTemplate：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> JdbcTemplate <span class="title">jdbcTemplate</span><span class="params">(DataSource dataSource)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> <span class="keyword">new</span> JdbcTemplate(dataSource);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将jdbcTemplate装配到Repository中并使用它来访问数据库：例如， SpitterRepository使用了JdbcTemplate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 1. JdbcSpitterRepository类上使用了@Repository注解， 这表明它将会在组件扫描的时候自动创建。</span></span><br><span class="line"><span class="comment"> * 2. 它的构造器上使用了@Inject注解， 因此在创建的时候， 会自动获得一个JdbcOperations对象。</span></span><br><span class="line"><span class="comment"> * 3. JdbcOperations是一个接口， 定义了JdbcTemplate所实现的操作。 通过注入JdbcOperations， 而不是具体的         *      JdbcTemplate， 能够保证JdbcSpitterRepository通过JdbcOperations接口达到与JdbcTemplate保持松耦合。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdbcSpitterRepository</span> <span class="keyword">implements</span> <span class="title">SpitterRepository</span></span>&#123;</span><br><span class="line">  	<span class="keyword">private</span> JdbcOperations jdbcOperations;</span><br><span class="line">  	<span class="meta">@Inject</span></span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="title">JdbcSpitterRepository</span><span class="params">(JdbcOperations jdbcOperations)</span></span>&#123;</span><br><span class="line">      	<span class="keyword">this</span>.jdbcOperations = jdbcOperations;</span><br><span class="line">  	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//另外一种组件扫描和自动装配的方案， 将JdbcSpitterRepository显式声明为Spring中的bean</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SpitterRepository <span class="title">spitterRepository</span><span class="params">(JdbcTemplate jdbcTemplate)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> <span class="keyword">new</span> JdbcSpitterRepository(jdbcTemplate);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<strong>Repository</strong>中具备可用的<strong>JdbcTemplate</strong>后， 我们可以极大地简化JDBC操作数据库的代码。</p>
+<p>例1：基于<strong>JdbcTemplate</strong>的<strong>addSpitter()</strong>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//样板代码被隐藏到JDBC模板类中了,Spring的数据访问异常都是运行时异常， 所以不必在addSpring ()方法中进行捕获</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSpitter</span><span class="params">(Spitter spitter)</span></span>&#123;</span><br><span class="line">  	jdbcOperations.update(INSERT_SPITTER,</span><br><span class="line">                         spitter.getUsername(),</span><br><span class="line">                         spitter.getPassword());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例2：使用<strong>JdbcTemplate</strong>查询<strong>Spitter</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//findOne()方法， 使用了JdbcTemplate的回调， 实现根据ID查询Spitter， 并将结果集映射为Spitter对象</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Spitter <span class="title">findOne</span><span class="params">(<span class="keyword">long</span> id)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> jdbcOperations.queryForObject(SELECT_SQL,<span class="keyword">new</span> SpitterRowMapper(),id);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 1. queryForObject()方法有三个参数：</span></span><br><span class="line"><span class="comment"> *     1. String对象， 包含了要从数据库中查找数据的SQL</span></span><br><span class="line"><span class="comment"> *     2. RowMapper对象， 用来从ResultSet中提取数据并构建域对象</span></span><br><span class="line"><span class="comment"> *     3. 可变参数列表， 列出了要绑定到查询上的索引参数值</span></span><br><span class="line"><span class="comment"> * 2. 对于查询返回的每一行数据，JdbcTemplate会调用RowMapper的mapRow()方法，并传入一个ResultSet和包含行号的整数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SpitterRowMapper</span> <span class="keyword">implements</span> <span class="title">RowMapper</span>&lt;<span class="title">Spitter</span>&gt;</span>&#123;</span><br><span class="line">  	<span class="function"><span class="keyword">public</span> Spitter <span class="title">mapRow</span><span class="params">(ResultSet rs, <span class="keyword">int</span> rowNum)</span><span class="keyword">throws</span> SQLException</span>&#123;</span><br><span class="line">      	<span class="keyword">return</span> <span class="keyword">new</span> Spitter(rs.getLong(<span class="string">"id"</span>),</span><br><span class="line">                           rs.getString(<span class="string">"username"</span>),</span><br><span class="line">                           rs.getString(<span class="string">"password"</span>));</span><br><span class="line">  	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在JdbcTemplate中使用Java-8的Lambda表达式"><a href="#在JdbcTemplate中使用Java-8的Lambda表达式" class="headerlink" title="在JdbcTemplate中使用Java 8的Lambda表达式"></a>在<strong>JdbcTemplate</strong>中使用<strong>Java 8</strong>的<strong>Lambda</strong>表达式</h3><p>因为RowMapper接口只声明了addRow()这一个方法， 因此它完全符合函数式接口（ functional interface） 的标准。如果使用Java 8来开发应用的话， 我们可以使用Lambda来表达RowMapper的实现， 而不必再使用具体的实现类了。如改写findOne()方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用Java 8的Lambda表达式</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Spitter <span class="title">findOne</span><span class="params">(<span class="keyword">long</span> id)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> jdbcOperations.queryForObject(SELECT_SQL,</span><br><span class="line">                                         (rs, rowNum) -&amp;gt;&#123;</span><br><span class="line">                                           <span class="keyword">return</span> <span class="keyword">new</span> Spitter(rs.getLong(<span class="string">"id"</span>),</span><br><span class="line">                                                              rs.getString(<span class="string">"username"</span>),</span><br><span class="line">                                                              rs.getString(<span class="string">"password"</span>));</span><br><span class="line">                                         &#125;, id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外， 还可以使用Java 8的方法引用， 在单独的方法中定义映射逻辑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Spitter <span class="title">findOne</span><span class="params">(<span class="keyword">long</span> id)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> jdbcOperations.queryForObject(SELECT_SQL,<span class="keyword">this</span>::mapSpitter,id);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> Spitter <span class="title">mapSpitter</span><span class="params">(ResultSet rs, <span class="keyword">int</span> row)</span><span class="keyword">throws</span> SQLException</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Spitter(rs.getLong(<span class="string">"id"</span>),</span><br><span class="line">                       rs.getString(<span class="string">"username"</span>),</span><br><span class="line">                       rs.getString(<span class="string">"password"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不管采用哪种方式， 我们都不必显式实现RowMapper接口， 但是与实现RowMapper类似， 我们所提供的Lambda表达式和方法必须要接受相同的参数， 并返回相同的类型。</p>
+<h3 id="使用命名参数"><a href="#使用命名参数" class="headerlink" title="使用命名参数"></a>使用命名参数</h3><p>命名参数可以赋予SQL中的每个参数一个明确的名字， 在绑定值到查询语句的时候就通过该名字来引用参数。声明NamedParameterJdbcTemplate：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NamedParameterJdbcTemplate <span class="title">jdbcTemplate</span><span class="params">(DataSource dataSource)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> <span class="keyword">new</span> NamedParameterJdbcTemplate(dataSource);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将NamedParameterJdbcOperations（ NamedParameterJdbcTemplate所实现的接口） 注入到Repository中， 用它来替代JdbcOperations。 现在的addSpitter()方法如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String INSERT_SPITTER = </span><br><span class="line">         <span class="string">"insert into Spitter(username,password) values(:username,:password)"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addSpitter</span><span class="params">(Spitter spitter)</span></span>&#123;</span><br><span class="line">  	<span class="comment">//命名参数是通过java.util.Map来进行绑定的</span></span><br><span class="line">  	Map&lt;String, Object&gt; paramMap = <span class="keyword">new</span> HashMap&lt;String, Object&gt;(); </span><br><span class="line">  	paramMap.put(<span class="string">"username"</span>, spitter.getUsername());</span><br><span class="line">  	paramMap.put(<span class="string">"password"</span>, spitter.getPassword()); <span class="comment">//绑定参数</span></span><br><span class="line">  </span><br><span class="line">  	jdbcOperations.update(INSERT_SPITTER, paramMap); <span class="comment">//执行数据插入</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/07/spring/aspectj/" rel="next" title="Spring注入AspectJ切面">
+                <i class="fa fa-chevron-left"></i> Spring注入AspectJ切面
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/15/spring/objrelational/" rel="prev" title="使用对象-关系映射持久化数据（ORM）">
+                使用对象-关系映射持久化数据（ORM） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring访问数据的原理"><span class="nav-number">2.</span> <span class="nav-text">Spring访问数据的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring数据访问异常体系"><span class="nav-number">2.1.</span> <span class="nav-text">Spring数据访问异常体系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据访问模板"><span class="nav-number">2.2.</span> <span class="nav-text">数据访问模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置数据源"><span class="nav-number">3.</span> <span class="nav-text">配置数据源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用JNDI数据源"><span class="nav-number">3.1.</span> <span class="nav-text">使用JNDI数据源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用数据源连接池"><span class="nav-number">3.2.</span> <span class="nav-text">使用数据源连接池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于JDBC驱动的数据源"><span class="nav-number">3.3.</span> <span class="nav-text">基于JDBC驱动的数据源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用嵌入式的数据源"><span class="nav-number">3.4.</span> <span class="nav-text">使用嵌入式的数据源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用profile选择数据源"><span class="nav-number">3.5.</span> <span class="nav-text">使用profile选择数据源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring中使用JDBC"><span class="nav-number">4.</span> <span class="nav-text">Spring中使用JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用JdbcTemplate来操作数据"><span class="nav-number">4.1.</span> <span class="nav-text">使用JdbcTemplate来操作数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在JdbcTemplate中使用Java-8的Lambda表达式"><span class="nav-number">4.2.</span> <span class="nav-text">在JdbcTemplate中使用Java 8的Lambda表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用命名参数"><span class="nav-number">4.3.</span> <span class="nav-text">使用命名参数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/12/07/spring/springJDBC/';
+          this.page.identifier = '2017/12/07/spring/springJDBC/';
+          this.page.title = 'Spring访问数据库';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Sql优化," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="索引索引用来排序数据以加快搜索和排序操作的速度。使用索引，可以在一个或多个列上定义索引，使DBMS保存其内容的一个排过序的列表。在定义了索引后，DBMS搜索排过序的索引，找出匹配的位置，然后检索这些行。 创建索引语法： 1234SQL&amp;gt; create [unique][clustered|nonclustered]index index_name --索引名必须唯一	 on &amp;#123;ta">
+<meta name="keywords" content="Sql优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="索引基本概念">
+<meta property="og:url" content="http://yoursite.com/2017/08/29/dataBase/index/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="索引索引用来排序数据以加快搜索和排序操作的速度。使用索引，可以在一个或多个列上定义索引，使DBMS保存其内容的一个排过序的列表。在定义了索引后，DBMS搜索排过序的索引，找出匹配的位置，然后检索这些行。 创建索引语法： 1234SQL&amp;gt; create [unique][clustered|nonclustered]index index_name --索引名必须唯一	 on &amp;#123;ta">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-29T08:34:30.011Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="索引基本概念">
+<meta name="twitter:description" content="索引索引用来排序数据以加快搜索和排序操作的速度。使用索引，可以在一个或多个列上定义索引，使DBMS保存其内容的一个排过序的列表。在定义了索引后，DBMS搜索排过序的索引，找出匹配的位置，然后检索这些行。 创建索引语法： 1234SQL&amp;gt; create [unique][clustered|nonclustered]index index_name --索引名必须唯一	 on &amp;#123;ta">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/29/dataBase/index/"/>
+
+
+
+
+
+  <title>索引基本概念 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/29/dataBase/index/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">索引基本概念</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-29T19:55:17+08:00">
+                2017-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/29/dataBase/index/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/08/29/dataBase/index/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/08/29/dataBase/index/" class="leancloud_visitors" data-flag-title="索引基本概念">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>索引用来排序数据以加快搜索和排序操作的速度。使用索引，可以在一个或多个列上定义索引，使DBMS保存其内容的一个排过序的列表。在定义了索引后，DBMS搜索排过序的索引，找出匹配的位置，然后检索这些行。</p>
+<p>创建索引语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create [unique][clustered|nonclustered]index index_name --索引名必须唯一</span><br><span class="line">	 on &#123;table_name|view_name&#125;[with [index_property]];--on指定被索引的表，括号中指明索引包含的列</span><br><span class="line">--例：建立唯一索引</span><br><span class="line">SQL&gt; create unique index emp_email on employees(email) tablespace users;</span><br></pre></td></tr></table></figure>
+<p>说明：<strong>unique</strong>：建立唯一索引，<strong>clustered</strong>：建立聚集索引，<strong>nonclustered</strong>：建立非聚集索引，<strong>index_property</strong>：索引属性。unique索引既可以采用聚集索引结构，也可以采用非聚集索引的结构。</p>
+<p>删除索引语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; drop index table_name.index_name[,table_name.index_name]--索引所在的表名称.索引名称</span><br></pre></td></tr></table></figure>
+<p>显示索引信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">--oracle用user_indexes和user_ind_columns系统表查看已经存在的索引</span><br><span class="line">--user_indexes: 系统视图存放是索引的名称以及该索引是否是唯一索引等信息。</span><br><span class="line">--user_ind_column: 系统视图存放的是索引名称，对应的表和列等。</span><br><span class="line">--查看索引个数和类别:</span><br><span class="line">SQL&gt; select * from user_indexes where table=&apos;表名&apos;;</span><br><span class="line">--查看索引被索引的字段:</span><br><span class="line">SQL&gt; select * from user_ind_columns where index_name=upper(&apos;&amp;index_name&apos;);</span><br><span class="line">--通过类似下面的语句来查看一个表的索引的基本情况：</span><br><span class="line">SQL&gt; select user_ind_columns.index_name,user_ind_columns.column_name,</span><br><span class="line">	 user_ind_columns.column_position,user_indexes.uniqueness</span><br><span class="line">	 from user_ind_columns,user_indexes</span><br><span class="line">	 where user_ind_columns.index_name = user_indexes.index_name</span><br><span class="line">	 and user_ind_columns.table_name = &apos;你想要查询的表名字&apos;;</span><br><span class="line"></span><br><span class="line">--SQL Server使用系统存储过程：sp_helpindex 查看指定表的索引信息。</span><br><span class="line">SQL&gt; Exec sp_helpindex book1;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="一、-索引的类型"><a href="#一、-索引的类型" class="headerlink" title="一、 索引的类型"></a>一、 索引的类型</h3><ol>
+<li>唯一索引：唯一索引不允许两行具有相同的索引值</li>
+<li>主键索引：为表定义一个主键将自动创建主键索引，主键索引是唯一索引的特殊类型。主键索引要求主键中的每个值是唯一的，并且不能为空</li>
+<li>聚集索引(Clustered)：表中各行的物理顺序与键值的逻辑（索引）顺序相同，每个表只能有一个</li>
+<li>非聚集索引(Non-clustered)：非聚集索引指定表的逻辑顺序。数据存储在一个位置，索引存储在另一个位置，索引中包含指向数据存储位置的指针。可以有多个，小于249个</li>
+</ol>
+<p>举例：</p>
+<ol>
+<li>图书馆对图书的管理建立一个以字母开头的目录，例如：a开头的书，在第一排，b开头的在第二排，这样在找什么书就好说了，这个就是一个<strong>聚集索引</strong>。很多人借书找某某作者的，不知道书名怎么办？图书管理员在写一个目录，某某作者的书分别在第几排，第几排，这就是一个<strong>非聚集索引</strong>。</li>
+<li>字典前面的目录，可以按照拼音和部首去查询，我们想查询一个字，只需要根据拼音或者部首去查询，就可以快速的定位到这个汉字了，这个就是索引的好处，拼音查询法就是<strong>聚集索引</strong>，部首查询就是一个<strong>非聚集索引</strong>。</li>
+</ol>
+<h3 id="二、索引的存储机制"><a href="#二、索引的存储机制" class="headerlink" title="二、索引的存储机制"></a>二、索引的存储机制</h3><p>首先，无索引的表，查询时，是按照顺序存续的方法扫描每个记录来查找符合条件的记录，这样效率十分低下。 聚集索引和非聚集索引的根本区别是表记录的排列顺序和与索引的排列顺序是否一致，其实理解起来非常简单，还是举字典的例子：如果按照拼音查询，那么都是从a-z的，是具有连续性的，a后面就是b，b后面就是c， 聚集索引就是这样的，他是和表的物理排列顺序是一样的，例如有id为聚集索引，那么1后面肯定是2，2后面肯定是3，所以说这样的搜索顺序的就是聚集索引。非聚集索引就和按照部首查询是一样是，可能按照偏房查询的时候，根据偏旁‘弓’字旁，索引出两个汉字，张和弘，但是这两个其实一个在100页，一个在1000页，（这里只是举个例子），他们的索引顺序和数据库表的排列顺序是不一样的，这个样的就是非聚集索引。</p>
+<p>所以他们的存储机制是这样的：聚集索引就是在数据库被开辟一个物理空间存放他的排列的值，例如1-100，所以当插入数据时，他会重新排列整个整个物理空间，而非聚集索引其实可以看作是一个含有聚集索引的表，他只仅包含原表中非聚集索引的列和指向实际物理表的指针。他只记录一个指针，其实就有点和堆栈差不多的感觉了。</p>
+<h3 id="三、索引建立原则"><a href="#三、索引建立原则" class="headerlink" title="三、索引建立原则"></a>三、索引建立原则</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">动作描述</th>
+<th style="text-align:center">使用聚集索引</th>
+<th style="text-align:center">使用非聚集索引</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">外键列</td>
+<td style="text-align:center">应</td>
+<td style="text-align:center">应</td>
+</tr>
+<tr>
+<td style="text-align:center">主键列</td>
+<td style="text-align:center">应</td>
+<td style="text-align:center">应</td>
+</tr>
+<tr>
+<td style="text-align:center">列经常被分组排序（order by）</td>
+<td style="text-align:center">应</td>
+<td style="text-align:center">应</td>
+</tr>
+<tr>
+<td style="text-align:center">返回某范围内的数据</td>
+<td style="text-align:center">应</td>
+<td style="text-align:center">不应</td>
+</tr>
+<tr>
+<td style="text-align:center">小数目的不同值</td>
+<td style="text-align:center">应</td>
+<td style="text-align:center">不应</td>
+</tr>
+<tr>
+<td style="text-align:center">大数目的不同值</td>
+<td style="text-align:center">不应</td>
+<td style="text-align:center">应</td>
+</tr>
+<tr>
+<td style="text-align:center">频繁更新的列</td>
+<td style="text-align:center">不应</td>
+<td style="text-align:center">应</td>
+</tr>
+<tr>
+<td style="text-align:center">频繁修改索引列</td>
+<td style="text-align:center">不应</td>
+<td style="text-align:center">应</td>
+</tr>
+<tr>
+<td style="text-align:center">一个或极少不同值</td>
+<td style="text-align:center">不应</td>
+<td style="text-align:center">不应</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>定义主键的数据列一定要建立索引；定义有外键的数据列一定要建立索引。</li>
+<li>对于经常查询的数据列最好建立索引。</li>
+<li>对于需要在指定范围内的快速或频繁查询的数据列。</li>
+<li>经常用在WHERE子句中的数据列。</li>
+<li>经常出现在关键字order by、group by、distinct后面的字段，建立索引。如果建立的是复合索引，索引的字段顺序要和这些关键字后面的字段顺序一致，否则索引不会被使用。</li>
+<li>对于那些查询中很少涉及的列，重复值比较多的列不要建立索引。</li>
+<li>对于定义为text、image和bit的数据类型的列不要建立索引。</li>
+<li>对于经常存取的列避免建立索引 。</li>
+<li>限制表上的索引数目。对一个存在大量更新操作的表，所建索引的数目一般不要超过3个，最多不要超过5个。索引虽说提高了访问速度，但太多索引会影响数据的更新操作。</li>
+<li>对复合索引，按照字段在查询条件中出现的频度建立索引。在复合索引中，记录首先按照第一个字段排序。对于在第一个字段上取值相同的记录，系统再按照第二个字段的取值排序，以此类推。因此只有复合索引的第一个字段出现在查询条件中，该索引才可能被使用,因此将应用频度高的字段，放置在复合索引的前面，会使系统最大可能地使用此索引，发挥索引的作用。</li>
+</ol>
+<h3 id="四、索引的优缺点"><a href="#四、索引的优缺点" class="headerlink" title="四、索引的优缺点"></a>四、索引的优缺点</h3><ul>
+<li><p>优点：</p>
+<blockquote>
+<ol>
+<li>加快访问速度</li>
+<li>加强行的唯一性</li>
+</ol>
+</blockquote>
+</li>
+<li><p>缺点：</p>
+<blockquote>
+<ol>
+<li>带索引的表在数据库中需要更多的存储空间</li>
+<li>操纵数据的命令需要更长的处理时间，因为它们需要对索引进行更新</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<h3 id="五、索引注意事项"><a href="#五、索引注意事项" class="headerlink" title="五、索引注意事项"></a>五、索引注意事项</h3><ol>
+<li>索引改善检索操作的性能，但降低了数据插入、修改和删除的性能。在执行这些操作时，DBMS必须动态地更新索引</li>
+<li>索引数据需要占用大量的存储空间</li>
+<li>索引用于数据过滤和数据排序，如果经常需要以某种特定顺序排序数据，该数据适合做索引</li>
+<li>可以在索引中定义多个列（如：州加城市）。这样索引仅在以州加城市的顺序排序时有用</li>
+<li>索引的效率随表数据的改变而变化，所以需要定期检查索引，使其性能达到最好</li>
+</ol>
+<h3 id="六、索引覆盖"><a href="#六、索引覆盖" class="headerlink" title="六、索引覆盖"></a>六、索引覆盖</h3><p>假设你在Sales表(SelesID,SalesDate,SalesPersonID,ProductID,Qty)的外键列(ProductID)上创建了一个索引，假设ProductID列是一个高选中性列，那么任何在where子句中使用索引列(ProductID)的select查询都会更快，如果在外键上没有创建索引，将会发生全部扫描，但还有办法可以进一步提升查询性能。假设Sales表有10,000行记录，下面的SQL语句选中400行(总行数的4%)：　</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT SalesDate, SalesPersonID FROM Sales WHERE ProductID = 112</span><br></pre></td></tr></table></figure>
+<p>我们来看看这条SQL语句在SQL执行引擎中是如何执行的：</p>
+<ol>
+<li>Sales表在ProductID列上有一个非聚集索引，因此它查找非聚集索引树找出ProductID=112的记录；</li>
+<li>包含ProductID = 112记录的索引页也包括所有的聚集索引键(所有的主键键值，即SalesID)；</li>
+<li>针对每一个主键(这里是400)，SQL引擎查找聚集索引树找出真实的行在对应页面中的位置；</li>
+<li>SQL引擎从对应的行查找SalesDate和SalesPersonID列的值。</li>
+</ol>
+<p>在上面的步骤中，对ProductID = 112的每个主键记录(这里是400)，SQL引擎要搜索400次聚集索引树以检索查询中指定的其它列(SalesDate，SalesPersonID)。如果非聚集索引页中包括了聚集索引键和其它两列(SalesDate,，SalesPersonID)的值，SQL Server引擎可能不会执行上面的第3和4步，直接从非聚集索引树查找ProductID列速度还会快一些，直接从索引页读取这三列的数值。</p>
+<p>幸运的是，有一种方法实现了这个功能，它被称为“覆盖索引”，在表列上创建覆盖索引时，需要指定哪些额外的列值需要和聚集索引键值(主键)一起存储在索引页中。下面是在Sales 表ProductID列上创建覆盖索引的例子：　</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE INDEX NCLIX_Sales_ProductID--Index name</span><br><span class="line">　　ON dbo.Sales(ProductID)--Column on which index is to be created</span><br><span class="line">　　INCLUDE(SalesDate, SalesPersonID)--Additional column values to include</span><br></pre></td></tr></table></figure>
+<p>应该在那些select查询中常使用到的列上创建覆盖索引，但覆盖索引中包括过多的列也不行，因为覆盖索引列的值是存储在内存中的，这样会消耗过多内存，引发性能下降。</p>
+<h3 id="七、索引碎片"><a href="#七、索引碎片" class="headerlink" title="七、索引碎片"></a>七、索引碎片</h3><p><a href="[http://www.cnblogs.com/AK2012/archive/2012/12/25/2012-1228.html](http://www.cnblogs.com/AK2012/archive/2012/12/25/2012-1228.html">数据库自身优化</a>)</p>
+<h3 id="八、索引实战（摘抄）"><a href="#八、索引实战（摘抄）" class="headerlink" title="八、索引实战（摘抄）"></a>八、索引实战（摘抄）</h3><p>摘抄地址：<a href="[http://blog.csdn.net/gprime/article/details/1687930](http://blog.csdn.net/gprime/article/details/1687930">如何使你的SQL运行得更快</a>)</p>
+<p>人们在使用SQL时往往会陷入一个误区，即太关注于所得的结果是否正确，而忽略了不同的实现方法之间可能存在的性能差异，这种性能差异在大型的或是复杂的数据库环境中（如联机事务处理OLTP或决策支持系统DSS）中表现得尤为明显。而不良的SQL往往来自于不恰当的索引设计、不充份的连接条件和不可优化的where子句。</p>
+<h4 id="不合理的索引设计"><a href="#不合理的索引设计" class="headerlink" title="不合理的索引设计"></a>不合理的索引设计</h4><p>例：表record有620000行，试看在不同的索引下，下面几个 SQL的运行情况：</p>
+<ol>
+<li><p>在date上建有一非聚集索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select count(*) from record where date &gt;&apos;19991201&apos; and date &lt; &apos;19991214&apos;and amount &gt;2000 (25秒)</span><br><span class="line">select date ,sum(amount) from record group by date(55秒)</span><br><span class="line">select count(*) from record where date &gt;&apos;19990901&apos; and place in (&apos;BJ&apos;,&apos;SH&apos;) (27秒)</span><br></pre></td></tr></table></figure>
+<p>分析：date上有大量的重复值，在非聚集索引下，数据在物理上随机存放在数据页上，在范围查找时，必须执行一次表扫描才能找到这一范围内的全部行。</p>
+</li>
+<li><p>在date上建有一聚集索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select count(*) from record where date &gt;&apos;19991201&apos; and date &lt; &apos;19991214&apos; and amount &gt;2000 （14秒）</span><br><span class="line">select date,sum(amount) from record group by date（28秒）</span><br><span class="line">select count(*) from record where date &gt;&apos;19990901&apos; and place in (&apos;BJ&apos;,&apos;SH&apos;)（14秒）</span><br></pre></td></tr></table></figure>
+<p>分析：在聚集索引下，数据在物理上按顺序在数据页上，重复值也排列在一起，因而在范围查找时，可以先找到这个范围的起末点，且只在这个范围内扫描数据页，避免了大范围扫描，提高了查询速度。</p>
+</li>
+<li><p>在place，date，amount上的组合索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select count(*) from record where date &gt;&apos;19991201&apos; and date &lt; &apos;19991214&apos; and amount &gt;2000 （26秒）</span><br><span class="line">select date,sum(amount) from record group by date（27秒）</span><br><span class="line">select count(*) from record where date &gt;&apos;19990901&apos; and place in (&apos;BJ, &apos;SH&apos;)（&lt; 1秒）</span><br></pre></td></tr></table></figure>
+<p>分析：这是一个不很合理的组合索引，因为它的前导列是place，第一和第二条SQL没有引用place，因此也没有利用上索引；第三个SQL使用了place，且引用的所有列都包含在组合索引中，形成了索引覆盖，所以它的速度是非常快的。</p>
+</li>
+<li><p>在date，place，amount上的组合索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select count(*) from record where date &gt;&apos;19991201&apos; and date &lt; &apos;19991214&apos; and amount &gt;2000(&lt; 1秒)</span><br><span class="line">select date,sum(amount) from record group by date（11秒）</span><br><span class="line">select count(*) from record where date &gt;&apos;19990901&apos; and place in (&apos;BJ&apos;,&apos;SH&apos;)（&lt; 1秒）</span><br></pre></td></tr></table></figure>
+<p>分析：这是一个合理的组合索引。它将date作为前导列，使每个SQL都可以利用索引，并且在第一和第三个SQL中形成了索引覆盖，因而性能达到了最优。</p>
+</li>
+</ol>
+<p>总结：</p>
+<p>缺省情况下建立的索引是非聚集索引，但有时它并不是最佳的；合理的索引设计要建立在对各种查询的分析和预测上。</p>
+<p>一般来说：</p>
+<ol>
+<li>有大量重复值、且经常有范围查询（between, &gt;,&lt; ，&gt;=,&lt; =）和order by、group by发生的列，可考虑建立聚集索引。</li>
+<li>经常同时存取多列，且每列都含有重复值可考虑建立组合索引。</li>
+<li>组合索引要尽量使关键查询形成索引覆盖，其前导列一定是使用最频繁的列。</li>
+</ol>
+<h4 id="不充分的连接条件"><a href="#不充分的连接条件" class="headerlink" title="不充分的连接条件"></a>不充分的连接条件</h4><p>例：表card有7896行，在card_no上有一个非聚集索引，表account有191122行，在account_no上有一个非聚集索引，试看在不同的表连接条件下，两个SQL的执行情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select sum(a.amount) from account a,card b where a.card_no = b.card_no（20秒）</span><br><span class="line">select sum(a.amount) from account a,card b where a.card_no = b.card_no </span><br><span class="line">	   and a.account_no=b.account_no（&lt; 1秒）</span><br></pre></td></tr></table></figure>
+<p>分析：</p>
+<p>在第一个连接条件下，最佳查询方案是将account作外层表，card作内层表，利用card上的索引，其I/O次数可由以下公式估算为：外层表account上的22541页+（外层表account的191122行*内层表card上对应外层表第一行所要查找的3页）=595907次I/O。</p>
+<p>在第二个连接条件下，最佳查询方案是将card作外层表，account作内层表，利用account上的索引，其I/O次数可由以下公式估算为：外层表card上的1944页+（外层表card的7896行*内层表account上对应外层表每一行所要查找的4页）= 33528次I/O。</p>
+<p>可见，只有充份的连接条件，真正的最佳方案才会被执行。</p>
+<p>总结：</p>
+<ol>
+<li>多表操作在被实际执行前，查询优化器会根据连接条件，列出几组可能的连接方案并从中找出系统开销最小的最佳方案。连接条件要充份考虑带有索引的表、行数多的表；内外表的选择可由公式：<strong>外层表中的匹配行数*内层表中每一次查找的次数确定</strong>，乘积最小为最佳方案。</li>
+<li>查看执行方案的方法– 用set showplanon，打开showplan选项，就可以看到连接顺序、使用何种索引的信息；想看更详细的信息，需用sa角色执行dbcc(3604,310,302)。（数据库：Sybase11.0.3）</li>
+</ol>
+<h4 id="不可优化的where子句"><a href="#不可优化的where子句" class="headerlink" title="不可优化的where子句"></a>不可优化的where子句</h4><ol>
+<li><p>例：下列SQL条件语句中的列都建有恰当的索引，但执行速度却非常慢：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from record where substring(card_no,1,4)=&apos;5378&apos;(13秒)</span><br><span class="line">select * from record where amount/30&lt; 1000（11秒）</span><br><span class="line">select * from record where convert(char(10),date,112)=&apos;19991201&apos;（10秒）</span><br></pre></td></tr></table></figure>
+<p>分析：where子句中对列的任何操作结果都是在SQL运行时逐列计算得到的，因此它不得不进行表搜索，而没有使用该列上面的索引；如果这些结果在查询编译时就能得到，那么就可以被SQL优化器优化，使用索引，避免表搜索，因此将SQL重写成下面这样：你会发现SQL明显快起来！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from record where card_no like&apos;5378%&apos;（&lt; 1秒）</span><br><span class="line">select * from record where amount&lt; 1000*30（&lt; 1秒）</span><br><span class="line">select * from record where date= &apos;1999/12/01&apos;（&lt; 1秒）</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例：表stuff有200000行，id_no上有非群集索引，请看下面这个SQL：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select count(*) from stuff where id_no in(&apos;0&apos;,&apos;1&apos;)（23秒）</span><br></pre></td></tr></table></figure>
+<p>分析：where条件中的’in’在逻辑上相当于’or’，所以语法分析器会将in (‘0’,’1’)转化为id_no =’0’ or id_no=’1’来执行。</p>
+<p>我们期望它会根据每个or子句分别查找，再将结果相加，这样可以利用id_no上的索引；</p>
+<p>但实际上（根据showplan）,它却采用了”OR策略”，即先取出满足每个or子句的行，存入临时数据库的工作表中，再建立唯一索引以去掉重复行，最后从这个临时表中计算结果。因此，实际过程没有利用id_no上索引，并且完成时间还要受tempdb数据库性能的影响。</p>
+<p>实践证明，表的行数越多，工作表的性能就越差，当stuff有620000行时，执行时间竟达到220秒！还不如将or子句分开：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select count() from stuff where id_no=&apos;0&apos;</span><br><span class="line">select count() from stuff where id_no=&apos;1&apos;</span><br></pre></td></tr></table></figure>
+<p>得到两个结果，再作一次加法合算。因为每句都使用了索引，执行时间只有3秒，在620000行下，时间也只有4秒。</p>
+<p>或者，用更好的方法，写一个简单的存储过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create proc count_stuff asdeclare @a intdeclare @b intdeclare @c intdeclare @d char(10)beginselect @a=count() from stuff where id_no=&apos;0&apos;select @b=count() from stuff where id_no=&apos;1&apos;endselect @c=@a+@bselect @d=convert(char(10),@c)print @d</span><br></pre></td></tr></table></figure>
+<p>直接算出结果，执行时间同上面一样快！</p>
+</li>
+</ol>
+<p>总结：所谓优化即where子句利用了索引，不可优化即发生了表扫描或额外开销。</p>
+<ol>
+<li>任何对列的操作都将导致表扫描，它包括数据库函数、计算表达式等等，查询时要尽可能将操作移至等号右边。</li>
+<li>in、or子句常会使用工作表，使索引失效；如果不产生大量重复值，可以考虑把子句拆开；拆开的子句中应该包含索引。</li>
+<li>要善于使用存储过程，它使SQL变得更加灵活和高效。</li>
+</ol>
+<p>从以上这些例子可以看出，SQL优化的实质就是在结果正确的前提下，用优化器可以识别的语句，充份利用索引，减少表扫描的I/O次数，尽量避免表搜索的发生。其实SQL的性能优化是一个复杂的过程，上述这些只是在应用层次的一种体现，深入研究还会涉及数据库层的资源配置、网络层的流量控制以及操作系统层的总体设计。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Sql优化/" rel="tag"># Sql优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/29/dataBase/view/" rel="next" title="视图">
+                <i class="fa fa-chevron-left"></i> 视图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/01/dataBase/sqlselect/" rel="prev" title="SQL查询">
+                SQL查询 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、-索引的类型"><span class="nav-number">1.1.</span> <span class="nav-text">一、 索引的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、索引的存储机制"><span class="nav-number">1.2.</span> <span class="nav-text">二、索引的存储机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、索引建立原则"><span class="nav-number">1.3.</span> <span class="nav-text">三、索引建立原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、索引的优缺点"><span class="nav-number">1.4.</span> <span class="nav-text">四、索引的优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、索引注意事项"><span class="nav-number">1.5.</span> <span class="nav-text">五、索引注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、索引覆盖"><span class="nav-number">1.6.</span> <span class="nav-text">六、索引覆盖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、索引碎片"><span class="nav-number">1.7.</span> <span class="nav-text">七、索引碎片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#八、索引实战（摘抄）"><span class="nav-number">1.8.</span> <span class="nav-text">八、索引实战（摘抄）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#不合理的索引设计"><span class="nav-number">1.8.1.</span> <span class="nav-text">不合理的索引设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不充分的连接条件"><span class="nav-number">1.8.2.</span> <span class="nav-text">不充分的连接条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不可优化的where子句"><span class="nav-number">1.8.3.</span> <span class="nav-text">不可优化的where子句</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/08/29/dataBase/index/';
+          this.page.identifier = '2017/08/29/dataBase/index/';
+          this.page.title = '索引基本概念';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

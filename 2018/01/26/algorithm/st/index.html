@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="查找," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍定义：符号表是一种存储键值对的数据结构，支持两种操作：插入（put），即将一组新的键值对存入表中；查找（get），即根据给定的键得到相应的值。 一种简单得泛型符号表API：    public class ST&amp;lt;Key, Value&amp;gt; 描述 默认实现     ST() 创建一张符号表    void put(Key key, Value val) 将键值对存入表中（若值为空则将键k">
+<meta name="keywords" content="查找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="符号表">
+<meta property="og:url" content="http://yoursite.com/2018/01/26/algorithm/st/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍定义：符号表是一种存储键值对的数据结构，支持两种操作：插入（put），即将一组新的键值对存入表中；查找（get），即根据给定的键得到相应的值。 一种简单得泛型符号表API：    public class ST&amp;lt;Key, Value&amp;gt; 描述 默认实现     ST() 创建一张符号表    void put(Key key, Value val) 将键值对存入表中（若值为空则将键k">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/st/st01.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/st/st03.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/26/algorithm/st/st02.png">
+<meta property="og:updated_time" content="2018-07-29T08:34:29.995Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="符号表">
+<meta name="twitter:description" content="介绍定义：符号表是一种存储键值对的数据结构，支持两种操作：插入（put），即将一组新的键值对存入表中；查找（get），即根据给定的键得到相应的值。 一种简单得泛型符号表API：    public class ST&amp;lt;Key, Value&amp;gt; 描述 默认实现     ST() 创建一张符号表    void put(Key key, Value val) 将键值对存入表中（若值为空则将键k">
+<meta name="twitter:image" content="http://yoursite.com/2018/01/26/algorithm/st/st01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/26/algorithm/st/"/>
+
+
+
+
+
+  <title>符号表 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/26/algorithm/st/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">符号表</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-26T09:25:36+08:00">
+                2018-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/26/algorithm/st/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/26/algorithm/st/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/26/algorithm/st/" class="leancloud_visitors" data-flag-title="符号表">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>定义：</strong>符号表是一种存储键值对的数据结构，支持两种操作：插入（put），即将一组新的键值对存入表中；查找（get），即根据给定的键得到相应的值。</p>
+<p>一种简单得泛型符号表API：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">public class ST&lt;Key, Value&gt;</th>
+<th style="text-align:center">描述</th>
+<th>默认实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ST()</td>
+<td style="text-align:center">创建一张符号表</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">void put(Key key, Value val)</td>
+<td style="text-align:center">将键值对存入表中（若值为空则将键key从表中删除）</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">Value get(Key key)</td>
+<td style="text-align:center">获取键key对应的值（若键key不存在则返回null）</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">void delete(Key key)</td>
+<td style="text-align:center">从表中删除键key（及其对应的值）</td>
+<td>put(key, null)</td>
+</tr>
+<tr>
+<td style="text-align:center">boolean contains(key key)</td>
+<td style="text-align:center">键key在表中是否有对应的值</td>
+<td>return get(key) != null</td>
+</tr>
+<tr>
+<td style="text-align:center">boolean isEmpty()</td>
+<td style="text-align:center">表是否为空</td>
+<td>return size() == 0</td>
+</tr>
+<tr>
+<td style="text-align:center">int size()</td>
+<td style="text-align:center">表中键值对数量</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">Iterable<key> keys()</key></td>
+<td style="text-align:center">表中所有键的集合</td>
+</tr>
+</tbody>
+</table>
+<p>说明：</p>
+<ul>
+<li>不允许存在重复的键，并且键不为空；</li>
+<li>新值会替代旧值，并且值不为空；</li>
+<li>两种删除：延时删除，即将键对应的值置为空，某个时候删除所有值为空的键；即时删除，立刻从表中删除指定的键。</li>
+</ul>
+<a id="more"></a>
+<h2 id="有序符号表"><a href="#有序符号表" class="headerlink" title="有序符号表"></a>有序符号表</h2><p>许多符号表的实现都利用了Comparable接口带来的键的有序性来更好地实现put()和get()方法。一种有序的泛型符号表的API：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">public class ST&lt;Key extends Comparable<key>, Value&gt;</key></th>
+<th style="text-align:center">描述</th>
+<th>默认实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ST()</td>
+<td style="text-align:center">创建一张有序符号表</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">void put(Key key, Value val)</td>
+<td style="text-align:center">将键值对存入表中（若值为空则将键key从表中删除）</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">Value get(Key key)</td>
+<td style="text-align:center">获取键key对应的值（若键key不存在则返回空）</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">void delete(Key key)</td>
+<td style="text-align:center">从表中删除键key（及其对应的值）</td>
+<td>put(key, null)</td>
+</tr>
+<tr>
+<td style="text-align:center">boolean contains(key key)</td>
+<td style="text-align:center">键key是否存在于表中</td>
+<td>return get(key) != null</td>
+</tr>
+<tr>
+<td style="text-align:center">boolean isEmpty()</td>
+<td style="text-align:center">表是否为空</td>
+<td>return size() == 0</td>
+</tr>
+<tr>
+<td style="text-align:center">int size()</td>
+<td style="text-align:center">表中的键值对数量</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">Key min()</td>
+<td style="text-align:center">最小的键</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">key max()</td>
+<td style="text-align:center">最大的键</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">key floor(Key key)</td>
+<td style="text-align:center">小于等于key的最大键</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">key ceiling(key key)</td>
+<td style="text-align:center">大于等于key的最小键</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">int rank(key key)</td>
+<td style="text-align:center">小于key的键的数量</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">key select(int k)</td>
+<td style="text-align:center">排名为k的键</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">void deleteMin()</td>
+<td style="text-align:center">删除最小的键</td>
+<td>delete(min())</td>
+</tr>
+<tr>
+<td style="text-align:center">void deleteMax()</td>
+<td style="text-align:center">删除最大的键</td>
+<td>delete(max())</td>
+</tr>
+<tr>
+<td style="text-align:center">int size(key lo, key hi)</td>
+<td style="text-align:center">[lo…hi]之间键的数量</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center">Iterable<key> keys(key lo, key hi)</key></td>
+<td style="text-align:center">[lo…hi]之间的所有键，已排序</td>
+<td>return keys(min(),max())</td>
+</tr>
+<tr>
+<td style="text-align:center">Iterable<key> keys()</key></td>
+<td style="text-align:center">表中所有键的集合，已排序</td>
+</tr>
+</tbody>
+</table>
+<p>说明：</p>
+<ul>
+<li><p>最大键最小键类似优先队列的IndexMinPQ()，主要区别在于优先队列中可以存在重复的键，但符号表不可以。</p>
+</li>
+<li><p>排名的选择：对于0到size()-1的所有i都有i==rank(select(i))，且所有的键都满足key==select(rank(key))。</p>
+</li>
+<li><p>int size(key lo, key hi)的默认实现：</p>
+<blockquote>
+<p>if(hi.compareTo(lo)&lt;0) {return 0;}else if(contains(hi)){return rank(hi)-rank(lo)+1;}else{return rank(hi)-rank(lo);}</p>
+</blockquote>
+</li>
+<li><p>键的等价性：java维护所有Comparable类型中compareTo()方法和equals()方法的一致性，即（a.compareTo(b)==0）和（a.equals(b)）返回值相同。和排序算法一样，java为许多经常作为键的数据类型提供了标准的compareTo方法。为避免二义性，有序符号表中只使用compareTo方法比较两个键，而不使用equals方法。</p>
+</li>
+<li><p>查找的成本模型：在学习符号表的实现时，我们会统计比较的次数。在内循环不进行比较（极少）的情况下，我们统计数组的访问次数。</p>
+</li>
+</ul>
+<p>下面是两种初级的符号表的实现：</p>
+<h2 id="无序链表中的顺序查找"><a href="#无序链表中的顺序查找" class="headerlink" title="无序链表中的顺序查找"></a>无序链表中的顺序查找</h2><p>符号表使用的数据结构的一个简单选择是链表，每个结点存储一个键值对。get()的实现即为遍历链表，用equals()方法比较需要被查找的键和每个结点中的键。如果匹配成功我们就返回相应的值，否则我们返回null。put()的实现也是遍历链表，用equals()方法比较需被查找的键和每个结点中的键。如果匹配成功我们就用第二个参数指定的值更新和该键相关联的值，否则我们就用给定的键值对创造一个新的结点并将其插入到链表的开头。这种方法称为<strong>顺序查找：</strong>在查找中一个一个地顺序遍历符号表中的所有键并使用equals方法来寻找与被查找的键匹配的键。</p>
+<p><strong>算法：顺序查找</strong>（基于无序链表）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SequentialSeqrchST</span>&lt;<span class="title">Key</span>, <span class="title">Value</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">  	<span class="keyword">private</span> <span class="keyword">int</span> N;</span><br><span class="line">	<span class="keyword">private</span> Node first; <span class="comment">//链表首结点</span></span><br><span class="line">	<span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123; <span class="comment">//链表结点的定义</span></span><br><span class="line">		Key key;</span><br><span class="line">		Value val;</span><br><span class="line">		Node next;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Key key, Value val, Node next)</span></span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.key = key;</span><br><span class="line">			<span class="keyword">this</span>.val = val;</span><br><span class="line">			<span class="keyword">this</span>.next = next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//查找给定的键，返回相关联的值</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Value <span class="title">get</span><span class="params">(Key key)</span></span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(Node x = first; x != <span class="keyword">null</span>; x = x.next)&#123;</span><br><span class="line">			<span class="keyword">if</span>(key.equals(x.key))&#123;</span><br><span class="line">				<span class="keyword">return</span> x.val; <span class="comment">//命中</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>; <span class="comment">//未命中</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//查找给定的键，找到则更新其值，否则在表中新建结点</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(Key key, Value val)</span></span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(Node x = first; x != <span class="keyword">null</span>; x = x.next)&#123;</span><br><span class="line">			<span class="keyword">if</span>(key.equals(x.key))&#123;  </span><br><span class="line">				x.val = val;  <span class="comment">//命中，更新</span></span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		first = <span class="keyword">new</span> Node(key, val, first); <span class="comment">//未命中，新建结点</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> N;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">//即时型的delete()方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        first = delete(first, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">delete</span><span class="params">(Node x, Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (key.equals(x.key)) &#123;</span><br><span class="line">             n--;</span><br><span class="line">             <span class="keyword">return</span> x.next;</span><br><span class="line">         &#125;</span><br><span class="line">         x.next = delete(x.next, key);</span><br><span class="line">         <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//表中所有键的集合</span></span><br><span class="line">  	<span class="function"><span class="keyword">public</span> Iterable&lt;Key&gt; <span class="title">keys</span><span class="params">()</span>  </span>&#123;</span><br><span class="line">        Queue&lt;Key&gt; queue = <span class="keyword">new</span> Queue&lt;Key&gt;();</span><br><span class="line">        <span class="keyword">for</span> (Node x = first; x != <span class="keyword">null</span>; x = x.next)&#123;</span><br><span class="line">          	queue.enqueue(x.key);</span><br><span class="line">        &#125;   </span><br><span class="line">        <span class="keyword">return</span> queue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li>符号表的实现使用了一个私有内部类Node来在链表中保存键和值；</li>
+<li>在含有N对键值的基于（无序）链表的符号表中，未命中的查找和插入 操作都需要N次比较。命中的查找在最坏情况下需要N次比较。特别地，向一个空表中插入N个不同的键需要~N^2/2次比较；</li>
+<li>查找一个已经存在的键并不需要线性级别的时间。一种度量方法是查找表中的每个键，并将总时间除以N。在查找表中的每个键的可能性都相同的情况下，这个结果就是一次查找平均所需的比较数。我们称为<strong>随机命中</strong> 。</li>
+</ul>
+<p>使用基于链表的符号表的索引用例的轨迹：</p>
+<p><img src="/2018/01/26/algorithm/st/st01.png" alt=""></p>
+<h2 id="有序数组中的二分查找"><a href="#有序数组中的二分查找" class="headerlink" title="有序数组中的二分查找"></a>有序数组中的二分查找</h2><p>下面是有序符号表API的完整实现。它使用的数据结构是一对平行的数组，一个存储键一个存储值。该实现的核心是rank()方法，它返回表中小于给定键的键的数量。我们将所有更大的键向后移动一格来腾出位置（从后向前移动）并将给定的键值对分别插入到各自数组中的合适位置。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinarySearchST</span>&lt;<span class="title">Key</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">Key</span>&gt;, <span class="title">Value</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INIT_CAPACITY = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">private</span> Key[] keys;</span><br><span class="line">    <span class="keyword">private</span> Value[] vals;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BinarySearchST</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123; </span><br><span class="line">        keys = (Key[]) <span class="keyword">new</span> Comparable[capacity]; </span><br><span class="line">        vals = (Value[]) <span class="keyword">new</span> Object[capacity]; </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">//动态调整数组大小</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">assert</span> capacity &gt;= n;</span><br><span class="line">        Key[]   tempk = (Key[])   <span class="keyword">new</span> Comparable[capacity];</span><br><span class="line">        Value[] tempv = (Value[]) <span class="keyword">new</span> Object[capacity];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            tempk[i] = keys[i];</span><br><span class="line">            tempv[i] = vals[i];</span><br><span class="line">        &#125;</span><br><span class="line">        vals = tempv;</span><br><span class="line">        keys = tempk;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size() == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> get(key) != <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Value <span class="title">get</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> i = rank(key); </span><br><span class="line">        <span class="keyword">if</span> (i &lt; n &amp;&amp; keys[i].compareTo(key) == <span class="number">0</span>) <span class="keyword">return</span> vals[i];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="comment">//二分查找</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">rank</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> lo = <span class="number">0</span>, hi = n-<span class="number">1</span>; </span><br><span class="line">        <span class="keyword">while</span> (lo &lt;= hi) &#123; </span><br><span class="line">            <span class="keyword">int</span> mid = lo + (hi - lo) / <span class="number">2</span>; </span><br><span class="line">            <span class="keyword">int</span> cmp = key.compareTo(keys[mid]);</span><br><span class="line">            <span class="keyword">if</span>      (cmp &lt; <span class="number">0</span>) hi = mid - <span class="number">1</span>; </span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) lo = mid + <span class="number">1</span>; </span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> mid; </span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> lo;</span><br><span class="line">    &#125; </span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(Key key, Value val)</span>  </span>&#123; </span><br><span class="line">        <span class="keyword">if</span> (val == <span class="keyword">null</span>) &#123;</span><br><span class="line">            delete(key);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = rank(key);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// key is already in table</span></span><br><span class="line">        <span class="keyword">if</span> (i &lt; n &amp;&amp; keys[i].compareTo(key) == <span class="number">0</span>) &#123;</span><br><span class="line">            vals[i] = val;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// insert new key-value pair</span></span><br><span class="line">        <span class="keyword">if</span> (n == keys.length) resize(<span class="number">2</span>*keys.length);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = n; j &gt; i; j--)  &#123;</span><br><span class="line">            keys[j] = keys[j-<span class="number">1</span>];</span><br><span class="line">            vals[j] = vals[j-<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        keys[i] = key;</span><br><span class="line">        vals[i] = val;</span><br><span class="line">        n++;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">assert</span> <span class="title">check</span><span class="params">()</span></span>;</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">(Key key)</span> </span>&#123; </span><br><span class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// compute rank</span></span><br><span class="line">        <span class="keyword">int</span> i = rank(key);</span><br><span class="line">        <span class="comment">// key not in table</span></span><br><span class="line">        <span class="keyword">if</span> (i == n || keys[i].compareTo(key) != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &lt; n-<span class="number">1</span>; j++)  &#123;</span><br><span class="line">            keys[j] = keys[j+<span class="number">1</span>];</span><br><span class="line">            vals[j] = vals[j+<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        n--;</span><br><span class="line">        keys[n] = <span class="keyword">null</span>;  <span class="comment">// to avoid loitering</span></span><br><span class="line">        vals[n] = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// resize if 1/4 full</span></span><br><span class="line">        <span class="keyword">if</span> (n &gt; <span class="number">0</span> &amp;&amp; n == keys.length/<span class="number">4</span>) resize(keys.length/<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">assert</span> <span class="title">check</span><span class="params">()</span></span>;</span><br><span class="line">    &#125; </span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteMin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        delete(min());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteMax</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        delete(max());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Key <span class="title">min</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> keys[<span class="number">0</span>]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Key <span class="title">max</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> keys[n-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Key <span class="title">select</span><span class="params">(<span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (k &lt; <span class="number">0</span> || k &gt;= size()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"called select() with invalid argument: "</span> + k);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> keys[k];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Key <span class="title">floor</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"argument to floor() is null"</span>); </span><br><span class="line">        <span class="keyword">int</span> i = rank(key);</span><br><span class="line">        <span class="keyword">if</span> (i &lt; n &amp;&amp; key.compareTo(keys[i]) == <span class="number">0</span>) <span class="keyword">return</span> keys[i];</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> keys[i-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Key <span class="title">ceiling</span><span class="params">(Key key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"argument to ceiling() is null"</span>); </span><br><span class="line">        <span class="keyword">int</span> i = rank(key);</span><br><span class="line">        <span class="keyword">if</span> (i == n) <span class="keyword">return</span> <span class="keyword">null</span>; </span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> keys[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">(Key lo, Key hi)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lo == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"first argument to size() is null"</span>); </span><br><span class="line">        <span class="keyword">if</span> (hi == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"second argument to size() is null"</span>); </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (lo.compareTo(hi) &gt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (contains(hi)) <span class="keyword">return</span> rank(hi) - rank(lo) + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span>              <span class="keyword">return</span> rank(hi) - rank(lo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Iterable&lt;Key&gt; <span class="title">keys</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> keys(min(), max());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Iterable&lt;Key&gt; <span class="title">keys</span><span class="params">(Key lo, Key hi)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lo == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"first argument to keys() is null"</span>); </span><br><span class="line">        <span class="keyword">if</span> (hi == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"second argument to keys() is null"</span>); </span><br><span class="line"></span><br><span class="line">        Queue&lt;Key&gt; queue = <span class="keyword">new</span> Queue&lt;Key&gt;(); </span><br><span class="line">        <span class="keyword">if</span> (lo.compareTo(hi) &gt; <span class="number">0</span>) <span class="keyword">return</span> queue;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = rank(lo); i &lt; rank(hi); i++) </span><br><span class="line">            queue.enqueue(keys[i]);</span><br><span class="line">        <span class="keyword">if</span> (contains(hi)) queue.enqueue(keys[rank(hi)]);</span><br><span class="line">        <span class="keyword">return</span> queue; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">check</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> isSorted() &amp;&amp; rankCheck();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isSorted</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; size(); i++)</span><br><span class="line">            <span class="keyword">if</span> (keys[i].compareTo(keys[i-<span class="number">1</span>]) &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check that rank(select(i)) = i</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">rankCheck</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size(); i++)</span><br><span class="line">            <span class="keyword">if</span> (i != rank(select(i))) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size(); i++)</span><br><span class="line">            <span class="keyword">if</span> (keys[i].compareTo(select(rank(keys[i]))) != <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们使用有序数组存储键的原因是，二分查找法能够根据数组的索引大大减小每次查找所需的比较次数。在有序数组中使用二分查找排名的轨迹：</p>
+<p><img src="/2018/01/26/algorithm/st/st03.png" alt=""></p>
+<p>这段符号表的实现用两个数组保存键和值，使用二分查找方法实现rank()方法，递归地rank()保留了以下性质：</p>
+<ul>
+<li>如果表中存在该键，rank()应该返回该键的位置，也就是表中小于它的键的数量；</li>
+<li>如果表中不存在该键，rank()还是应该返回表中小于它的键的数量。</li>
+</ul>
+<p>使用基于有序数组的符号表实现的索引用例的轨迹：</p>
+<p><img src="/2018/01/26/algorithm/st/st02.png" alt=""></p>
+<p>对二分查找的分析：</p>
+<ul>
+<li>在N个键的有序数组中进行二分查找最多需要（lgN+1）次比较（无论成功与否）；</li>
+<li>向大小为N的有序数组中插入一个新的元素在最坏情况下需要访问~2N次数组，因此向一个空符号表中插入N个元素在最坏情况下需要访问~N^2次数组</li>
+<li>二分查找减少了比较的次数，但无法减少运行所需的时间，put()方法的效率还是太慢了，无法处理大数量。</li>
+<li>它无法处理Leipzing Corpora数据库，因为查找和插入操作是混合进行的，而且符号表也太大了。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>简单得符号表实现的成本总结：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">情况</th>
+<th style="text-align:center">顺序查找</th>
+<th style="text-align:center">二分查找</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">最坏情况下的查找</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">lgN</td>
+</tr>
+<tr>
+<td style="text-align:center">最坏情况下的插入</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">2N</td>
+</tr>
+<tr>
+<td style="text-align:center">平均情况下的查找</td>
+<td style="text-align:center">N/2</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:center">平均情况下的插入</td>
+<td style="text-align:center">lgN</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:center">是否高效支持有序性</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">是</td>
+</tr>
+</tbody>
+</table>
+<p>查找算法的核心问题是能够保证同事查找和插入操作都是对数级别的算法和数据结构。要支持高效的插入，我们需要一种链式结构，可以将二分查找的效率和链表的灵活性结合起来的数据结构就是<strong>二叉查找树</strong> 。下面是符号表的各种实现的优缺点：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">数据结构</th>
+<th style="text-align:center">实现</th>
+<th style="text-align:center">优点</th>
+<th style="text-align:center">缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">链表（顺序查找）</td>
+<td style="text-align:center">SequentialSearchST</td>
+<td style="text-align:center">适用于小型问题</td>
+<td style="text-align:center">对于大型符号表很慢</td>
+</tr>
+<tr>
+<td style="text-align:center">有序数组（二分查找）</td>
+<td style="text-align:center">BinarySearchST</td>
+<td style="text-align:center">最优的查找效率和空间需求，能够进行有序性相关的操作</td>
+<td style="text-align:center">插入操作很慢</td>
+</tr>
+<tr>
+<td style="text-align:center">二叉查找树</td>
+<td style="text-align:center">BST</td>
+<td style="text-align:center">实现简单，能够进行有序性相关的操作</td>
+<td style="text-align:center">没有性能上界的保证，链接需要额外的空间</td>
+</tr>
+<tr>
+<td style="text-align:center">平衡二叉查找树</td>
+<td style="text-align:center">RedBlackBST</td>
+<td style="text-align:center">最优的查找和插入效率，能够进行有序性相关的操作</td>
+<td style="text-align:center">链接需要额外的空间</td>
+</tr>
+<tr>
+<td style="text-align:center">散列表</td>
+<td style="text-align:center">SeparateChainHashST  LinearProbingHashST</td>
+<td style="text-align:center">能够快速地查找和插入常见类型的数据</td>
+<td style="text-align:center">需要计算每种类型的数据的散列，无法进行有序性相关的操作，链接和空结点需要额外的空间</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/查找/" rel="tag"># 查找</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/23/dataBase/mysqloptimize/" rel="next" title="MySQL性能优化">
+                <i class="fa fa-chevron-left"></i> MySQL性能优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/26/algorithm/bst/" rel="prev" title="二叉查找树">
+                二叉查找树 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有序符号表"><span class="nav-number">2.</span> <span class="nav-text">有序符号表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无序链表中的顺序查找"><span class="nav-number">3.</span> <span class="nav-text">无序链表中的顺序查找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有序数组中的二分查找"><span class="nav-number">4.</span> <span class="nav-text">有序数组中的二分查找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/01/26/algorithm/st/';
+          this.page.identifier = '2018/01/26/algorithm/st/';
+          this.page.title = '符号表';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍输入一系列整数对，其中每个整数都表示一个某种类型的对象，一对整数p和q可以理解成“p和q是相连的”。我们假设“相连”是一种等价关系，这意味着它具有：  自反性：p和p是相连的； 对称性：如果p和q是相连的，那么q和p也是相连的； 传递性：如果p和q是相连的且q和r是相连的，那么p和r也是相连的。  当程序从输入中读取了整数对p,q时，如果已知的所有整数对都不能说明p和q是相连的，则将这对整数写">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Union-Find算法">
+<meta property="og:url" content="http://yoursite.com/2017/11/12/algorithm/unionfind/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍输入一系列整数对，其中每个整数都表示一个某种类型的对象，一对整数p和q可以理解成“p和q是相连的”。我们假设“相连”是一种等价关系，这意味着它具有：  自反性：p和p是相连的； 对称性：如果p和q是相连的，那么q和p也是相连的； 传递性：如果p和q是相连的且q和r是相连的，那么p和r也是相连的。  当程序从输入中读取了整数对p,q时，如果已知的所有整数对都不能说明p和q是相连的，则将这对整数写">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/11/12/algorithm/unionfind/quickfind01.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/12/algorithm/unionfind/quickfind02.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/12/algorithm/unionfind/quickfind03.png">
+<meta property="og:updated_time" content="2018-07-29T08:34:29.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Union-Find算法">
+<meta name="twitter:description" content="介绍输入一系列整数对，其中每个整数都表示一个某种类型的对象，一对整数p和q可以理解成“p和q是相连的”。我们假设“相连”是一种等价关系，这意味着它具有：  自反性：p和p是相连的； 对称性：如果p和q是相连的，那么q和p也是相连的； 传递性：如果p和q是相连的且q和r是相连的，那么p和r也是相连的。  当程序从输入中读取了整数对p,q时，如果已知的所有整数对都不能说明p和q是相连的，则将这对整数写">
+<meta name="twitter:image" content="http://yoursite.com/2017/11/12/algorithm/unionfind/quickfind01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/12/algorithm/unionfind/"/>
+
+
+
+
+
+  <title>Union-Find算法 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/12/algorithm/unionfind/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Union-Find算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-12T19:58:08+08:00">
+                2017-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/12/algorithm/unionfind/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/12/algorithm/unionfind/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/11/12/algorithm/unionfind/" class="leancloud_visitors" data-flag-title="Union-Find算法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>输入一系列整数对，其中每个整数都表示一个某种类型的对象，一对整数p和q可以理解成“p和q是相连的”。我们假设“相连”是一种等价关系，这意味着它具有：</p>
+<ul>
+<li>自反性：p和p是相连的；</li>
+<li>对称性：如果p和q是相连的，那么q和p也是相连的；</li>
+<li>传递性：如果p和q是相连的且q和r是相连的，那么p和r也是相连的。</li>
+</ul>
+<p>当程序从输入中读取了整数对p,q时，如果已知的所有整数对都不能说明p和q是相连的，则将这对整数写到输出，如果已知的数据可以说明p和q是相连的，则忽略这对整数对继续处理下一对整数对。要求程序能够判断给定的整数对是否相连。</p>
+<p>我们程序限定为网络问题，所以使用网络方面的术语：将对象称为触点，将整数对称为连接，将等价类称为连通分量。</p>
+<p>union-find算法的API：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">public class UF</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">UF（int N）</td>
+<td>以整数标识（0到N-1初始化N个触点）</td>
+</tr>
+<tr>
+<td style="text-align:center">void     union（int p, int q）</td>
+<td>在p和q之间建立连接，合并分量</td>
+</tr>
+<tr>
+<td style="text-align:center">int     find（int p）</td>
+<td>p所在的分量的标识符</td>
+</tr>
+<tr>
+<td style="text-align:center">boolean     connected（int p, int q）</td>
+<td>如果p和q存在于同一个分量中则返回true</td>
+</tr>
+<tr>
+<td style="text-align:center">int     count（）</td>
+<td>连通分量的数量</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h2 id="Union-Find的实现"><a href="#Union-Find的实现" class="headerlink" title="Union-Find的实现"></a>Union-Find的实现</h2><h3 id="数据结构和算法设计"><a href="#数据结构和算法设计" class="headerlink" title="数据结构和算法设计"></a>数据结构和算法设计</h3><p>API已经说明触点和分量都会用int值表示，所以我们用一个以触点为索引的数组id[]作为基本数据结构来表示所有分量，所以每个分量都是由它的触点之一所表示。一开始我们有N个分量，每个触点都构成了一个只包含有它自己的分量，因此我们将id[i]的值初始化为i，其中i在0到N-1之中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UF</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] a;<span class="comment">//分量id，以触点作为索引</span></span><br><span class="line">  	<span class="keyword">private</span> <span class="keyword">int</span> count;<span class="comment">//分量数量</span></span><br><span class="line">  </span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="title">UF</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">      	<span class="comment">//初始化分量id数组</span></span><br><span class="line">      	count = N;</span><br><span class="line">      	id = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">      	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)&#123;</span><br><span class="line">          	id[i] = i;</span><br><span class="line">      	&#125;</span><br><span class="line">  	&#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//返回给定触点所在的连通分量的标识符</span></span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">      	</span><br><span class="line">  	&#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//将两个分量归并</span></span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span></span>&#123;</span><br><span class="line">      	</span><br><span class="line">  	&#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//返回所有连通分量的数量</span></span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">()</span></span>&#123;</span><br><span class="line">      	<span class="keyword">return</span> count;</span><br><span class="line">  	&#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//判断两个触点是否存在于同一个分量之中</span></span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">connected</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span></span>&#123;</span><br><span class="line">      	<span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">  	&#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">      	<span class="keyword">int</span> N = StdIn.readInt();<span class="comment">//读取触点数量</span></span><br><span class="line">      	UF uf = <span class="keyword">new</span> UF(N);<span class="comment">//初始化N个分量</span></span><br><span class="line">      	<span class="keyword">while</span>(!StdIn.isEmpty())&#123;</span><br><span class="line">          	<span class="keyword">int</span> p = StdIn.readInt();</span><br><span class="line">          	<span class="keyword">int</span> q = StdIn.readInt();<span class="comment">//读取整数对</span></span><br><span class="line">          	<span class="keyword">if</span>(uf.connected(p,q))&#123;</span><br><span class="line">              	<span class="keyword">continue</span>;<span class="comment">//如果已经连通则忽略</span></span><br><span class="line">          	&#125;</span><br><span class="line">          	uf.union(p,q);<span class="comment">//归并分量</span></span><br><span class="line">          	StdOut.println(p + <span class="string">" "</span> + q);</span><br><span class="line">      	&#125;</span><br><span class="line">      	StdOut.println(uf.count + <span class="string">"components"</span>);</span><br><span class="line">  	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个实现维护了一个整形数组id[]，使得find（）方法对于处在同一个连通分量中的触点均返回相同的整数值，union（）方法来保证这一点。这样，问题就变成了实现find（）和union（）方法。</p>
+<h3 id="Quick-Find算法"><a href="#Quick-Find算法" class="headerlink" title="Quick-Find算法"></a>Quick-Find算法</h3><p>保证当且仅当id[p]等于id[q]时p和q是连通的。也就是，在同一个连通分量中的所有触点在id[]中的值必须全部相同。为了调用union（p，q）确保这一点，必须将两个集合中所有触点所对应的id[]元素变为同一个值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> id[p]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span></span>&#123;</span><br><span class="line">  	<span class="comment">//将p和q归并到相同的分量中</span></span><br><span class="line">  	<span class="keyword">int</span> pID = find(p);</span><br><span class="line">  	<span class="keyword">int</span> qID = find(q);</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//如果p和q已经在相同的分量中，则忽略</span></span><br><span class="line">  	<span class="keyword">if</span>(pID == qID)&#123;</span><br><span class="line">      	reutrn;</span><br><span class="line">  	&#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">//将p的分量重命名为q的名称</span></span><br><span class="line">  	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; id.length; i++)&#123;</span><br><span class="line">      	<span class="keyword">if</span>(id[i] == pID)&#123;</span><br><span class="line">          	id[i] = qID</span><br><span class="line">      	&#125;</span><br><span class="line">  	&#125;</span><br><span class="line">  	count--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>quick-find算法概述：</p>
+<p><img src="/2017/11/12/algorithm/unionfind/quickfind01.png" alt=""></p>
+<p>quick-find分析：</p>
+<p>find（）操作速度很快，因为它只需要访问id[]数组一次。而归并两个分量的union（）操作访问数组的次数在(N+3)到(2N+1)之间。但quick-find算法一般无法处理大型问题，因为对于每一对输入union（）都需要扫描整个id[]数组。假设我们使用该算法解决动态连通性问题并且最后只得到一个连通分量，那么至少调用N-1次union（），即至少(N+3)(N-1)~N^2次数组访问。</p>
+<h3 id="Quick-Union算法"><a href="#Quick-Union算法" class="headerlink" title="Quick-Union算法"></a>Quick-Union算法</h3><p>该算法用来提高union（）方法的速度。每个触点所对应的id[]元素都是同一个分量中的另一个触点的名称（也可能是它自己），我们将这种联系称为链接。在实现find（）方法时，我们从给定的触点开始，由它的链接得到另一个触点，如此继续直到到达一个根触点，即链接指向自己的触点。当且仅当分别由两个触点开始的这个过程到达了同一个根触点时它们存在于同一个连通分量。需要union（p，q）保证这一点。它的实现就简单了：由p和q的链接分别找到它们的根触点，然后只需要将一个根触点链接到另一个即可将一个分量命名为另一个分量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">  	<span class="comment">//找出分量的名称</span></span><br><span class="line">  	<span class="keyword">while</span>(p != id[p])&#123;<span class="comment">//while循环中经过编译的代码对id[p]的第二次访问一般都不会访问数组</span></span><br><span class="line">      	p = id[p]</span><br><span class="line">  	&#125;</span><br><span class="line">  	<span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span></span>&#123;</span><br><span class="line">  	<span class="comment">//将p和q的根节点统一</span></span><br><span class="line">  	<span class="keyword">int</span> pRoot = find(p);</span><br><span class="line">  	<span class="keyword">int</span> qRoot = find(q);</span><br><span class="line">  </span><br><span class="line">  	<span class="keyword">if</span>(pRoot == qRoot)&#123;</span><br><span class="line">      	<span class="keyword">return</span>;</span><br><span class="line">  	&#125;</span><br><span class="line">  </span><br><span class="line">  	id[pRoot] = qRoot;</span><br><span class="line">  	count--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>森林的表示：</p>
+<p><img src="/2017/11/12/algorithm/unionfind/quickfind02.png" alt=""></p>
+<p>用节点表示触点，用从一个节点到另一个节点的箭头表示链接，由此得到一个树的结构。在数组被初始化之后，每个节点的链接都指向自己，如果在某次union（）操作之前这条性质成立，那么操作之后也必然成立，因此find（）方法能够返回根节点所对应的触点的名称。这样，connected（）才能判断两个触点是否在同一树上。</p>
+<p>quick-union算法分析：</p>
+<p>quick-union算法可以看做是quick-find算法的一种改良，因为它解决了quick-find算法中最主要的问题，union（）操作总是线性级别的。<strong>quick-union算法中的find（）方法访问数组的次数为1加上给定触点所对应的节点的深度的两倍。union（）和connected（）访问数组的次数为两次find（）操作（如果union（）中给定的两个触点分别存在于不同的树中则还需要加1）</strong> 。这样我们得到quick-union算法最坏的情况：假设输入的整数对是有序的0-1、0-2、0-3等，N-1对之后N个触点将全部处于相同的集合之中，且由quick-union算法得到的树的高度为N-1，其中0链接到1,1链接到2…由上面黑体可知对于整数对0-i，union（）操作访问数组的次数为2i+1（触点为0的深度为i-1，触点i的深度为0）。因此处理N对整数所需要的所有find（）操作访问数组的总次数为3+5+7+…+（2N-1）~ N^2。</p>
+<h3 id="加权quick-union算法"><a href="#加权quick-union算法" class="headerlink" title="加权quick-union算法"></a>加权quick-union算法</h3><p>对quick-union算法进行改进：之前union（）随意将一棵树连接到另一棵树上，现在我们会记录每一棵树的大小并总是将较小的树连接到较大的树上。加权quick-union:</p>
+<p><img src="/2017/11/12/algorithm/unionfind/quickfind03.png" alt=""></p>
+<p>这项改动需要添加一个数组和一些代码来记录树中的节点数，但它能大大改进算法的效率，称为<strong>加权quick-union算法</strong>。该算法构造的树的高度远远小于未加权的版本所构造的树的高度。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightedQuickUnionUF</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] id;<span class="comment">//父链接数组（由触点索引）</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] sz;<span class="comment">//各个根节点所对应的分量的大小</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> count;<span class="comment">//连通分量的数量</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">WeightedQuickUnionUF</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">		count = N;</span><br><span class="line">		id = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">		sz = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)&#123;</span><br><span class="line">			id[i] = i;</span><br><span class="line">			sz[i] = <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> count;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">connected</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> find(p) == find(q);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">		<span class="comment">//跟随链接找到根节点</span></span><br><span class="line">		<span class="keyword">while</span>(p != id[p])&#123;</span><br><span class="line">			p = id[p];</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> p;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> i = find(p);</span><br><span class="line">		<span class="keyword">int</span> j = find(q);</span><br><span class="line">		<span class="keyword">if</span>(i == j)&#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//将小树的根节点连接到大树的根节点</span></span><br><span class="line">		<span class="keyword">if</span>(sz[i] &lt;sz[j])&#123;</span><br><span class="line">			id[i] = j;</span><br><span class="line">			sz[j] += sz[i];</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			id[j] = i;</span><br><span class="line">			sz[i] += sz[j];</span><br><span class="line">		&#125;</span><br><span class="line">		count--;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加权quick-union算法分析：</p>
+<p>上面显示了加权quick-union算法的最坏情况。其中将要被归并的树的大小总是相等的（且总是2的幂）。这些树均含有2^n个节点，因此高度正好是n。当要归并两个含有2^n个节点的树时，得到的树含有2^n+1个节点，由此将树的高度增加到n+1。由此推广可以证明加权quick-union算法能够保证对数级别的性能。<strong>对于N个触点，加权quick-union算法构造的森林中的任意节点的深度最多为lgN</strong>。<strong>对于加权quick-union算法和N个触点，在最坏情况下find（）、connected（）和union（）的成本的增长数量级为logN</strong>。对于动态连通性问题，加权quick-union算法是三种算法中唯一可以用于解决大型实际问题的算法。</p>
+<h3 id="路径压缩的加权quick-union算法"><a href="#路径压缩的加权quick-union算法" class="headerlink" title="路径压缩的加权quick-union算法"></a>路径压缩的加权quick-union算法</h3><p>路径压缩的加权quick-union算法是每个节点都直接链接到它的根节点上。要实现它只需要为find（）添加一个循环，将在路径上遇到的节点都直接链接到根节点上。这样得到的结果是几乎完全扁平化的树，它和quick-union算法理想情况下所得到的树非常接近。但实际上已经不大可能对加权quick-union算法进行任何改进。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="union-find成本模型"><a href="#union-find成本模型" class="headerlink" title="union-find成本模型"></a>union-find成本模型</h3><p>数组的访问次数。</p>
+<h3 id="union-find算法的性能特点"><a href="#union-find算法的性能特点" class="headerlink" title="union-find算法的性能特点"></a>union-find算法的性能特点</h3><table>
+<thead>
+<tr>
+<th>算法</th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存在N个触点时成本的增长数量级（最坏情况）</td>
+<td>构造函数</td>
+<td>union（）</td>
+<td>find（）</td>
+</tr>
+<tr>
+<td>quick-find算法</td>
+<td>N</td>
+<td>N</td>
+<td>1</td>
+</tr>
+<tr>
+<td>quick-union算法</td>
+<td>N</td>
+<td>树的高度</td>
+<td>树的高度</td>
+</tr>
+<tr>
+<td>加权quick-union算法</td>
+<td>N</td>
+<td>lgN</td>
+<td>lgN</td>
+</tr>
+<tr>
+<td>使用路径压缩的加权quick-union算法</td>
+<td>N</td>
+<td>非常非常接近1</td>
+<td>均摊成本</td>
+</tr>
+<tr>
+<td>理想情况</td>
+<td>N</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="算法中的增长数量级"><a href="#算法中的增长数量级" class="headerlink" title="算法中的增长数量级"></a>算法中的增长数量级</h3><table>
+<thead>
+<tr>
+<th>描述</th>
+<th>增长的数量级</th>
+<th>典型的代码</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>常数级别</td>
+<td>1</td>
+<td>a = b + c</td>
+<td>普通语句</td>
+<td>将两个数相加</td>
+</tr>
+<tr>
+<td>对数级别</td>
+<td>logN</td>
+<td>二分查找</td>
+<td>二分策略</td>
+<td>二分查找</td>
+</tr>
+<tr>
+<td>线性级别</td>
+<td>N</td>
+<td>for(int i = 0; i &lt; N; i++)</td>
+<td>循环</td>
+<td>找出最大元素</td>
+</tr>
+<tr>
+<td>线性对数级别</td>
+<td>NlogN</td>
+<td>归并排序</td>
+<td>分治</td>
+<td>归并排序</td>
+</tr>
+<tr>
+<td>平方级别</td>
+<td>N^2</td>
+<td>双层循环</td>
+<td>双层循环</td>
+<td>检查所有元素对</td>
+</tr>
+<tr>
+<td>立方级别</td>
+<td>N^3</td>
+<td>三层循环</td>
+<td>三层循环</td>
+<td>检查所有三元组</td>
+</tr>
+<tr>
+<td>指数级别</td>
+<td>2^N</td>
+<td>穷举查找</td>
+<td>穷举查找</td>
+<td>检查所有子集</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/09/algorithm/linked/" rel="next" title="链表（Linked List）">
+                <i class="fa fa-chevron-left"></i> 链表（Linked List）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/14/algorithm/selsort/" rel="prev" title="选择排序和插入排序">
+                选择排序和插入排序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Union-Find的实现"><span class="nav-number">2.</span> <span class="nav-text">Union-Find的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构和算法设计"><span class="nav-number">2.1.</span> <span class="nav-text">数据结构和算法设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Quick-Find算法"><span class="nav-number">2.2.</span> <span class="nav-text">Quick-Find算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Quick-Union算法"><span class="nav-number">2.3.</span> <span class="nav-text">Quick-Union算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权quick-union算法"><span class="nav-number">2.4.</span> <span class="nav-text">加权quick-union算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路径压缩的加权quick-union算法"><span class="nav-number">2.5.</span> <span class="nav-text">路径压缩的加权quick-union算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#union-find成本模型"><span class="nav-number">3.1.</span> <span class="nav-text">union-find成本模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#union-find算法的性能特点"><span class="nav-number">3.2.</span> <span class="nav-text">union-find算法的性能特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法中的增长数量级"><span class="nav-number">3.3.</span> <span class="nav-text">算法中的增长数量级</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/11/12/algorithm/unionfind/';
+          this.page.identifier = '2017/11/12/algorithm/unionfind/';
+          this.page.title = 'Union-Find算法';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="查找," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍在一颗含有N个结点的树中，我们希望树高为~lgN，这样就能保证所有查找都能在~lgN次比较内结束，就和二分查找一样。但是在动态插入中保持树的完美平衡的代价太高了。">
+<meta name="keywords" content="查找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="平衡查找树（红黑二叉查找树）">
+<meta property="og:url" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍在一颗含有N个结点的树中，我们希望树高为~lgN，这样就能保证所有查找都能在~lgN次比较内结束，就和二分查找一样。但是在动态插入中保持树的完美平衡的代价太高了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb01.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb02.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb03.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb04.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb05.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb06.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb07.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb08.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb09.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb10.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb11.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb12.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb13.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb14.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb15.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb18.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb19.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb16.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb20.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb21.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb17.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb22.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb23.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb24.jpg">
+<meta property="og:updated_time" content="2018-07-29T08:34:29.960Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="平衡查找树（红黑二叉查找树）">
+<meta name="twitter:description" content="介绍在一颗含有N个结点的树中，我们希望树高为~lgN，这样就能保证所有查找都能在~lgN次比较内结束，就和二分查找一样。但是在动态插入中保持树的完美平衡的代价太高了。">
+<meta name="twitter:image" content="http://yoursite.com/2018/01/29/algorithm/redblackBST/rb01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/29/algorithm/redblackBST/"/>
+
+
+
+
+
+  <title>平衡查找树（红黑二叉查找树） | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/29/algorithm/redblackBST/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">平衡查找树（红黑二叉查找树）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T17:06:31+08:00">
+                2018-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/29/algorithm/redblackBST/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/29/algorithm/redblackBST/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/29/algorithm/redblackBST/" class="leancloud_visitors" data-flag-title="平衡查找树（红黑二叉查找树）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在一颗含有N个结点的树中，我们希望树高为~lgN，这样就能保证所有查找都能在~lgN次比较内结束，就和二分查找一样。但是在动态插入中保持树的完美平衡的代价太高了。</p>
+<a id="more"></a>
+<h2 id="2-3查找树"><a href="#2-3查找树" class="headerlink" title="2-3查找树"></a>2-3查找树</h2><p><strong>定义：</strong>一颗2-3查找树或为一颗空树，或由以下结点组成：</p>
+<ul>
+<li>2-结点：含有一个键（及其对应的值）和两条链接，左链接指向的2-3树中的键都小于该结点，右链接指向的2-3树中的键都大于该结点。</li>
+<li>3-结点：含有两个键（及其对应的值）和三条链接，左链接指向的2-3树中的键都小于该结点。中链接指向的2-3树中的键都位于该结点的两个键之间，右链接指向的2-3树中的键都大于该结点。</li>
+</ul>
+<p>2-3查找树示意图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb01.png" alt=""></p>
+<p>一颗完美平衡的2-3查找树中的所有空链接到根结点的距离都是相同的。</p>
+<h3 id="1-查找"><a href="#1-查找" class="headerlink" title="1. 查找"></a>1. 查找</h3><p>要判断一个键是否在树中，我们先将它和根结点中的键比较，如果它和其中任意一个相等，查找命中；否则就根据比较的结果找到指向相应区间的链接，并在其指向的子树中递归地继续查找。如果这是个空链接，查找未命中。具体查找过程如下：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb02.png" alt=""></p>
+<h3 id="2-向2-结点中插入新键"><a href="#2-向2-结点中插入新键" class="headerlink" title="2. 向2-结点中插入新键"></a>2. 向2-结点中插入新键</h3><p>在2-3树中插入一个新结点，可以先和二叉查找树一样进行一次未命中的查找，如果未命中的查找结束于一个2-结点，我们只要把这个2-结点替换为一个3-结点，将要插入的键保存在其中即可。如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb03.png" alt=""></p>
+<p>如果未命中的查找结束于一个3-结点，事情就麻烦了。</p>
+<h3 id="3-向一颗只含有一个3-结点的树中插入新键"><a href="#3-向一颗只含有一个3-结点的树中插入新键" class="headerlink" title="3. 向一颗只含有一个3-结点的树中插入新键"></a>3. 向一颗只含有一个3-结点的树中插入新键</h3><p>我们需要向一颗只含有一个3-结点的树中插入一个新键，这颗树有两个键，所以在它唯一的结点中已经没有可插入新键的空间了。为了将新键插入，我们先临时将新键存入该结点中，使之成为一个4-结点。它很自然地扩展了以前的结点并含有3个键和4条链接。然后很容易将它转换为一颗由3个2-结点组成的2-3树，其中一个结点（根）含有中键，一个结点含有3个键中的最小者（和根结点的左链接相连），一个结点含有3个键中的最大者（和根结点的右链接相连）。这棵树既是一颗含有3个结点的二叉查找树，又是一颗完美平衡的2-3树。如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb04.png" alt=""></p>
+<h3 id="4-向一个父结点为2-结点的3-结点中插入新键"><a href="#4-向一个父结点为2-结点的3-结点中插入新键" class="headerlink" title="4. 向一个父结点为2-结点的3-结点中插入新键"></a>4. 向一个父结点为2-结点的3-结点中插入新键</h3><p>假设未命中的查找结束于3-结点，而它的父结点是一个2-结点，在这种情况下我们需要<strong>在维持树的完美平衡的前提下为新键腾出空间</strong> 。我们可以想刚才一样构造一个临时 的4-结点并将其分解，但此时我们不会为中键创建一个新结点，而是将其移动至原来的父结点中。根据我们的假设，父结点中是有空间的：父结点是一个2-结点，插入后变成一个3-结点。另外，这次转换也不影响2-3树的主要性质。树仍然是有序的，因为中键被移动到父结点中去了，树仍然是完美平衡的，插入后所有的空链接到根结点的距离仍然相同。其过程如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb05.png" alt=""></p>
+<h3 id="5-向一个父结点为3-结点的3-结点中插入新键"><a href="#5-向一个父结点为3-结点的3-结点中插入新键" class="headerlink" title="5. 向一个父结点为3-结点的3-结点中插入新键"></a>5. 向一个父结点为3-结点的3-结点中插入新键</h3><p>现在假设未命中的查找结束于一个父结点为3-结点的结点，我们再次和刚才一样构造一个临时的4-结点并分解它，然后将它的中键插入到它的父结点中，但父结点也是一个3-结点，因此需要再用这个中键构造一个临时4-结点，然后<strong>在这个结点上进行相同的变换</strong> ，即分解这个父结点并将它的中键插入到更高层次的父结点，直到遇到一个2-结点并将它替换为一个不需要继续分解的3-结点，或者是到达3-结点的根。该过程如下：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb06.png" alt=""></p>
+<h3 id="6-分解根结点"><a href="#6-分解根结点" class="headerlink" title="6. 分解根结点"></a>6. 分解根结点</h3><p>如果从插入结点到根结点的路径上全都是3-结点，我们的根结点最终变成一个临时的4-结点。此时我们可以按照向一颗只有一个3-结点的树中插入新键的方法处理这个问题。我们将临时的4-结点分解为3个2-结点，使树的高度加1。这次最后的变换仍然保持了树的完美平衡性，因为它变换的是根结点。其过程如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb07.png" alt=""></p>
+<h3 id="7-局部变换"><a href="#7-局部变换" class="headerlink" title="7. 局部变换"></a>7. 局部变换</h3><p>将一个4-结点分解为一颗2-3树可能有6中情况，如下图。</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb08.jpg" alt=""></p>
+<p>这个4-结点可能是根结点，可能是一个2-结点的左子结点或者右子结点，也可能是一个3-结点的左子结点、中子结点或者右子结点。2-3树插入算法的根本在于这些变换都是局部的：除了相关的结点和链接之外不必修改或者检查树的其他部分。树中的任何地方只有符合相应的模式，变换都可以进行。每个变换都会将4-结点中的一个键送入它的父结点中，并重构相应的链接而不必涉及树的其他部分。这些局部变换不会影响树的全局有序性和平衡性。</p>
+<h3 id="8-全局性质"><a href="#8-全局性质" class="headerlink" title="8. 全局性质"></a>8. 全局性质</h3><p>如下图所示的是当一个4-结点是一个3-结点的中子结点时的完整变换情况。如果在变换之前根结点到所有空链接的路径长度为h，那么变换后该长度仍然为h。所有的变换都具有这个性质，即使是将一个4-结点分解为两个2-结点并将其父结点由2-结点变为3-结点，或是由3-结点变为一个临时的4-结点时也是如此。当根结点被分解为3个2-结点时，所有空链接到根结点的路径长度才会加1。</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb09.jpg" alt=""></p>
+<h3 id="9-总结"><a href="#9-总结" class="headerlink" title="9. 总结"></a>9. 总结</h3><p>和标准的二叉查找树由上向下生长不同，2-3树的生长是由下向上的。<strong>在一颗大小为N的2-3树中，查找和插入操作访问的结点必然不超过lgN个</strong> 。因此我们可以确定2-3树在最坏情况下仍然有较好的性能。上面我们理解了2-3树的插入算法，下面我们要学习一种名为<strong>红黑二叉查找树</strong>的简单数据结构来实现它。</p>
+<h2 id="红黑二叉查找树"><a href="#红黑二叉查找树" class="headerlink" title="红黑二叉查找树"></a>红黑二叉查找树</h2><p>红黑二叉查找树背后的基本思想是用标准的二叉查找树（完全由2-结点构成）和一些额外的信息（替换3-结点）来表示2-3树。</p>
+<h3 id="1-替换3-结点"><a href="#1-替换3-结点" class="headerlink" title="1.替换3-结点"></a>1.替换3-结点</h3><p>我们将树中的链接分为两种类型：<strong>红链接</strong>将两个2-结点连接起来构成一个3-结点，<strong>黑链接</strong>则是2-3树中的普通链接。确切地说，我们将3-结点表示为由一条<strong>左斜</strong>的红色链接（两个2-结点其中之一是另一个的左子结点）相连的两个2-结点。如图所示：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb10.png" alt=""></p>
+<p>这种表示法的一个优点是，我们无需修改就可以直接使用标准二叉查找树的get()方法。对于任意的2-3树，只要对结点进行转换，我们都可以立即派生出一颗对应的二叉查找树。我们将用这种方式表示的2-3树的二叉查找树称为<strong>红黑二叉查找树</strong> ，简称<strong>红黑树</strong> 。</p>
+<h3 id="2-一种等价的定义"><a href="#2-一种等价的定义" class="headerlink" title="2. 一种等价的定义"></a>2. 一种等价的定义</h3><p>红黑树的另一种<strong>定义</strong>是含有红黑链接并满足下列条件的二叉查找树：</p>
+<ul>
+<li>红链接均为左链接；</li>
+<li>没有任何一个结点同时和两条红链接相连；</li>
+<li>该树是<strong>完美黑色平衡</strong>的，即任意空链接到根结点的路径上的黑链接数量相同。</li>
+</ul>
+<p>满足这样定义的红黑树和相应的2-3树是一一对应的。</p>
+<h3 id="3-一一对应"><a href="#3-一一对应" class="headerlink" title="3. 一一对应"></a>3. 一一对应</h3><p>如果我们将一颗红黑树中的红链接画平，那么所有的空链接到根结点的距离都将是相同的。如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb11.jpg" alt=""></p>
+<p>如果我们将由红链接相连的结点合并，得到的就是一颗2-3树。无论选择何种方式定义，红黑树都既是二叉查找树，也是2-3树。如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb12.png" alt=""></p>
+<p>因此我们能够在保持一一对应关系的基础上实现2-3树的插入算法，那么我们就能够将两个算法的优点结合起来：二叉查找树中简洁高效的查找方法和2-3树中高效的平衡插入算法。</p>
+<h3 id="4-颜色表示"><a href="#4-颜色表示" class="headerlink" title="4. 颜色表示"></a>4. 颜色表示</h3><p>因为每个结点都只会有一条指向自己的链接（从它的父结点指向它），我们将链接的颜色保存在表示结点的Node数据类型的布尔变量中。红色表示true，黑色表示false，约定空链接为黑色。当我们提到一个结点的颜色时，我们指的是指向该结点的链接的颜色。如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb13.png" alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">boolean</span> RED = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">boolean</span> BLACK = <span class="keyword">false</span>;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isRed</span><span class="params">(Node x)</span></span>&#123;</span><br><span class="line">  	<span class="keyword">if</span>(x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">  	<span class="keyword">return</span> x.color == RED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-旋转"><a href="#5-旋转" class="headerlink" title="5. 旋转"></a>5. 旋转</h3><p>旋转操作会改变红链接的指向。首先，假设我们有一条红色的右链接需要被转化为<strong>左链接</strong> ，这个操作叫做<strong>左旋转</strong> ，它对应的方法接受一条指向红黑树中的某个结点的链接作为参数。假设被指向的结点的右链接是红色的，这个方法会对树进行必要的调整并返回一个指向包含同一组键的子树且其左链接为红色的根结点的链接。操作很容易理解：我们只是将用两个键中的较小者作为根结点变为将较大者作为根结点。实现将一个红色左链接转换为一个红色右链接的一个<strong>右旋转</strong>的代码完全相同，只需要将left和right互换即可。其操作如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb14.png" alt=""></p>
+<h3 id="6-在旋转后重置父结点的链接"><a href="#6-在旋转后重置父结点的链接" class="headerlink" title="6. 在旋转后重置父结点的链接"></a>6. 在旋转后重置父结点的链接</h3><p>无论左旋转还是右旋转，旋转操作都会返回一条链接。我们总是会用rotateRight()或rotateLeft()的返回值重置父结点（或根结点）中相应的链接。这个链接可能是红色也可能是黑色，rotateRight()和rotateLeft()都通过将x.color设为h.color保留它原来的颜色。这可能会产生两条连续的红链接，但我们的算法会继续用旋转操作修正这种情况。这种简洁的代码是我们使用递归实现二叉查找树的各种方法的主要原因。它使得旋转操作成为了普通插入操作的一个简单补充。</p>
+<p>在插入新键时我们可以使用旋转操作保证2-3树和红黑树之间的一一对应关系，因为旋转操作可以保持红黑树的两个重要性质：<strong>有序性</strong> 和 <strong>完美平衡性</strong> 。</p>
+<h3 id="7-向单个2-结点中插入新键"><a href="#7-向单个2-结点中插入新键" class="headerlink" title="7. 向单个2-结点中插入新键"></a>7. 向单个2-结点中插入新键</h3><p>一颗只含有一个键的红黑树只含有一个2-结点。插入另一个键之后，我们马上就需要将它们旋转。如果新键小于老键，我们只需要新增一个红色的结点即可，新的红黑树和单个3-结点完全等价。如果新键大于老键，那么新增的红色结点将会产生一条红色的右链接。我们需要使用root = rotateLeft(root) 来将其旋转为红色左链接并修正根结点的链接，插入操作才算完成。两种情况的结果均为一颗和单个3-结点等价的红黑树，其中含有两个键，一条红链接，树的黑链接高度为1，如下图所示：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb15.png" alt=""></p>
+<h3 id="8-向树底部的2-结点插入新键"><a href="#8-向树底部的2-结点插入新键" class="headerlink" title="8. 向树底部的2-结点插入新键"></a>8. 向树底部的2-结点插入新键</h3><p>用和二叉查找树相同的方式向一颗红黑树中插入一个新键会在树的底部新增一个结点（为了保证有序性），但总是用红链接将新结点和它的父结点相连。如果它的父结点是一个2-结点，那么上面的两种处理方法仍然适用。如果指向新结点的是父结点的左链接，那么父结点就直接成为了一个3-结点；如果指向新结点的是父结点的右链接，这需要一次左旋转去修正它。其操作如下图所示：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb18.png" alt=""></p>
+<h3 id="9-向一颗双键树（即一个3-结点）中插入新键"><a href="#9-向一颗双键树（即一个3-结点）中插入新键" class="headerlink" title="9. 向一颗双键树（即一个3-结点）中插入新键"></a>9. 向一颗双键树（即一个3-结点）中插入新键</h3><p>分三种情况：新键小于树中的两个键，在两者之间，新键大于树中的两个键。每种情况中都会产生一个同时连接到两条红链接的结点，我们需要修正这一点。</p>
+<ul>
+<li>三者中最简单的情况是新键大于原树中的两个键，因此它被连接到3-结点的右链接。此时树是平衡的，根结点是中间大小的键，它有两条红链接分别和较小和较大的结点相连。如果我们将两条链接的颜色都由红变黑，那么我们就得到了一颗由三个结点组成、高为2的平衡树。它正好能够对应一颗2-3树。其他两种情况也会转化为这种情况。</li>
+<li>如果新键小于原树中的两个键，它会被连接到最左边的空链接，这样就产生了两条连续的红链接，此时我们只需要将上层的红链接右旋转即可得到第一种情况（中间键为根节点并和其他两个结点用红链接相连）。</li>
+<li>如果新键介于原树中的两个键之间，这又会产生两条连续的红链接，一条红色左链接接一条红色右链接，此时我们只需要将下层的红链接左旋转即可得到第二种情况（两条连续的红色左链接）。</li>
+</ul>
+<p>总的来说，我们通过0次、1次和2次旋转以及颜色的变化得到了期望的结果。整个操作如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb19.jpg" alt=""></p>
+<h3 id="10-颜色转换"><a href="#10-颜色转换" class="headerlink" title="10. 颜色转换"></a>10. 颜色转换</h3><p>我们专门用一个方法flipColors()来转换一个结点的两个红色子结点的颜色。除了将子结点的颜色由红变黑，同时还要将父结点的颜色由黑变红。这项操作最重要的性质在于它和旋转操作一样是局部变换，不会影响<strong>整颗树的黑色平衡性</strong> 。如下图所示：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb16.png" alt=""></p>
+<h3 id="11-根结点总是黑色"><a href="#11-根结点总是黑色" class="headerlink" title="11. 根结点总是黑色"></a>11. 根结点总是黑色</h3><p>由9所述的情况中，颜色转换会使根结点变为红色。这也可能出现在很大的红黑树中。严格地说，红色的根结点说明根结点是一个3-结点的一部分，但实际情况是我们每次插入后都会将根结点设为黑色。注意：<strong>每当根结点由红变黑时树的黑链接高度就会加1</strong> 。</p>
+<h3 id="12-向树底部的3-结点插入新键"><a href="#12-向树底部的3-结点插入新键" class="headerlink" title="12. 向树底部的3-结点插入新键"></a>12. 向树底部的3-结点插入新键</h3><p>同9所述的三种情况：指向新结点的链接可能是3-结点的右链接（此时我们只需要转换颜色即可），或是左链接（此时我们需要进行右旋转再转换颜色），或是中链接（此时我们需要先左旋转下层链接然后右旋转上层链接，最后再转换颜色）。颜色转换会使的中结点的链接变红，相当于将它送入了父结点。这意味着在父结点中继续插入一个新键，我们也会继续用相同的办法解决。其操作如下图：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb20.jpg" alt=""></p>
+<h3 id="13-将红链接在树中向上传递"><a href="#13-将红链接在树中向上传递" class="headerlink" title="13. 将红链接在树中向上传递"></a>13. 将红链接在树中向上传递</h3><p>2-3树中的插入算法需要我们分解3-结点，将中间键插入父结点，如此这般直到遇到一个2-结点或是根结点。为了达成这个目标：每次必要的旋转之后我们都会进行颜色转换，这使得中结点变红。在父结点看来，处理这样一个红色结点的方式和处理一个新插入的红色结点完全相同，即继续把红链接转移到中结点上去。在红黑树中实现2-3树的插入算法的关键操作所需的步骤：<strong>要在一个3-结点下插入新键，先创建一个临时的4-结点，将其分解并将红链接由中间键传递给它的父结点。重复这个过程，我们就能将红链接在树中向上传递，直至遇到一个2-结点或者根结点</strong> 。其操作如下图所示：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb21.jpg" alt=""></p>
+<p>在沿着插入点到根结点的路径向上移动时所经过的每个结点中顺序完成以下操作，我们就能完成插入操作：</p>
+<ul>
+<li>如果右子结点是红色的而左子结点是黑色的，进行左旋转；</li>
+<li>如果左子结点是红色的且它的左子结点也是红色的，进行右旋转；</li>
+<li>如果左右子结点均为红色，进行颜色转换。</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>因为保持树的平衡所需的操作是由下向上在每个所经过的结点中进行的，将它们植入我们已有的实现中十分简单：只需要在递归调用后完成这些操作即可，上一段中列出的三种操作都可以通过一个检测两个结点的颜色的if语句完成。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedBlackBST</span>&lt;<span class="title">Key</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">Key</span>&gt;, <span class="title">Value</span>&gt; </span>&#123;</span><br><span class="line">  	<span class="keyword">private</span> Node root;</span><br><span class="line">  	<span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;            <span class="comment">//含有color变量的Node对象</span></span><br><span class="line">      	<span class="keyword">private</span> Key key;           <span class="comment">// key</span></span><br><span class="line">        <span class="keyword">private</span> Value val;         <span class="comment">// associated data</span></span><br><span class="line">        <span class="keyword">private</span> Node left, right;  <span class="comment">// links to left and right subtrees</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">boolean</span> color;     <span class="comment">// color of parent link</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> size;          <span class="comment">// subtree count</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Key key, Value val, <span class="keyword">boolean</span> color, <span class="keyword">int</span> size)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.key = key;</span><br><span class="line">            <span class="keyword">this</span>.val = val;</span><br><span class="line">            <span class="keyword">this</span>.color = color;</span><br><span class="line">            <span class="keyword">this</span>.size = size;</span><br><span class="line">        &#125;</span><br><span class="line">  	&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * 红黑树的插入算法</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(Key key, Value val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (val == <span class="keyword">null</span>) &#123;</span><br><span class="line">            delete(key);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        root = put(root, key, val);</span><br><span class="line">        root.color = BLACK;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">put</span><span class="params">(Node h, Key key, Value val)</span> </span>&#123; </span><br><span class="line">        <span class="keyword">if</span> (h == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">new</span> Node(key, val, RED, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> cmp = key.compareTo(h.key);</span><br><span class="line">        <span class="keyword">if</span>      (cmp &lt; <span class="number">0</span>) h.left  = put(h.left,  key, val); </span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) h.right = put(h.right, key, val); </span><br><span class="line">        <span class="keyword">else</span>              h.val   = val;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (isRed(h.right) &amp;&amp; !isRed(h.left))      h = rotateLeft(h);</span><br><span class="line">        <span class="keyword">if</span> (isRed(h.left)  &amp;&amp;  isRed(h.left.left)) h = rotateRight(h);</span><br><span class="line">        <span class="keyword">if</span> (isRed(h.left)  &amp;&amp;  isRed(h.right))     flipColors(h);</span><br><span class="line">        h.size = size(h.left) + size(h.right) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> h;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">/************************辅助方法start********************************/</span></span><br><span class="line">  	<span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isRed</span><span class="params">(Node x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">return</span> x.color == RED;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">(Node x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> x.size;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size(root);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="function"><span class="keyword">private</span> Node <span class="title">rotateLeft</span><span class="params">(Node h)</span> </span>&#123;</span><br><span class="line">        Node x = h.right;</span><br><span class="line">        h.right = x.left;</span><br><span class="line">        x.left = h;</span><br><span class="line">        x.color = x.left.color;</span><br><span class="line">        x.left.color = RED;</span><br><span class="line">        x.size = h.size;</span><br><span class="line">        h.size = size(h.left) + size(h.right) + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="function"><span class="keyword">private</span> Node <span class="title">rotateRight</span><span class="params">(Node h)</span> </span>&#123;</span><br><span class="line">        Node x = h.left;</span><br><span class="line">        h.left = x.right;</span><br><span class="line">        x.right = h;</span><br><span class="line">        x.color = x.right.color;</span><br><span class="line">        x.right.color = RED;</span><br><span class="line">        x.size = h.size;</span><br><span class="line">        h.size = size(h.left) + size(h.right) + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">flipColors</span><span class="params">(Node h)</span> </span>&#123;</span><br><span class="line">        h.color = !h.color;</span><br><span class="line">        h.left.color = !h.left.color;</span><br><span class="line">        h.right.color = !h.right.color;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/***************************辅助方法end********************************/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了递归调用后的三条if语句，红黑树中put()的递归实现和二叉查找树中put()的实现完全相同。它们在查找路径上保证了红黑树和2-3树的一一对应关系，使得树的平衡性接近完美。第一条if语句会将任意含有红色右链接的3-结点（或临时的4-结点）向左旋转；第二条if语句会将临时的4-结点中两条连续红链接中的上层链接向右旋转；第三条if语句会进行颜色转换并将红链接在树中向上传递。下图是用标准索引测试用例和用同一组键按升序构造一颗红黑树的轨迹：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb17.png" alt=""></p>
+<h2 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h2><p>删除操作比插入操作更加复杂，不仅要在（为了删除一个结点而）构造临时4-结点时沿着查找路径<strong>向下</strong>进行变换，还要在分解遗留的4-结点时沿着查找路径<strong>向上</strong>进行变换（同插入操作）。</p>
+<h3 id="1-自顶向下的2-3-4树"><a href="#1-自顶向下的2-3-4树" class="headerlink" title="1. 自顶向下的2-3-4树"></a>1. 自顶向下的2-3-4树</h3><p>我们先学习一个沿查找路径既能向上也能向下进行变换的稍简单得算法：<strong>2-3-4树的插入算法</strong> ，2-3-4树中允许存在我们以前见过的4-结点。它的插入算法沿查找路径向下进行变换是为了保证当前结点不是4-结点（这样树底才有空间来插入新的键），沿查找路径向上进行变换是为了将之前创建的4-结点配平，如下图所示：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb22.jpg" alt=""></p>
+<p>向下的变换和我们在2-3树中分解4-结点所进行的变换完全相同。如果根结点是4-结点，我们就将它分解成三个2-结点，使得树的高度加1。在向下查找的过程中，如果遇到一个父结点为2-结点的4-结点，我们将4-结点分解为两个2-结点并将中间键传递给它的父结点，使得父结点变成一个3-结点；如果遇到一个父结点为3-结点的4-结点，我们将4-结点分解为两个2-结点并将中间键传递给它的父结点，使得父结点变为一个4-结点；我们不必担心会遇到父结点为4-结点的4-结点，因为插入算法本身保证了这一情况不会出现。到达树底后，我们也只会遇到2-结点或者3-结点，所以我们可以插入新的键。要用红黑树实现这个算法，我们需要：</p>
+<ul>
+<li>将4-结点表示为由三个2-结点组成的一颗平衡的子树，根结点和两个子结点都用红链接相连；</li>
+<li>在向下的过程中分解所有4-结点并进行颜色转换；</li>
+<li>和插入操作一样，在向上的过程中用旋转将4-结点配平（因为4-结点可以存在，所以允许一个结点同时连接到两条链接）。</li>
+</ul>
+<p>只需要将上面put方法移动一行就能实现2-3-4树的插入操作：<strong>将flipColors语句（及其if语句）移动到递归调用前（null测试和比较操作之间）</strong> 。</p>
+<h3 id="2-删除最小键"><a href="#2-删除最小键" class="headerlink" title="2. 删除最小键"></a>2. 删除最小键</h3><p>从树底部的3-结点中删除键是简单的，但2-结点删除一个键会留下一个空结点，一般我们会将它替换为一个空链接，但这样会破坏树的完美平衡性所以我们需要这样做：为了保证我们不会删除一个2-结点，我们沿着左链接向下进行变换，确保当前结点不是2-结点。分下面几种情况：</p>
+<ul>
+<li>如果当前结点的左子结点不是2-结点，完成；</li>
+<li>如果当前结点的坐子结点是2-结点而它的亲兄弟结点不是2-结点，将左子结点的兄弟结点中的一个键移动到左子结点中；</li>
+<li>如果当前结点的左子结点和它的亲兄弟结点都是2-结点，将左子结点、父结点中的最小键和左子结点最近的兄弟结点合并为合并为一个4-结点，使父结点由3-结点变为2-结点或者由4-结点变为3-结点。</li>
+</ul>
+<p>在遍历的过程中执行这个过程，最后能够得到一个含有最小键的3-结点或者4-结点，然后我们就可以直接从中将其删除，将3-结点变成2-结点，或者将4-结点变为3-结点。然后我们再回头向上分解所有临时的4-结点。删除最小键操作如下图所示：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb23.jpg" alt=""></p>
+<h3 id="3-删除操作"><a href="#3-删除操作" class="headerlink" title="3. 删除操作"></a>3. 删除操作</h3><p>在查找路径上进行和删除最小键相同的变换同样可以保证在查找过程中任意当前结点均不是2-结点。如果被查找的键在树的底部，我们可以直接删除它。如果不在，我们需要将它和它的后继结点交换，就和二叉查找树一样。因为当前结点必然不是2-结点，问题已经转换为在一颗根结点不是2-结点的子树中删除最小的键，我们可以在这颗树中使用前面所说的算法。和以前一样，删除之后我们需要向上回溯并分解余下的4-结点。</p>
+<h2 id="红黑树的性质"><a href="#红黑树的性质" class="headerlink" title="红黑树的性质"></a>红黑树的性质</h2><p>结论：<strong>所有基于红黑树的符号表实现都能保证操作的运行时间为对数级别（范围查找除外，它所需的额外时间和返回的键的数量成正比）</strong> 。</p>
+<ol>
+<li>一颗大小为N的红黑树的高度不会超过2lgN。</li>
+<li>一颗大小为N的红黑树中，根节点到任意结点的平均路径长度为~1.00lgN。</li>
+<li>红黑树<strong>能够保证对数级别的查找和插入操作的实现</strong> 。</li>
+</ol>
+<p>红黑树最吸引人的一点是它的实现中最复杂的代码仅限于put方法和删除方法。二叉查找树中的查找最大键和最小键、select、rank、floor、ceiling和范围查找方法不会做任何改动即可继续使用，因为红黑树也是二叉查找树而这些操作也不会涉及结点的颜色。各种符号表实现的性能总结：</p>
+<p><img src="/2018/01/29/algorithm/redblackBST/rb24.jpg" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/查找/" rel="tag"># 查找</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/26/algorithm/bst/" rel="next" title="二叉查找树">
+                <i class="fa fa-chevron-left"></i> 二叉查找树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/30/algorithm/HST/" rel="prev" title="散列表">
+                散列表 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3查找树"><span class="nav-number">2.</span> <span class="nav-text">2-3查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查找"><span class="nav-number">2.1.</span> <span class="nav-text">1. 查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-向2-结点中插入新键"><span class="nav-number">2.2.</span> <span class="nav-text">2. 向2-结点中插入新键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-向一颗只含有一个3-结点的树中插入新键"><span class="nav-number">2.3.</span> <span class="nav-text">3. 向一颗只含有一个3-结点的树中插入新键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-向一个父结点为2-结点的3-结点中插入新键"><span class="nav-number">2.4.</span> <span class="nav-text">4. 向一个父结点为2-结点的3-结点中插入新键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-向一个父结点为3-结点的3-结点中插入新键"><span class="nav-number">2.5.</span> <span class="nav-text">5. 向一个父结点为3-结点的3-结点中插入新键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-分解根结点"><span class="nav-number">2.6.</span> <span class="nav-text">6. 分解根结点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-局部变换"><span class="nav-number">2.7.</span> <span class="nav-text">7. 局部变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-全局性质"><span class="nav-number">2.8.</span> <span class="nav-text">8. 全局性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-总结"><span class="nav-number">2.9.</span> <span class="nav-text">9. 总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑二叉查找树"><span class="nav-number">3.</span> <span class="nav-text">红黑二叉查找树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-替换3-结点"><span class="nav-number">3.1.</span> <span class="nav-text">1.替换3-结点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-一种等价的定义"><span class="nav-number">3.2.</span> <span class="nav-text">2. 一种等价的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-一一对应"><span class="nav-number">3.3.</span> <span class="nav-text">3. 一一对应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-颜色表示"><span class="nav-number">3.4.</span> <span class="nav-text">4. 颜色表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-旋转"><span class="nav-number">3.5.</span> <span class="nav-text">5. 旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-在旋转后重置父结点的链接"><span class="nav-number">3.6.</span> <span class="nav-text">6. 在旋转后重置父结点的链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-向单个2-结点中插入新键"><span class="nav-number">3.7.</span> <span class="nav-text">7. 向单个2-结点中插入新键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-向树底部的2-结点插入新键"><span class="nav-number">3.8.</span> <span class="nav-text">8. 向树底部的2-结点插入新键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-向一颗双键树（即一个3-结点）中插入新键"><span class="nav-number">3.9.</span> <span class="nav-text">9. 向一颗双键树（即一个3-结点）中插入新键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-颜色转换"><span class="nav-number">3.10.</span> <span class="nav-text">10. 颜色转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-根结点总是黑色"><span class="nav-number">3.11.</span> <span class="nav-text">11. 根结点总是黑色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-向树底部的3-结点插入新键"><span class="nav-number">3.12.</span> <span class="nav-text">12. 向树底部的3-结点插入新键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-将红链接在树中向上传递"><span class="nav-number">3.13.</span> <span class="nav-text">13. 将红链接在树中向上传递</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除操作"><span class="nav-number">5.</span> <span class="nav-text">删除操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-自顶向下的2-3-4树"><span class="nav-number">5.1.</span> <span class="nav-text">1. 自顶向下的2-3-4树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-删除最小键"><span class="nav-number">5.2.</span> <span class="nav-text">2. 删除最小键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-删除操作"><span class="nav-number">5.3.</span> <span class="nav-text">3. 删除操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树的性质"><span class="nav-number">6.</span> <span class="nav-text">红黑树的性质</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/01/29/algorithm/redblackBST/';
+          this.page.identifier = '2018/01/29/algorithm/redblackBST/';
+          this.page.title = '平衡查找树（红黑二叉查找树）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

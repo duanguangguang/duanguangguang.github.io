@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="MySQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="MySQL存储引擎存储引擎说白了就是如何存储数据、如何为存储的数据建立索引和如何更新、查询数据等技术的实现方法。因为在关系数据库中数据的存储是以表的形式存储的，所以存储引擎也可以称为表类型（即存储和操作此表的类型）。在Oracle 和SQL Server等数据库中只有一种存储引擎，所有数据存储管理机制都是一样的。而MySql数据库提供了多种存储引擎。用户可以根据不同的需求为数据表选择不同的存储引擎">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL存储引擎">
+<meta property="og:url" content="http://yoursite.com/2018/03/13/dataBase/mysql-engine/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="MySQL存储引擎存储引擎说白了就是如何存储数据、如何为存储的数据建立索引和如何更新、查询数据等技术的实现方法。因为在关系数据库中数据的存储是以表的形式存储的，所以存储引擎也可以称为表类型（即存储和操作此表的类型）。在Oracle 和SQL Server等数据库中只有一种存储引擎，所有数据存储管理机制都是一样的。而MySql数据库提供了多种存储引擎。用户可以根据不同的需求为数据表选择不同的存储引擎">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-29T08:34:30.012Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL存储引擎">
+<meta name="twitter:description" content="MySQL存储引擎存储引擎说白了就是如何存储数据、如何为存储的数据建立索引和如何更新、查询数据等技术的实现方法。因为在关系数据库中数据的存储是以表的形式存储的，所以存储引擎也可以称为表类型（即存储和操作此表的类型）。在Oracle 和SQL Server等数据库中只有一种存储引擎，所有数据存储管理机制都是一样的。而MySql数据库提供了多种存储引擎。用户可以根据不同的需求为数据表选择不同的存储引擎">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/13/dataBase/mysql-engine/"/>
+
+
+
+
+
+  <title>MySQL存储引擎 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/13/dataBase/mysql-engine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL存储引擎</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-13T14:22:17+08:00">
+                2018-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/13/dataBase/mysql-engine/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/13/dataBase/mysql-engine/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/03/13/dataBase/mysql-engine/" class="leancloud_visitors" data-flag-title="MySQL存储引擎">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="MySQL存储引擎"><a href="#MySQL存储引擎" class="headerlink" title="MySQL存储引擎"></a>MySQL存储引擎</h2><p>存储引擎说白了就是如何存储数据、如何为存储的数据建立索引和如何更新、查询数据等技术的实现方法。因为在关系数据库中数据的存储是以表的形式存储的，所以存储引擎也可以称为表类型（即存储和操作此表的类型）。<br>在Oracle 和SQL Server等数据库中只有一种存储引擎，所有数据存储管理机制都是一样的。而MySql数据库提供了多种存储引擎。用户可以根据不同的需求为数据表选择不同的存储引擎，用户也可以根据自己的需要编写自己的存储引擎。</p>
+<a id="more"></a>
+<h2 id="MySQL存储引擎分类"><a href="#MySQL存储引擎分类" class="headerlink" title="MySQL存储引擎分类"></a>MySQL存储引擎分类</h2><h3 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h3><p>这种引擎是mysql最早提供的。这种引擎又可以分为静态MyISAM、动态MyISAM 和压缩MyISAM三种：</p>
+<ul>
+<li><strong>静态MyISAM</strong>：如果数据表中的各数据列的长度都是预先固定好的，服务器将自动选择这种表类型。因为数据表中每一条记录所占用的空间都是一样的，所以<strong>这种表存取和更新的效率非常高。当数据受损时，恢复工作也比较容易做。</strong></li>
+<li><strong>动态MyISAM</strong>：如果数据表中出现 <code>varchar、xxxtext或xxxBLOB</code> 字段时，服务器将自动选择这种表类型。相对于静态MyISAM，这种表<strong>存储空间比较小</strong>，但由于每条记录的长度不一，所以多次修改数据后，数据表中的数据就可能离散的存储在内存中，进而导致执行效率下降。同时，内存中也可能会出现很多碎片。因此，这种类型的表要经常用 <code>optimize table</code> 命令或优化工具来进行碎片整理。</li>
+<li><strong>压缩MyISAM</strong>：以上说到的两种类型的表都可以用 <code>myisamchk</code> 工具压缩。这种类型的表进一步减小了占用的存储，但是这种表压缩之后不能再被修改。另外，因为是压缩数据，所以这种表在读取的时候要先时行解压缩。</li>
+</ul>
+<p>但是，不管是何种MyISAM表，目前它都<strong>不支持事务，行级锁和外键约束</strong>的功能。</p>
+<p><strong>MyISAM Merge引擎</strong>：这种类型是MyISAM类型的一种变种。合并表是将几个相同的MyISAM表合并为一个虚表。常应用于日志和数据仓库。</p>
+<h3 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h3><p>InnoDB表类型可以看作是对MyISAM的进一步更新产品，它<strong>提供了事务、行级锁机制和外键约束</strong>的功能。</p>
+<h3 id="memory-heap"><a href="#memory-heap" class="headerlink" title="memory(heap)"></a>memory(heap)</h3><p>这种类型的数据表只存在于内存中。它使用<strong>散列索引</strong>，所以数据的存取速度非常快。因为是存在于内存中，所以这种类型<strong>常应用于临时表</strong>中。</p>
+<h3 id="archive"><a href="#archive" class="headerlink" title="archive"></a>archive</h3><p>这种类型只支持select 和 insert语句，而且不支持索引。常应用于日志记录和聚合分析方面。</p>
+<p>当然MySql支持的表类型不止上面几种。下面我们介绍一下如何查看和设置数据表类型。</p>
+<h2 id="MySQL中关于存储引擎的操作"><a href="#MySQL中关于存储引擎的操作" class="headerlink" title="MySQL中关于存储引擎的操作"></a>MySQL中关于存储引擎的操作</h2><h3 id="查看数据库可以支持的存储引擎"><a href="#查看数据库可以支持的存储引擎" class="headerlink" title="查看数据库可以支持的存储引擎"></a>查看数据库可以支持的存储引擎</h3><p><code>show engines</code> 命令可以显示当前数据库支持的存储引擎情况</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show engines;</span><br><span class="line">+<span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line">| Engine             | Support | <span class="keyword">Comment</span>                                                        | Transactions | XA   | Savepoints |</span><br><span class="line">+<span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line">| <span class="keyword">InnoDB</span>             | <span class="keyword">DEFAULT</span> | Supports transactions, <span class="keyword">row</span>-<span class="keyword">level</span> locking, <span class="keyword">and</span> foreign <span class="keyword">keys</span>     | YES          | YES  | YES        |</span><br><span class="line">| MRG_MYISAM         | YES     | Collection <span class="keyword">of</span> identical MyISAM <span class="keyword">tables</span>                          | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| <span class="keyword">MEMORY</span>             | YES     | <span class="keyword">Hash</span> based, <span class="keyword">stored</span> <span class="keyword">in</span> <span class="keyword">memory</span>, useful <span class="keyword">for</span> <span class="keyword">temporary</span> <span class="keyword">tables</span>      | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| BLACKHOLE          | YES     | /dev/<span class="literal">null</span> <span class="keyword">storage</span> <span class="keyword">engine</span> (anything you write <span class="keyword">to</span> it disappears) | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| MyISAM             | YES     | MyISAM <span class="keyword">storage</span> <span class="keyword">engine</span>                                          | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| CSV                | YES     | CSV <span class="keyword">storage</span> <span class="keyword">engine</span>                                             | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| <span class="keyword">ARCHIVE</span>            | YES     | <span class="keyword">Archive</span> <span class="keyword">storage</span> <span class="keyword">engine</span>                                         | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| PERFORMANCE_SCHEMA | YES     | <span class="keyword">Performance</span> <span class="keyword">Schema</span>                                             | <span class="keyword">NO</span>           | <span class="keyword">NO</span>   | <span class="keyword">NO</span>         |</span><br><span class="line">| FEDERATED          | <span class="keyword">NO</span>      | Federated MySQL <span class="keyword">storage</span> <span class="keyword">engine</span>                                 | <span class="literal">NULL</span>         | <span class="literal">NULL</span> | <span class="literal">NULL</span>       |</span><br><span class="line">+<span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line"><span class="number">9</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<h3 id="查看表的结构等信息的若干命令"><a href="#查看表的结构等信息的若干命令" class="headerlink" title="查看表的结构等信息的若干命令"></a>查看表的结构等信息的若干命令</h3><p><code>Desc[ribe] tablename</code> 查看数据表的结构</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; desc user;</span><br><span class="line">+<span class="comment">----------+-------------+------+-----+---------+----------------+</span></span><br><span class="line">| Field    | Type        | Null | Key | Default | Extra          |</span><br><span class="line">+<span class="comment">----------+-------------+------+-----+---------+----------------+</span></span><br><span class="line">| id       | int(11)     | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| password | varchar(80) | YES  |     | NULL    |                |</span><br><span class="line">| username | varchar(80) | YES  |     | NULL    |                |</span><br><span class="line">+<span class="comment">----------+-------------+------+-----+---------+----------------+</span></span><br><span class="line">3 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p><code>Show create table tablename</code> 显示表的创建语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show create table user;</span><br><span class="line">+<span class="comment">-------+--------------------------------------------+</span></span><br><span class="line">| Table | <span class="keyword">Create</span> <span class="keyword">Table</span>                               |</span><br><span class="line">+<span class="comment">-------+--------------------------------------------+</span></span><br><span class="line">| <span class="keyword">user</span>  | <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`user`</span> (                      |</span><br><span class="line">|       |  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,     |</span><br><span class="line">|       |  <span class="string">`password`</span> <span class="built_in">varchar</span>(<span class="number">80</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,      |</span><br><span class="line">|       |  <span class="string">`username`</span> <span class="built_in">varchar</span>(<span class="number">80</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,      |</span><br><span class="line">|       |  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)                        |</span><br><span class="line">|       |  ) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8      |</span><br><span class="line">+<span class="comment">-------+--------------------------------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure>
+<p><code>show table status like ‘tablename’\G</code> 显示表的当前状态值</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show table status like 'user' \G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">           Name: user</span><br><span class="line">         Engine: InnoDB</span><br><span class="line">        Version: 10</span><br><span class="line">     Row_format: Dynamic</span><br><span class="line">           Rows: 0</span><br><span class="line"> Avg_row_length: 0</span><br><span class="line">    Data_length: 16384</span><br><span class="line">Max_data_length: 0</span><br><span class="line">   Index_length: 0</span><br><span class="line">      Data_free: 0</span><br><span class="line"> Auto_increment: 1</span><br><span class="line">    Create_time: 2017-10-23 23:53:45</span><br><span class="line">    Update_time: NULL</span><br><span class="line">     Check_time: NULL</span><br><span class="line">      Collation: utf8_general_ci</span><br><span class="line">       <span class="keyword">Checksum</span>: <span class="literal">NULL</span></span><br><span class="line"> Create_options: </span><br><span class="line">        <span class="keyword">Comment</span>: </span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line"><span class="keyword">ERROR</span>: </span><br><span class="line"><span class="keyword">No</span> <span class="keyword">query</span> specified</span><br></pre></td></tr></table></figure>
+<p>综上可见，后两种方式都可以帮助我们查看某一表的存储引擎类型</p>
+<h3 id="设置或修改表的存储引擎"><a href="#设置或修改表的存储引擎" class="headerlink" title="设置或修改表的存储引擎"></a>设置或修改表的存储引擎</h3><p>创建数据库表时设置存储存储引擎的基本语法是：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Create</span> <span class="keyword">table</span> tableName(</span><br><span class="line">columnName(列名<span class="number">1</span>)  <span class="keyword">type</span>(数据类型)  <span class="keyword">attri</span>(属性设置),</span><br><span class="line">columnName(列名<span class="number">2</span>)  <span class="keyword">type</span>(数据类型)  <span class="keyword">attri</span>(属性设置),</span><br><span class="line">……..</span><br><span class="line">) <span class="keyword">engine</span> = engineName</span><br></pre></td></tr></table></figure>
+<p>例如,假设要创建一个名为user的表,此表包括id,用户名username和性别sex三个字段，并且要设置表类型为merge。则可用如下的方式创建此数据表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span>(</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span> auto_increment,</span><br><span class="line">  username <span class="built_in">char</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">  sex <span class="built_in">char</span>(<span class="number">2</span>),</span><br><span class="line">  primary <span class="keyword">key</span>(<span class="keyword">id</span>)</span><br><span class="line">) <span class="keyword">engine</span>=<span class="keyword">merge</span></span><br></pre></td></tr></table></figure>
+<p>修改存储引擎，可以用命令：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Alter</span> <span class="keyword">table</span> tableName <span class="keyword">engine</span>=engineName</span><br></pre></td></tr></table></figure>
+<p>假如，若需要将表user的存储引擎修改为archive类型，则可使用命令：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; alter table user engine=archive;</span><br><span class="line">Query OK, 0 rows affected (0.04 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; show table status like 'user' \G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">           Name: user</span><br><span class="line">         Engine: ARCHIVE</span><br><span class="line">        Version: 10</span><br><span class="line">     Row_format: Compressed</span><br><span class="line">           Rows: 0</span><br><span class="line"> Avg_row_length: 487</span><br><span class="line">    Data_length: 8720</span><br><span class="line">Max_data_length: 0</span><br><span class="line">   Index_length: 0</span><br><span class="line">      Data_free: 0</span><br><span class="line"> Auto_increment: 1</span><br><span class="line">    Create_time: NULL</span><br><span class="line">    Update_time: 2018-01-26 20:36:34</span><br><span class="line">     Check_time: NULL</span><br><span class="line">      Collation: utf8_general_ci</span><br><span class="line">       <span class="keyword">Checksum</span>: <span class="literal">NULL</span></span><br><span class="line"> Create_options: </span><br><span class="line">        <span class="keyword">Comment</span>: </span><br><span class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<h2 id="MySQL-常用数据存储引擎区别"><a href="#MySQL-常用数据存储引擎区别" class="headerlink" title="MySQL 常用数据存储引擎区别"></a>MySQL 常用数据存储引擎区别</h2><p>mysql 有多种存储引擎，目前常用的是 <code>MyISAM</code> 和 <code>InnoDB</code> 这两个引擎。</p>
+<h3 id="MyISAM-1"><a href="#MyISAM-1" class="headerlink" title="MyISAM"></a>MyISAM</h3><p>MyISAM 是 mysql 5.5.5 之前的默认引擎，它支持 B-tree/FullText/R-tree 索引类型。</p>
+<p>锁级别为表锁，表锁优点是开销小，加锁快；缺点是锁粒度大，发生锁冲动概率较高，容纳并发能力低，这个引擎适合查询为主的业务。</p>
+<p>此引擎不支持事务，也不支持外键。</p>
+<p>MyISAM强调了快速读取操作。它存储表的行数，于是SELECT COUNT(*) FROM TABLE时只需要直接读取已经保存好的值而不需要进行全表扫描。</p>
+<h3 id="InnoDB-1"><a href="#InnoDB-1" class="headerlink" title="InnoDB"></a>InnoDB</h3><p>InnoDB 存储引擎最大的亮点就是支持事务，支持回滚，它支持 Hash/B-tree 索引类型。</p>
+<p>锁级别为行锁，行锁优点是适用于高并发的频繁表修改，高并发是性能优于 MyISAM。缺点是系统消耗较大，索引不仅缓存自身，也缓存数据，相比 MyISAM 需要更大的内存。</p>
+<p>InnoDB 中不保存表的具体行数，也就是说，执行 select count(*) from table时，InnoDB 要扫描一遍整个表来计算有多少行。</p>
+<p>支持事务，支持外键。</p>
+<h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>Memory 是内存级别存储引擎，数据存储在内存中，所以他能够存储的数据量较小。</p>
+<p>因为内存的特性，存储引擎对数据的一致性支持较差。锁级别为表锁，不支持事务。但访问速度非常快，并且默认使用 hash 索引。</p>
+<p>Memory存储引擎使用存在内存中的内容来创建表，每个Memory表只实际对应一个磁盘文件，在磁盘中表现为.frm文件。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>MyISAM</th>
+<th>InnoDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储结构</td>
+<td>每张表被存放在三个文件：frm-格定义MYD(MYData)-数据文件MYI(MYIndex)-索引文件</td>
+<td>所有的表都保存在同一个数据文件中（也可能是多个文件，或者是独立的表空间文件），InnoDB表的大小只受限于操作系统文件的大小，一般为2GB</td>
+</tr>
+<tr>
+<td>存储空间</td>
+<td>MyISAM可被压缩，存储空间较小</td>
+<td>InnoDB的表需要更多的内存和存储，它会在主内存中建立其专用的缓冲池用于高速缓冲数据和索引</td>
+</tr>
+<tr>
+<td>可移植性、备份及恢复</td>
+<td>由于MyISAM的数据是以文件的形式存储，所以在跨平台的数据转移中会很方便。在备份和恢复时可单独针对某个表进行操作</td>
+<td>免费的方案可以是拷贝数据文件、备份 binlog，或者用 mysqldump，在数据量达到几十G的时候就相对痛苦了</td>
+</tr>
+<tr>
+<td>事务安全</td>
+<td>不支持 每次查询具有原子性</td>
+<td>支持 具有事务(commit)、回滚(rollback)和崩溃修复能力(crash recovery capabilities)的事务安全(transaction-safe (ACID compliant))型表</td>
+</tr>
+<tr>
+<td>AUTO_INCREMENT</td>
+<td>MyISAM表可以和其他字段一起建立联合索引</td>
+<td>InnoDB中必须包含只有该字段的索引</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>MyISAM更优</td>
+<td></td>
+</tr>
+<tr>
+<td>INSERT</td>
+<td></td>
+<td>InnoDB更优</td>
+</tr>
+<tr>
+<td>UPDATE</td>
+<td></td>
+<td>InnoDB更优</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td></td>
+<td>InnoDB更优 它不会重新建立表，而是一行一行的删除</td>
+</tr>
+<tr>
+<td>COUNT without WHERE</td>
+<td>MyISAM更优。因为MyISAM保存了表的具体行数</td>
+<td>InnoDB没有保存表的具体行数，需要逐行扫描统计，就很慢了</td>
+</tr>
+<tr>
+<td>COUNT with WHERE</td>
+<td>一样</td>
+<td>一样，InnoDB也会锁表</td>
+</tr>
+<tr>
+<td>锁</td>
+<td>只支持表锁</td>
+<td>支持表锁、行锁 行锁大幅度提高了多用户并发操作的新能。但是InnoDB的行锁，只是在WHERE的主键是有效的，非主键的WHERE都会锁全表的</td>
+</tr>
+<tr>
+<td>外键</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>FULLTEXT全文索引</td>
+<td>支持</td>
+<td>不支持（5.6.4以上支持英文全文索引） 可以通过使用Sphinx从InnoDB中获得全文索引，会慢一点</td>
+</tr>
+</tbody>
+</table>
+<p>互联网项目中随着硬件成本的降低及缓存、中间件的应用，一般我们选择都以 InnoDB 存储引擎为主，很少再去选择 MyISAM 了。而业务真发展的一定程度时，自带的存储引擎无法满足时，这时公司应该是有实力去自主研发满足自己需求的存储引擎或者购买商用的存储引擎了。</p>
+<p>原文：</p>
+<p><a href="http://www.cnblogs.com/lina1006/archive/2011/04/29/2032894.html" target="_blank" rel="noopener">浅谈MySql的存储引擎（表类型）</a></p>
+<p><a href="https://laravel-china.org/articles/4198/mysql-common-data-storage-engine" target="_blank" rel="noopener">MySQL 常用数据存储引擎区别</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/02/algorithm/LSD/" rel="next" title="字符串排序">
+                <i class="fa fa-chevron-left"></i> 字符串排序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/16/javaAdvance/java-transmit/" rel="prev" title="Java值传递和引用传递">
+                Java值传递和引用传递 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL存储引擎"><span class="nav-number">1.</span> <span class="nav-text">MySQL存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL存储引擎分类"><span class="nav-number">2.</span> <span class="nav-text">MySQL存储引擎分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM"><span class="nav-number">2.1.</span> <span class="nav-text">MyISAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB"><span class="nav-number">2.2.</span> <span class="nav-text">InnoDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memory-heap"><span class="nav-number">2.3.</span> <span class="nav-text">memory(heap)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#archive"><span class="nav-number">2.4.</span> <span class="nav-text">archive</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL中关于存储引擎的操作"><span class="nav-number">3.</span> <span class="nav-text">MySQL中关于存储引擎的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看数据库可以支持的存储引擎"><span class="nav-number">3.1.</span> <span class="nav-text">查看数据库可以支持的存储引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看表的结构等信息的若干命令"><span class="nav-number">3.2.</span> <span class="nav-text">查看表的结构等信息的若干命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置或修改表的存储引擎"><span class="nav-number">3.3.</span> <span class="nav-text">设置或修改表的存储引擎</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-常用数据存储引擎区别"><span class="nav-number">4.</span> <span class="nav-text">MySQL 常用数据存储引擎区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM-1"><span class="nav-number">4.1.</span> <span class="nav-text">MyISAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB-1"><span class="nav-number">4.2.</span> <span class="nav-text">InnoDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory"><span class="nav-number">4.3.</span> <span class="nav-text">Memory</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/03/13/dataBase/mysql-engine/';
+          this.page.identifier = '2018/03/13/dataBase/mysql-engine/';
+          this.page.title = 'MySQL存储引擎';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

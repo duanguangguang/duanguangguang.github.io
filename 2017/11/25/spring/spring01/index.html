@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍在Spring中，对象无需自己查找或创建与其所关联的其他对象，容器负责把需要相互协作的对象引用赋予各个对象。创建应用对象之间协作关系的行为通常称为装配（wiring），这也是依赖注入的本质。Spring提供了四种主要的装配机制：  隐式的bean发现机制和自动装配 在java中进行显示配置（javaConfig） 在XML中进行显示配置 混合配置">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring装配bean">
+<meta property="og:url" content="http://yoursite.com/2017/11/25/spring/spring01/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍在Spring中，对象无需自己查找或创建与其所关联的其他对象，容器负责把需要相互协作的对象引用赋予各个对象。创建应用对象之间协作关系的行为通常称为装配（wiring），这也是依赖注入的本质。Spring提供了四种主要的装配机制：  隐式的bean发现机制和自动装配 在java中进行显示配置（javaConfig） 在XML中进行显示配置 混合配置">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-29T08:34:30.200Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring装配bean">
+<meta name="twitter:description" content="介绍在Spring中，对象无需自己查找或创建与其所关联的其他对象，容器负责把需要相互协作的对象引用赋予各个对象。创建应用对象之间协作关系的行为通常称为装配（wiring），这也是依赖注入的本质。Spring提供了四种主要的装配机制：  隐式的bean发现机制和自动装配 在java中进行显示配置（javaConfig） 在XML中进行显示配置 混合配置">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/25/spring/spring01/"/>
+
+
+
+
+
+  <title>Spring装配bean | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/25/spring/spring01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring装配bean</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-25T15:59:41+08:00">
+                2017-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/25/spring/spring01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/25/spring/spring01/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/11/25/spring/spring01/" class="leancloud_visitors" data-flag-title="Spring装配bean">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在Spring中，对象无需自己查找或创建与其所关联的其他对象，容器负责把需要相互协作的对象引用赋予各个对象。创建应用对象之间协作关系的行为通常称为装配（wiring），这也是依赖注入的本质。Spring提供了四种主要的装配机制：</p>
+<ul>
+<li>隐式的bean发现机制和自动装配</li>
+<li>在java中进行显示配置（javaConfig）</li>
+<li>在XML中进行显示配置</li>
+<li>混合配置</li>
+</ul>
+<a id="more"></a>
+<h2 id="例子程序中通用的接口"><a href="#例子程序中通用的接口" class="headerlink" title="例子程序中通用的接口"></a>例子程序中通用的接口</h2><p>CD接口：<compactdisc></compactdisc></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CompactDisc</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CDPlayer接口：<mediaplayer></mediaplayer></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MediaPlayer</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自动化装配bean"><a href="#自动化装配bean" class="headerlink" title="自动化装配bean"></a>自动化装配bean</h2><p>Spring从两个角度来实现自动化装配：</p>
+<ul>
+<li>组件扫描（component scanning）：Spring 会自动发现应用上下文中创建的bean。</li>
+<li>自动装配（autowiring）：Spring自动满足bean之间的依赖。</li>
+</ul>
+<p>带有@Component注解的<compactdisc>实现类<sgtpeppers></sgtpeppers></compactdisc></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* @Component </span></span><br><span class="line"><span class="comment">* 1. spring会为所有带@Component注解的类创建为bean</span></span><br><span class="line"><span class="comment">* 2. 为组件扫描的bean命名：默认为类名第一个字母小写。例：sgtPeppers</span></span><br><span class="line"><span class="comment">* 3. 为组件扫描的bean命名：@Component("rename"), @Named("rename")</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Component</span> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SgtPeppers</span> <span class="keyword">implements</span> <span class="title">CompactDisc</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> String title = <span class="string">"Lonely Hearts"</span>;</span><br><span class="line">	<span class="keyword">private</span> String artist = <span class="string">"The Beatles"</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"Playing "</span> + title + <span class="string">"by "</span> + artist);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@ComponentScan注解启用扫描组件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">* @ComponentScan</span></span><br><span class="line"><span class="comment">* 1. 启用组件扫描,在spring中组件扫描默认不启用</span></span><br><span class="line"><span class="comment">* 2. 如果没有其他配置，@ComponentScan会默认扫描与配置类相同的包,查找@Component </span></span><br><span class="line"><span class="comment">* 3. 设置组件扫描基础包：@ComponentScan("spring02.assemble.automatic")</span></span><br><span class="line"><span class="comment">* 3. 设置组件扫描基础包：@ComponentScan(basePackages="spring02.assemble.automatic")</span></span><br><span class="line"><span class="comment">* 3. 设置组件扫描基础包：@ComponentScan(basePackages=&#123;"com.01", "com.02"&#125;)</span></span><br><span class="line"><span class="comment">* 4. 设置组件类：@ComponentScan(basePackageClasses=&#123;SgtPeppers.class, CDPlayer.class&#125;)</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(<span class="string">"spring02.assemble.automatic"</span>) </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayerConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Autowired注解实现自动装配：让Spring自动满足bean依赖</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayer</span> <span class="keyword">implements</span> <span class="title">MediaPlayer</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> CompactDisc cd;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	* @Autowired</span></span><br><span class="line"><span class="comment">	* 1. @Autowired注解可以用在任意方法上</span></span><br><span class="line"><span class="comment">	* 2. 如果找不到bean匹配则会抛出异常，可以将@Autowired的required属性设成false避免抛出异常</span></span><br><span class="line"><span class="comment">	* 2. @Autowired(required=false)，匹配不上会让bean处于未装配状态</span></span><br><span class="line"><span class="comment">	* 3. @Autowired注解的替代注解@Inject,后者同时定义了@Named注解</span></span><br><span class="line"><span class="comment">	* 4. 多个bean匹配会产生自动装配的歧义性</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CDPlayer</span><span class="params">(CompactDisc cd)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.cd = cd;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cd.play();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>验证自动装配</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* @RunWith</span></span><br><span class="line"><span class="comment">* @RunWith使用了Spring的SpringJUnit4ClassRunner，以便在测试开始的时候自动创建Spring的应用上下文</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* @ContextConfiguration</span></span><br><span class="line"><span class="comment">* @ContextConfiguration会告诉测试类要在CDPlayerConfig中加载配置，因为CDPlayerConfig包含了@ComponentScan</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@ContextConfiguration</span>(classes=CDPlayerConfig.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayerTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Rule</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">final</span> StandardOutputStreamLog log = <span class="keyword">new</span> StandardOutputStreamLog();</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Autowired</span> <span class="comment">/*自动注解标识*/</span></span><br><span class="line">	<span class="keyword">private</span> CompactDisc cd;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> MediaPlayer player;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * 测试组件扫描能够发现CompactDisc</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cdShouldNotBeNull</span><span class="params">()</span></span>&#123;</span><br><span class="line">		assertNotNull(cd);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      player.play();</span><br><span class="line">      assertEquals(<span class="string">"Playing Lonely Heartsby The Beatles\n"</span>, log.getLog());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="通过java代码装配bean"><a href="#通过java代码装配bean" class="headerlink" title="通过java代码装配bean"></a>通过java代码装配bean</h2><p>创建配置类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* @Configuration</span></span><br><span class="line"><span class="comment">* @Configuration表明这个类是配置类，该类应该包含在Spring应用上下文中如何创建bean的细节</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayerConfig</span> </span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	* @Bean</span></span><br><span class="line"><span class="comment">	* 1. @Bean注解会返回一个Spring应用上下文中的bean</span></span><br><span class="line"><span class="comment">	* 2. @Bean的ID默认与方法名同名，例：compactDisc</span></span><br><span class="line"><span class="comment">	* 2. 重新设置@Bean的名字：@Bean(name="rename")</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">  	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> CompactDisc <span class="title">compactDisc</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> SgtPeppers();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> CDPlayer <span class="title">cdPlayer</span><span class="params">(CompactDisc compactDisc)</span> </span>&#123;</span><br><span class="line">	    <span class="keyword">return</span> <span class="keyword">new</span> CDPlayer(compactDisc);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现类<sgtpeppers>和<cdplayer>以及测试类<cdplayertest>同上。</cdplayertest></cdplayer></sgtpeppers></p>
+<h2 id="通过XML装配bean"><a href="#通过XML装配bean" class="headerlink" title="通过XML装配bean"></a>通过XML装配bean</h2><p>XML配置规范：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></span><br><span class="line">  xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">  xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans                                http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span><br><span class="line"></span><br><span class="line">  &lt;!-- configuration details go here--&gt;</span><br><span class="line"></span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+<p>通用实现类和测试类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 非字面量SgtPeppers实现类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SgtPeppers</span> <span class="keyword">implements</span> <span class="title">CompactDisc</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String title = <span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span>;  </span><br><span class="line">  <span class="keyword">private</span> String artist = <span class="string">"The Beatles"</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"Playing "</span> + title + <span class="string">" by "</span> + artist);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  测试字面量实现类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlankDisc</span> <span class="keyword">implements</span> <span class="title">CompactDisc</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String title;</span><br><span class="line">  <span class="keyword">private</span> String artist;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">BlankDisc</span><span class="params">(String title, String artist)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.title = title;</span><br><span class="line">    <span class="keyword">this</span>.artist = artist;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"Playing "</span> + title + <span class="string">" by "</span> + artist);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  测试集合实现类</span></span><br><span class="line"><span class="comment"> *  collections包下</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlankDisc</span> <span class="keyword">implements</span> <span class="title">CompactDisc</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String title;</span><br><span class="line">  <span class="keyword">private</span> String artist;</span><br><span class="line">  <span class="keyword">private</span> List&lt;String&gt; tracks;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">BlankDisc</span><span class="params">(String title, String artist, List&lt;String&gt; tracks)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.title = title;</span><br><span class="line">    <span class="keyword">this</span>.artist = artist;</span><br><span class="line">    <span class="keyword">this</span>.tracks = tracks;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"Playing "</span> + title + <span class="string">" by "</span> + artist);</span><br><span class="line">    <span class="keyword">for</span> (String track : tracks) &#123;</span><br><span class="line">      System.out.println(<span class="string">"-Track: "</span> + track);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  测试属性实现类</span></span><br><span class="line"><span class="comment"> *  properties包下</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlankDisc</span> <span class="keyword">implements</span> <span class="title">CompactDisc</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String title;</span><br><span class="line">  <span class="keyword">private</span> String artist;</span><br><span class="line">  <span class="keyword">private</span> List&lt;String&gt; tracks;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTitle</span><span class="params">(String title)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.title = title;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArtist</span><span class="params">(String artist)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.artist = artist;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTracks</span><span class="params">(List&lt;String&gt; tracks)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.tracks = tracks;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"Playing "</span> + title + <span class="string">" by "</span> + artist);</span><br><span class="line">    <span class="keyword">for</span> (String track : tracks) &#123;</span><br><span class="line">      System.out.println(<span class="string">"-Track: "</span> + track);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayer</span> <span class="keyword">implements</span> <span class="title">MediaPlayer</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> CompactDisc cd;</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CDPlayer</span><span class="params">(CompactDisc cd)</span></span>&#123;<span class="comment">//cd构造器参数名</span></span><br><span class="line">		<span class="keyword">this</span>.cd = cd;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		cd.play();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  测试属性实现类</span></span><br><span class="line"><span class="comment"> *  properties包下</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayer</span> <span class="keyword">implements</span> <span class="title">MediaPlayer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> CompactDisc compactDisc;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCompactDisc</span><span class="params">(CompactDisc compactDisc)</span> </span>&#123;<span class="comment">//compactDisc属性名</span></span><br><span class="line">    <span class="keyword">this</span>.compactDisc = compactDisc;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    compactDisc.play();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations=<span class="string">"classpath:springXML02/ConstructorArgReferenceTest-context.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConstructorArgReferenceTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Rule</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">final</span> StandardOutputStreamLog log = <span class="keyword">new</span> StandardOutputStreamLog();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="keyword">private</span> MediaPlayer player;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    player.play();</span><br><span class="line">    assertEquals(<span class="string">"Playing Sgt. Pepper's Lonely Hearts Club Band by The Beatles\n"</span>, log.getLog());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面进行说明XML配置的几种情况：</p>
+<ol>
+<li><p>构造器注入bean引用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.SgtPeppers"</span> /&gt;</span><br><span class="line">        </span><br><span class="line">&lt;bean id=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.CDPlayer"</span>&gt;</span><br><span class="line">    &lt;constructor-arg name = <span class="string">"compactDisc"</span> ref=<span class="string">"compactDisc"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将字面量注入到构造器中</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.BlankDisc"</span>&gt;</span><br><span class="line">    &lt;constructor-arg value=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span> /&gt;</span><br><span class="line">    &lt;constructor-arg value=<span class="string">"The Beatles"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line">        </span><br><span class="line">&lt;bean id=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.CDPlayer"</span>&gt;</span><br><span class="line">    &lt;constructor-arg ref=<span class="string">"compactDisc"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过构造器装配集合</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.collections.BlankDisc"</span>&gt;</span><br><span class="line">    &lt;constructor-arg value=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span> /&gt;</span><br><span class="line">    &lt;constructor-arg value=<span class="string">"The Beatles"</span> /&gt;</span><br><span class="line">    &lt;constructor-arg&gt;</span><br><span class="line">      &lt;list&gt;</span><br><span class="line">        &lt;value&gt;Sgt. Pepper<span class="string">'s Lonely Hearts Club Band&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;With a Little Help from My Friends&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Lucy in the Sky with Diamonds&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Getting Better&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Fixing a Hole&lt;/value&gt;</span></span><br><span class="line">        &lt;value&gt;She's Leaving Home&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;Being for the Benefit of Mr. Kite!&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;Within You Without You&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;When I<span class="string">'m Sixty-Four&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Lovely Rita&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Good Morning Good Morning&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Sgt. Pepper'</span><span class="function">s Lonely Hearts Club <span class="title">Band</span> <span class="params">(Reprise)</span>&lt;/value&gt;</span></span><br><span class="line"><span class="function">        &lt;value&gt;A Day in the Life&lt;/value&gt;</span></span><br><span class="line"><span class="function">      &lt;/list&gt;</span></span><br><span class="line"><span class="function">    &lt;/constructor-arg&gt;</span></span><br><span class="line"><span class="function">&lt;/bean&gt;</span></span><br><span class="line"><span class="function">        </span></span><br><span class="line"><span class="function">&lt;bean id</span>=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.CDPlayer"</span>&gt;</span><br><span class="line">    &lt;constructor-arg ref=<span class="string">"compactDisc"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构造器注入bean引用 — c-命名模式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- c-命名模式：需要在beans中引入c --&gt; </span><br><span class="line">xmlns:c=<span class="string">"http://www.springframework.org/schema/c"</span></span><br><span class="line"></span><br><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.SgtPeppers"</span> /&gt;</span><br><span class="line">&lt;!-- c-命名模式：c指前缀,cd指构造器参数名,-ref指注入bean引用,value指要注入的ID --&gt;       </span><br><span class="line">&lt;bean id=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.CDPlayer"</span> c:cd-ref=<span class="string">"compactDisc"</span> /&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将字面量注入到构造器中 — c-命名模式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- c-命名模式：可以用占位符表示参数的位置，xml中不允许数字作为属性的第一个字符，所以加_前缀 --&gt; </span><br><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.BlankDisc"</span></span><br><span class="line">        c:_0=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span> </span><br><span class="line">        c:_1=<span class="string">"The Beatles"</span>&gt;</span><br><span class="line">&lt;/bean&gt;  </span><br><span class="line">&lt;!-- c-命名模式：当只有一个时可以只写_ --&gt;          </span><br><span class="line">&lt;bean id=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.CDPlayer"</span> c:_-ref=<span class="string">"compactDisc"</span> /&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>属性注入bean引用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.BlankDisc"</span>&gt;</span><br><span class="line">    &lt;constructor-arg value=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span> /&gt;</span><br><span class="line">    &lt;constructor-arg value=<span class="string">"The Beatles"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line">        </span><br><span class="line">&lt;bean id=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.properties.CDPlayer"</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">"compactDisc"</span> ref=<span class="string">"compactDisc"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将字面量注入到属性中</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"compactDisc"</span></span><br><span class="line">        <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.properties.BlankDisc"</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">"title"</span> value=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span> /&gt;</span><br><span class="line">    &lt;property name=<span class="string">"artist"</span> value=<span class="string">"The Beatles"</span> /&gt;</span><br><span class="line">    &lt;property name=<span class="string">"tracks"</span>&gt;</span><br><span class="line">      &lt;list&gt;</span><br><span class="line">        &lt;value&gt;Sgt. Pepper<span class="string">'s Lonely Hearts Club Band&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;With a Little Help from My Friends&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Lucy in the Sky with Diamonds&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Getting Better&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Fixing a Hole&lt;/value&gt;</span></span><br><span class="line">        &lt;value&gt;She's Leaving Home&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;Being for the Benefit of Mr. Kite!&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;Within You Without You&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;When I<span class="string">'m Sixty-Four&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Lovely Rita&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Good Morning Good Morning&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Sgt. Pepper'</span><span class="function">s Lonely Hearts Club <span class="title">Band</span> <span class="params">(Reprise)</span>&lt;/value&gt;</span></span><br><span class="line"><span class="function">        &lt;value&gt;A Day in the Life&lt;/value&gt;</span></span><br><span class="line"><span class="function">      &lt;/list&gt;</span></span><br><span class="line"><span class="function">    &lt;/property&gt;</span></span><br><span class="line"><span class="function">&lt;/bean&gt;</span></span><br><span class="line"><span class="function">        </span></span><br><span class="line"><span class="function">&lt;bean id</span>=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.properties.CDPlayer"</span></span><br><span class="line">        &lt;property name=<span class="string">"compactDisc"</span> ref=<span class="string">"compactDisc"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>属性注入bean引用 — p-命名模式（规则同c-命名模式）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- p-命名模式：需要在beans中引入p --&gt; </span><br><span class="line">xmlns:p=<span class="string">"http://www.springframework.org/schema/p"</span></span><br><span class="line">  </span><br><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.BlankDisc"</span>&gt;</span><br><span class="line">    &lt;constructor-arg value=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span> /&gt;</span><br><span class="line">    &lt;constructor-arg value=<span class="string">"The Beatles"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line"> </span><br><span class="line">&lt;!-- p-命名模式：p指前缀,compactDisc指属性名,-ref指注入bean引用,value指要注入的ID --&gt;     </span><br><span class="line">&lt;bean id=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.properties.CDPlayer"</span></span><br><span class="line">        p:compactDisc-ref=<span class="string">"compactDisc"</span>&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将字面量注入到属性中 — p-命名模式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.properties.BlankDisc"</span></span><br><span class="line">        p:title=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span></span><br><span class="line">        p:artist=<span class="string">"The Beatles"</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">"tracks"</span>&gt;</span><br><span class="line">      &lt;list&gt;</span><br><span class="line">        &lt;value&gt;Sgt. Pepper<span class="string">'s Lonely Hearts Club Band&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;With a Little Help from My Friends&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Lucy in the Sky with Diamonds&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Getting Better&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Fixing a Hole&lt;/value&gt;</span></span><br><span class="line">        &lt;value&gt;She's Leaving Home&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;Being for the Benefit of Mr. Kite!&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;Within You Without You&lt;/value&gt;</span><br><span class="line">        &lt;value&gt;When I<span class="string">'m Sixty-Four&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Lovely Rita&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Good Morning Good Morning&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Sgt. Pepper'</span><span class="function">s Lonely Hearts Club <span class="title">Band</span> <span class="params">(Reprise)</span>&lt;/value&gt;</span></span><br><span class="line"><span class="function">        &lt;value&gt;A Day in the Life&lt;/value&gt;</span></span><br><span class="line"><span class="function">      &lt;/list&gt;</span></span><br><span class="line"><span class="function">    &lt;/property&gt;</span></span><br><span class="line"><span class="function">&lt;/bean&gt;</span></span><br><span class="line"><span class="function">        </span></span><br><span class="line"><span class="function">&lt;bean id</span>=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.properties.CDPlayer"</span></span><br><span class="line">        p:compactDisc-ref=<span class="string">"compactDisc"</span>&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将字面量注入到属性中 — util-命名模式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.properties.BlankDisc"</span></span><br><span class="line">        p:title=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span></span><br><span class="line">        p:artist=<span class="string">"The Beatles"</span></span><br><span class="line">        p:tracks-ref=<span class="string">"trackList"</span>&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line">&lt;util:list id=<span class="string">"trackList"</span>&gt;  </span><br><span class="line">    &lt;value&gt;Sgt. Pepper<span class="string">'s Lonely Hearts Club Band&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;With a Little Help from My Friends&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;Lucy in the Sky with Diamonds&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;Getting Better&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;Fixing a Hole&lt;/value&gt;</span></span><br><span class="line">    &lt;value&gt;She's Leaving Home&lt;/value&gt;</span><br><span class="line">    &lt;value&gt;Being for the Benefit of Mr. Kite!&lt;/value&gt;</span><br><span class="line">    &lt;value&gt;Within You Without You&lt;/value&gt;</span><br><span class="line">    &lt;value&gt;When I<span class="string">'m Sixty-Four&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;Lovely Rita&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;Good Morning Good Morning&lt;/value&gt;</span></span><br><span class="line"><span class="string">    &lt;value&gt;Sgt. Pepper'</span><span class="function">s Lonely Hearts Club <span class="title">Band</span> <span class="params">(Reprise)</span>&lt;/value&gt;</span></span><br><span class="line"><span class="function">    &lt;value&gt;A Day in the Life&lt;/value&gt;</span></span><br><span class="line"><span class="function">&lt;/util:list&gt;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">&lt;bean id</span>=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.xml.properties.CDPlayer"</span></span><br><span class="line">        p:compactDisc-ref=<span class="string">"compactDisc"</span> /&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+<p>Spring util-命名空间中的元素</p>
+<p>|           元素           |                 描述                 |<br>| :——————–: | :——————————–: |<br>|    <a href="util:constant" target="_blank" rel="noopener">util:constant</a>     |  引用某个类型的public static域，并将其暴露为bean  |<br>|      <a href="util:list" target="_blank" rel="noopener">util:list</a>       | 创建一个java.util.List类型的bean，其中包含值或引用 |<br>|       <a href="util:map" target="_blank" rel="noopener">util:map</a>       | 创建一个java.util.Map类型的bean，其中包含值或引用  |<br>|   <a href="util:properties" target="_blank" rel="noopener">util:properties</a>    |  创建一个java.util.Properties类型的bean   |<br>| <a href="util:properties-path" target="_blank" rel="noopener">util:properties-path</a> |   引用一个bean的属性（或内嵌属性），并将其暴露为bean    |<br>|       <a href="util:set" target="_blank" rel="noopener">util:set</a>       | 创建一个java.util.Set类型的bean，其中包含值或引用  |</p>
+</li>
+</ol>
+<h2 id="导入和混合配置"><a href="#导入和混合配置" class="headerlink" title="导入和混合配置"></a>导入和混合配置</h2><p>通用实现类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlankDisc</span> <span class="keyword">implements</span> <span class="title">CompactDisc</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String title;</span><br><span class="line">  <span class="keyword">private</span> String artist;</span><br><span class="line">  <span class="keyword">private</span> List&lt;String&gt; tracks;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">BlankDisc</span><span class="params">(String title, String artist, List&lt;String&gt; tracks)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.title = title;</span><br><span class="line">    <span class="keyword">this</span>.artist = artist;</span><br><span class="line">    <span class="keyword">this</span>.tracks = tracks;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"Playing "</span> + title + <span class="string">" by "</span> + artist);</span><br><span class="line">    <span class="keyword">for</span> (String track : tracks) &#123;</span><br><span class="line">      System.out.println(<span class="string">"-Track: "</span> + track);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayer</span> <span class="keyword">implements</span> <span class="title">MediaPlayer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> CompactDisc cd;</span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">CDPlayer</span><span class="params">(CompactDisc cd)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.cd = cd;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    cd.play();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>javaConfig中引入XML配置</p>
+<p>配置类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* CDPlayer采用javaConfig方式</span></span><br><span class="line"><span class="comment">* xml需要将cd引进来</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDPlayerConfig</span> </span>&#123; </span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> CDPlayer <span class="title">cdPlayer</span><span class="params">(CompactDisc compactDisc)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> CDPlayer(compactDisc);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import</span>(CDPlayerConfig.class)</span><br><span class="line"><span class="meta">@ImportResource</span>(<span class="string">"classpath:springXML02/ImportXmlConfigTest-config.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SoundSystemConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(classes=SoundSystemConfig.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ImportXmlConfigTest</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="keyword">private</span> MediaPlayer player;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    player.play();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>xml文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--  xm需要将cd引进来 --&gt;</span><br><span class="line">&lt;bean id=<span class="string">"compactDisc"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.mixdconfig.BlankDisc"</span></span><br><span class="line">        c:_0=<span class="string">"Sgt. Pepper's Lonely Hearts Club Band"</span></span><br><span class="line">        c:_1=<span class="string">"The Beatles"</span>&gt;</span><br><span class="line">    &lt;constructor-arg&gt;</span><br><span class="line">      &lt;list&gt;</span><br><span class="line">        &lt;value&gt;Sgt. Pepper<span class="string">'s Lonely Hearts Club Band&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;With a Little Help from My Friends&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Lucy in the Sky with Diamonds&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Getting Better&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;value&gt;Fixing a Hole&lt;/value&gt;</span></span><br><span class="line"><span class="string">        &lt;!-- ...other tracks omitted for brevity... --&gt;</span></span><br><span class="line"><span class="string">      &lt;/list&gt;</span></span><br><span class="line"><span class="string">    &lt;/constructor-arg&gt;</span></span><br><span class="line"><span class="string">&lt;/bean&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>XML配置中引入javaConfig</p>
+<p>配置类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* CDConfig在XML文件中被引入进来</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CDConfig</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> CompactDisc <span class="title">compactDisc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> SgtPeppers();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(<span class="string">"classpath:springXML02/ImportJavaConfigSystemTest-config.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ImportJavaConfigSystemTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  <span class="keyword">private</span> MediaPlayer player;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    player.play();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>xml文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 使用第三方配置文件将两个组合起来，在xml中引入javaConfig  --&gt;</span><br><span class="line">  </span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.mixdconfig.CDConfig"</span> /&gt;</span><br><span class="line"></span><br><span class="line">&lt;<span class="keyword">import</span> resource=<span class="string">"ImportJavaConfigTest-config.xml"</span> /&gt;</span><br><span class="line">  </span><br><span class="line">&lt;!-- 第三方配置文件需要引入的xml文件ImportJavaConfigTest-config.xml  --&gt;</span><br><span class="line">  </span><br><span class="line">&lt;bean id=<span class="string">"cdPlayer"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"spring02.assemble.mixdconfig.CDPlayer"</span></span><br><span class="line">        c:cd-ref=<span class="string">"compactDisc"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/25/spring/spring00/" rel="next" title="Spring概述">
+                <i class="fa fa-chevron-left"></i> Spring概述
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/29/spring/seniorassembling/" rel="prev" title="Spring高级装配">
+                Spring高级装配 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子程序中通用的接口"><span class="nav-number">2.</span> <span class="nav-text">例子程序中通用的接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动化装配bean"><span class="nav-number">3.</span> <span class="nav-text">自动化装配bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过java代码装配bean"><span class="nav-number">4.</span> <span class="nav-text">通过java代码装配bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过XML装配bean"><span class="nav-number">5.</span> <span class="nav-text">通过XML装配bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导入和混合配置"><span class="nav-number">6.</span> <span class="nav-text">导入和混合配置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/11/25/spring/spring01/';
+          this.page.identifier = '2017/11/25/spring/spring01/';
+          this.page.title = 'Spring装配bean';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

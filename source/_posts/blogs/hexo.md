@@ -245,7 +245,12 @@ tags:
 
      > hexo new post "article title"    系统会自动生成一个同名文件夹可以用来放图片
 
-   ​
+   3. hexo s报错：
+
+      > ERROR Local hexo not found in G:\XcantloadX
+      > ERROR Try running: 'npm install hexo --save'
+      >
+      > 按照提示安装依然报错，原因是node有问题，重新安装node即可
 
 ### 多地使用配置
 
@@ -280,11 +285,15 @@ tags:
 
 - 可能会遇到图片无法显示的问题，同上处理
 
-- 注意：此时千万不要使用git push -u origin backup，会将master分支的静态文件替换掉，导致整个文件无法显示
-
-  > 解决方式：将另一台机器上好的版本执行一次git push -u origin backup即可
 
 #### 5. ssh配置
 
 同上。
+
+临时笔记：
+
+1. 拉分支：backup
+2. 新建hexo并初始化
+3. hexo合并backup
+4. backup历史数据覆盖
 

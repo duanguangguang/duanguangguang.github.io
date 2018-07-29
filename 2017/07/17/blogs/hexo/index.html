@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://yoursite.com/2017/07/17/blogs/hexo/hexo01.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/07/17/blogs/hexo/hexo02.png">
 <meta property="og:image" content="http://yoursite.com/2017/07/17/blogs/hexo/hexo03.png">
-<meta property="og:updated_time" content="2018-07-29T08:34:30.003Z">
+<meta property="og:updated_time" content="2018-07-29T14:36:13.687Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo+Github搭建个人博客">
 <meta name="twitter:description" content="Hexo+Github搭建个人博客​        hexo是一个简洁、高效且开源的博客框架，是用node.js开发的。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。 环境 win10 64位旗舰版  node.js  git  github账户">
@@ -671,7 +671,14 @@
 </blockquote>
 </li>
 </ul>
-<p>​</p>
+<ol start="3">
+<li><p>hexo s报错：</p>
+<blockquote>
+<p>ERROR Local hexo not found in G:\XcantloadX<br>ERROR Try running: ‘npm install hexo –save’</p>
+<p>按照提示安装依然报错，原因是node有问题，重新安装node即可</p>
+</blockquote>
+</li>
+</ol>
 </li>
 </ol>
 <h3 id="多地使用配置"><a href="#多地使用配置" class="headerlink" title="多地使用配置"></a>多地使用配置</h3><p>之前是家里电脑一份，公司电脑一份，今天突然想在新公司的电脑上配置一份hexo环境，发现有些细节操作已经忘记了，趁热做个笔记记录下来</p>
@@ -693,13 +700,15 @@
 </li>
 <li><p>可能会遇到图片无法显示的问题，同上处理</p>
 </li>
-<li><p>注意：此时千万不要使用git push -u origin backup，会将master分支的静态文件替换掉，导致整个文件无法显示</p>
-<blockquote>
-<p>解决方式：将另一台机器上好的版本执行一次git push -u origin backup即可</p>
-</blockquote>
-</li>
 </ul>
 <h4 id="5-ssh配置"><a href="#5-ssh配置" class="headerlink" title="5. ssh配置"></a>5. ssh配置</h4><p>同上。</p>
+<p>临时笔记：</p>
+<ol>
+<li>拉分支：backup</li>
+<li>新建hexo并初始化</li>
+<li>hexo合并backup</li>
+<li>backup历史数据覆盖</li>
+</ol>
 
       
     </div>
@@ -826,7 +835,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">92</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -837,7 +846,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -848,7 +857,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

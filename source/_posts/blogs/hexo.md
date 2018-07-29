@@ -290,10 +290,8 @@ tags:
 
 同上。
 
-临时笔记：
+### 参考文档
 
-1. 拉分支：backup
-2. 新建hexo并初始化
-3. hexo合并backup
-4. backup历史数据覆盖
-
+1. [手把手教你用Hexo+Github 搭建属于自己的博客](https://blog.csdn.net/gdutxiaoxu/article/details/53576018)
+2. [nexT](http://theme-next.iissnan.com/getting-started.html)
+3. [Hexo](https://hexo.io/zh-cn/docs/index.html)

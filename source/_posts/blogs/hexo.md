@@ -252,44 +252,6 @@ tags:
       >
       > 按照提示安装依然报错，原因是node有问题，重新安装node即可
 
-### 多地使用配置
-
-之前是家里电脑一份，公司电脑一份，今天突然想在新公司的电脑上配置一份hexo环境，发现有些细节操作已经忘记了，趁热做个笔记记录下来
-
-#### 1. 环境安装
-
-- node.js
-- git
-
-#### 2. 安装hexo
-
-同上，效果图如下：
-
-![](hexo\hexo02.png)
-
-#### 3. 将github的backup分支拉下来
-
-`git clone -b backup ... `
-
-效果图如下：
-
-![](hexo\hexo03.png)
-
-将此内容覆盖到hexo文件夹中
-
-#### 4. 一些插件的安装
-
-- 将hexo与git关联起来
-
-  > npm install hexo-deployer-git --save
-
-- 可能会遇到图片无法显示的问题，同上处理
-
-
-#### 5. ssh配置
-
-同上。
-
 ### 参考文档
 
 1. [手把手教你用Hexo+Github 搭建属于自己的博客](https://blog.csdn.net/gdutxiaoxu/article/details/53576018)

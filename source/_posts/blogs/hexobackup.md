@@ -6,7 +6,7 @@ tags:
   - Hexo
 ---
 
-##  Hexo+Github个人博客多地备份
+## Hexo+Github个人博客多地备份
 
 个人博客家里和公司各有一份环境，随时编辑更新，之前是这么做的，最近在新公司电脑上配置hexo环境的时候，发现还是遇到了很多坑，很多细节操作忘记了，现在趁热做下笔记
 
@@ -18,13 +18,13 @@ tags:
 
 验证环境安装：
 
-![](hexo-backup/hexo03.png)
+![](hexobackup\hexo03.png)
 
 #### 二、操作步骤
 
 1. 拉backup分支到本地并做一备份（共两份文件），如图：
 
-   ![](hexo-backup/hexo06.png)
+   ![](hexobackup\hexo06.png)
 
 2. 新建文件夹初始化hexo;
 
@@ -34,7 +34,7 @@ tags:
 
    初始化完成后如图：
 
-   ![](hexo-backup/hexo05.png)
+   ![](hexobackup\hexo05.png)
 
 3. 将初始化完成的hexo文件内容覆盖到backup中；
 
@@ -46,7 +46,7 @@ tags:
 
 这么做的原因是需要更新本地的hexo jar包，因为node_modules文件在.gitgnore忽略掉了，可以看到最终backup分支比刚备份下来得多了node_modules文件，如下图：
 
-![](hexo-backup/hexo04.png)
+![](hexobackup\hexo04.png)
 
 #### 三、插件安装
 
@@ -78,7 +78,7 @@ tags:
 
    - 正确的master分支内容如下图：
 
-     ![](hexo-backup/hexo01.png)
+     ![](hexobackup\hexo01.png)
 
 2. backup分支
 
@@ -92,6 +92,6 @@ tags:
 
    - 正确的backup分支内容如下图：
 
-     ![](hexo-backup/hexo02.png)
+     ![](hexobackup\hexo02.png)
 
    ​

@@ -46,6 +46,8 @@ tags:
 
 3. 初始化hexo
 
+   > 需要新建一空文件夹
+
    > hexo init
 
    > npm install

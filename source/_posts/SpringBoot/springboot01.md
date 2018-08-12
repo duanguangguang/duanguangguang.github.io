@@ -1,7 +1,8 @@
 ---
 title: Spring Boot（一）：优雅的入门
 date: 2018-08-12 14:54:26
-tags:SpringBoot
+tags:
+ - SpringBoot
 categories: 
  - SpringBoot
 ---

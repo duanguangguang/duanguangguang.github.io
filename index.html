@@ -326,7 +326,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/blogs/hexo-backup/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/blogs/hexobackup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -345,7 +345,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/29/blogs/hexo-backup/" itemprop="url">Hexo+Github多地备份</a></h1>
+                <a class="post-title-link" href="/2018/07/29/blogs/hexobackup/" itemprop="url">Hexo+Github多地备份</a></h1>
         
 
         <div class="post-meta">
@@ -398,9 +398,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/29/blogs/hexo-backup/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/29/blogs/hexobackup/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/29/blogs/hexo-backup/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/29/blogs/hexobackup/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -408,7 +408,7 @@
 
           
           
-             <span id="/2018/07/29/blogs/hexo-backup/" class="leancloud_visitors" data-flag-title="Hexo+Github多地备份">
+             <span id="/2018/07/29/blogs/hexobackup/" class="leancloud_visitors" data-flag-title="Hexo+Github多地备份">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -440,78 +440,14 @@
 
       
         
-          
-            <h2 id="Hexo-Github个人博客多地备份"><a href="#Hexo-Github个人博客多地备份" class="headerlink" title="Hexo+Github个人博客多地备份"></a>Hexo+Github个人博客多地备份</h2><p>个人博客家里和公司各有一份环境，随时编辑更新，之前是这么做的，最近在新公司电脑上配置hexo环境的时候，发现还是遇到了很多坑，很多细节操作忘记了，现在趁热做下笔记</p>
-<h4 id="一、环境安装"><a href="#一、环境安装" class="headerlink" title="一、环境安装"></a>一、环境安装</h4><ul>
-<li><p>node.js</p>
-</li>
-<li><p>git</p>
-</li>
-<li><p>hexo</p>
-<p>hexo安装参考这个：<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo</a></p>
-</li>
-</ul>
-<h4 id="二、操作步骤"><a href="#二、操作步骤" class="headerlink" title="二、操作步骤"></a>二、操作步骤</h4><ol>
-<li>拉backup分支到本地并做一备份；</li>
-<li>新建文件夹初始化hexo;</li>
-<li>将初始化完成的hexo文件内容覆盖到backup中；</li>
-<li>将backup备份内容除了node_modules文件覆盖到backup中</li>
-</ol>
-<p>这么做的原因是需要更新本地的hexo jar包，因为node_modules文件在.gitgnore忽略掉了</p>
-<p>注意：node_modules在从hexo拷贝到backup的过程中因为文件名太长导致失败，需要使用命令拷贝</p>
-<blockquote>
-<p>cp -a …命令</p>
-</blockquote>
-<h4 id="三、插件安装"><a href="#三、插件安装" class="headerlink" title="三、插件安装"></a>三、插件安装</h4><ul>
-<li><p>将hexo与git关联起来</p>
-<blockquote>
-<p>npm install hexo-deployer-git –save</p>
-</blockquote>
-</li>
-<li><p>可能会遇到图片无法显示的问题</p>
-<blockquote>
-<p>npm install <a href="https://github.com/CodeFalling/hexo-asset-image" target="_blank" rel="noopener">https://github.com/CodeFalling/hexo-asset-image</a> –save</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="四、ssh配置"><a href="#四、ssh配置" class="headerlink" title="四、ssh配置"></a>四、ssh配置</h4><p>将生成的公有密钥添加到github上即可</p>
-<h4 id="五、github分支管理策略"><a href="#五、github分支管理策略" class="headerlink" title="五、github分支管理策略"></a>五、github分支管理策略</h4><ol>
-<li><p>master分支</p>
-<ul>
-<li><p>master分支存储的是博客生成的可以直接在浏览器上显示的静态文件</p>
-</li>
-<li><p><code>hexo generate</code> 生成静态文件（）</p>
-</li>
-<li><p><code>hexo deploy</code> 将生成的静态文件部署到master上</p>
-</li>
-<li><p>我们在_config.yml配置了hexo关联的master分支，<code>hexo deploy</code> 命令会自动将生成的静态文件推送到master分支，除此之外master分支切勿自己提交内容，切记！！！</p>
-</li>
-<li><p>master分支内容就是backup分支中的public文件内容</p>
-</li>
-<li><p>正确的master分支内容如下图：</p>
-<p><img src="/2018/07/29/blogs/hexo-backup/hexo01.png" alt=""></p>
-</li>
-</ul>
-</li>
-<li><p>backup分支</p>
-<ul>
-<li><p>backup分支是对我们的博客文件包括主题配置等做的一个远程备份</p>
-</li>
-<li><p><code>git add --all</code> 将修改的文件添加到git</p>
-</li>
-<li><p><code>git commit -m &quot;description&quot;</code> 文件提交</p>
-</li>
-<li><p><code>git push origin backup</code> 文件推送到远程backup分支</p>
-</li>
-<li><p>正确的backup分支内容如下图：</p>
-<p><img src="/2018/07/29/blogs/hexo-backup/hexo02.png" alt=""></p>
-</li>
-</ul>
-<p>​</p>
-</li>
-</ol>
-
-          
+          <h2 id="Hexo-Github个人博客多地备份"><a href="#Hexo-Github个人博客多地备份" class="headerlink" title="Hexo+Github个人博客多地备份"></a>Hexo+Github个人博客多地备份</h2><p>个人博客家里和公司各有一份环境，随时编辑更新，之前是这么做的，最近在新公司电脑上配置hexo环境的时候，发现还是遇到了很多坑，很多细节操作忘记了，现在趁热做下笔记</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/29/blogs/hexobackup/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

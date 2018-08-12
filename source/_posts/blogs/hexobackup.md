@@ -6,32 +6,49 @@ tags:
   - Hexo
 ---
 
-##  Hexo+Github个人博客多地备份
+## Hexo+Github个人博客多地备份
 
 个人博客家里和公司各有一份环境，随时编辑更新，之前是这么做的，最近在新公司电脑上配置hexo环境的时候，发现还是遇到了很多坑，很多细节操作忘记了，现在趁热做下笔记
+
+<!-- more -->
 
 #### 一、环境安装
 
 - node.js
-
 - git
+- hexo: [Hexo](https://hexo.io/zh-cn/docs/index.html)
 
-- hexo
+验证环境安装：
 
-  hexo安装参考这个：[Hexo](https://hexo.io/zh-cn/docs/index.html)
+![](hexobackup\hexo03.png)
 
 #### 二、操作步骤
 
-1. 拉backup分支到本地并做一备份；
+1. 拉backup分支到本地并做一备份（共两份文件），如图：
+
+   ![](hexobackup\hexo06.png)
+
 2. 新建文件夹初始化hexo;
+
+   - `hexo init`
+   - `npm install`
+   - `hexo -p 5000 server` 本地测试hexo
+
+   初始化完成后如图：
+
+   ![](hexobackup\hexo05.png)
+
 3. 将初始化完成的hexo文件内容覆盖到backup中；
+
+   注意：node_modules在从hexo拷贝到backup的过程中因为文件名太长导致失败，需要使用命令拷贝
+
+   > 切换到需要拷贝得文件得根目录：`cp -a hexo/node_modules/ duanguangguang.github.io/`
+
 4. 将backup备份内容除了node_modules文件覆盖到backup中
 
-这么做的原因是需要更新本地的hexo jar包，因为node_modules文件在.gitgnore忽略掉了
+这么做的原因是需要更新本地的hexo jar包，因为node_modules文件在.gitgnore忽略掉了，可以看到最终backup分支比刚备份下来得多了node_modules文件，如下图：
 
-注意：node_modules在从hexo拷贝到backup的过程中因为文件名太长导致失败，需要使用命令拷贝
-
-> cp -a ...命令
+![](hexobackup\hexo04.png)
 
 #### 三、插件安装
 
@@ -63,7 +80,7 @@ tags:
 
    - 正确的master分支内容如下图：
 
-     ![](hexo-backup/hexo01.png)
+     ![](hexobackup\hexo01.png)
 
 2. backup分支
 
@@ -77,6 +94,6 @@ tags:
 
    - 正确的backup分支内容如下图：
 
-     ![](hexo-backup/hexo02.png)
+     ![](hexobackup\hexo02.png)
 
    ​

@@ -7,7 +7,7 @@ categories:
  - SpringBoot
 ---
 
-## 介绍
+### 介绍
 
 Spring Boot使用了一个全局的配置文件application.properties，放在src/main/resources目录下或者类路径的/config下。Sping Boot的全局配置文件的作用是对一些默认配置的配置值进行修改。比如自定义应用端口号(比较在机器比较少的情况下，一台机器还是需要部署多个应用的，当然利用docker的话，是可避免的，这是后话了)、mq的服务地址、缓存服务的服务地址、数据库的配置等，都或多或少的需要一些外部的配置项等。
 

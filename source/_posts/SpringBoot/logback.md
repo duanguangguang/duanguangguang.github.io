@@ -30,9 +30,9 @@ Spring Boot在所有内部日志中使用[Commons Logging](http://commons.apache
 1. [SLF4J](http://www.slf4j.org/):Simple Logging Facade For Java，它是一个针对于各类Java日志框架的统一[Facade](https://en.wikipedia.org/wiki/Facade_pattern)抽象。Java日志框架众多——常用的有`java.util.logging`, `log4j`, `logback`，`commons-logging`, Spring框架使用的是`Jakarta Commons Logging API (JCL)`。而SLF4J定义了统一的日志抽象接口，而真正的日志实现则是在运行时决定的，它提供了各类日志框架的binding。 
 2. [Logback](http://logback.qos.ch/)是log4j框架的作者开发的新一代日志框架，它效率更高、能够适应诸多的运行环境，同时天然支持SLF4J。 
 
-默认情况下，Spring Boot会用Logback来记录日志，并用INFO级别输出到控制台。 
+默认情况下，spring boot默认会加载`classpath:logback-spring.xml`或者`classpath:logback-spring.groovy`，Spring Boot会用Logback来记录日志，并用INFO级别输出到控制台。 
 
-### 默认配置
+### 默认配置logback
 
 1. 添加日志依赖
 
@@ -61,7 +61,7 @@ Spring Boot在所有内部日志中使用[Commons Logging](http://commons.apache
    - `logging.level`：日志级别控制前缀，`*`为包名或Logger名
    - `LEVEL`：选项TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
 
-### 自定义日志配置
+#### 自定义日志配置
 
 根据不同的日志系统，你可以按如下规则组织配置文件名，就能被正确加载： 
 
@@ -76,7 +76,7 @@ Spring Boot在所有内部日志中使用[Commons Logging](http://commons.apache
 logging.config=classpath:logging-config.xml
 ~~~
 
-### logback-spring.xml 示例
+####logback-spring.xml 示例
 
 ~~~xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -195,11 +195,11 @@ root节点是必选节点，用来指定最基础的日志输出级别，只有�
   </logger>
   ~~~
 
-### 多环境日志输出
+#### 多环境日志输出
 
-根据不同环境（prod:生产环境，test:测试环境，dev:开发环境）来定义不同的日志输出，在 logback-spring.xml（想使用spring扩展profile支持，要以logback-spring.xml命名 ）中使用 springProfile 节点来定义，方法如下： 
+logback-spring.xml（想使用spring扩展profile支持，要以logback-spring.xml命名 ），方法如下： 
 
-~~~xml
+~~~java
 <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
 <springProfile name="test,dev">
     <logger name="com.dodd.controller" level="info" />
@@ -210,7 +210,153 @@ root节点是必选节点，用来指定最基础的日志输出级别，只有�
 </springProfile>
 ~~~
 
-然后在启动服务的时候指定 profile ，不指定使用默认
+根据不同环境（prod:生产环境，test:测试环境，dev:开发环境）来定义不同的日志输出：使用方法如下：
 
+application.properties
 
+~~~java
+#配置文件环境配置
+spring.profiles.active = dev
+#配置成dev则会去找<springProfile name="dev">的环境日志配置
+~~~
 
+logback多环境配置示例：
+
+~~~java
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 文件输出格式 -->
+    <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+    <!-- test文件路径 -->
+    <property name="TEST_FILE_PATH" value="d:/dodd/springboot/test/logs" />
+    <!-- pro文件路径 -->
+    <property name="PRO_FILE_PATH" value="/dodd/springboot/pro/logs" />
+
+    <!-- 开发环境 -->
+    <springProfile name="dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${PATTERN}</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="springbootdemo.springboot" level="debug"/>
+
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+
+    <!-- 测试环境 -->
+    <springProfile name="test">
+        <!-- 每天产生一个文件 -->
+        <appender name="TEST-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!-- 文件路径 -->
+            <file>${TEST_FILE_PATH}</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 文件名称 -->
+                <fileNamePattern>${TEST_FILE_PATH}/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 文件最大保存历史数量 -->
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+
+        <root level="info">
+            <appender-ref ref="TEST-FILE" />
+        </root>
+    </springProfile>
+
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+        <appender name="PROD_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PRO_FILE_PATH}</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${PRO_FILE_PATH}/warn.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+
+        <root level="warn">
+            <appender-ref ref="PROD_FILE" />
+        </root>
+    </springProfile>
+</configuration>
+~~~
+
+### log4j2
+
+#### pom引用：
+
+~~~java
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-log4j2</artifactId>
+</dependency>
+<!-- 去除logback的依赖包 -->
+<exclusions>
+	<exclusion>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-logging</artifactId>
+	</exclusion>
+</exclusions>
+~~~
+
+在classpath添加log4j2.xml或者log4j2-spring.xml（spring boot 默认加载）。
+
+#### log4j2多环境配置：
+
+可以结合多环境配置的配置文件，利用`logging.config=classpath:log4j2-dev.xml`，结构如下：
+
+![](logback\log02.png)
+
+application.properties
+
+~~~java
+#配置文件环境配置
+spring.profiles.active = dev
+~~~
+
+application-dev.properties
+
+~~~java
+logging.config=classpath:log4j2-dev.xml
+~~~
+
+log4j2-dev.xml
+
+~~~java
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <properties>
+        <!-- 文件输出格式 -->
+        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} |-%-5level [%thread] %c [%L] -| %msg%n</property>
+    </properties>
+
+    <appenders>
+        <Console name="CONSOLE" target="system_out">
+            <PatternLayout pattern="${PATTERN}" />
+        </Console>
+    </appenders>
+
+    <loggers>
+        <logger name="com.dodd.demo" level="debug" />
+        <root level="info">
+            <appenderref ref="CONSOLE" />
+        </root>
+    </loggers>
+
+</configuration>
+~~~
+
+### 总结
+
+性能比较：Log4J2 和 Logback 都优于 log4j（不推荐使用）
+
+配置方式：Logback最简洁，spring boot默认，推荐使用

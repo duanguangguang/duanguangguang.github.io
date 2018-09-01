@@ -215,6 +215,15 @@ public class DemoController {
 // dodd 爱好是：[看电影, 桌游]
 ~~~
 
+### 时间格式化
+
+~~~java
+# 日期格式化
+spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+# 时区
+spring.jackson.time-zone=Asia/Chongqing
+~~~
+
 ### 外部配置
 
 Spring Boot是基于jar包运行的，打成jar包的程序可以直接通过下面命令运行：

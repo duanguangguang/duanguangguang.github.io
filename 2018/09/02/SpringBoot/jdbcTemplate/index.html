@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Dodd">
 <meta property="og:description" content="介绍pom文件引入： 12345678910&amp;lt;!-- jdbc --&amp;gt;&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-jdbc&amp;lt;/artifactId&amp;gt;&amp;lt;/dependency&amp;g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-02T03:25:14.974Z">
+<meta property="og:updated_time" content="2018-09-02T09:08:18.495Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot（十一）：关系型数据库之jdbcTemplate">
 <meta name="twitter:description" content="介绍pom文件引入： 12345678910&amp;lt;!-- jdbc --&amp;gt;&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-jdbc&amp;lt;/artifactId&amp;gt;&amp;lt;/dependency&amp;g">
@@ -445,6 +445,7 @@
 <li>数据连接池默认使用 tomcat-jdbc </li>
 <li>连接池的配置： spring.datasource.tomcat.*  </li>
 </ol>
+<p>设置日志打印：<logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug"></logger></p>
 <a id="more"></a>
 <p>实体类：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SbUser</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Date createTime;</span><br><span class="line">    <span class="comment">// 省略getter/setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -590,7 +591,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-count">112</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

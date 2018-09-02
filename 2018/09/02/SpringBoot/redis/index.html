@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="介绍">
+<meta name="description" content="介绍pom文件引入： 1234&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-data-redis&amp;lt;/artifactId&amp;gt;&amp;lt;/dependency&amp;gt;">
 <meta name="keywords" content="SpringBoot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Boot（十四）：NoSql数据库redis">
 <meta property="og:url" content="http://yoursite.com/2018/09/02/SpringBoot/redis/index.html">
 <meta property="og:site_name" content="Dodd">
-<meta property="og:description" content="介绍">
+<meta property="og:description" content="介绍pom文件引入： 1234&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-data-redis&amp;lt;/artifactId&amp;gt;&amp;lt;/dependency&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-02T05:40:31.259Z">
+<meta property="og:updated_time" content="2018-09-02T08:01:35.597Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot（十四）：NoSql数据库redis">
-<meta name="twitter:description" content="介绍">
+<meta name="twitter:description" content="介绍pom文件引入： 1234&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;    &amp;lt;artifactId&amp;gt;spring-boot-starter-data-redis&amp;lt;/artifactId&amp;gt;&amp;lt;/dependency&amp;gt;">
 
 
 
@@ -438,7 +438,15 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><a id="more"></a>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>pom文件引入：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>添加配置：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#redis不配置会读取默认配置</span><br><span class="line">spring.redis.host=localhost</span><br><span class="line">spring.redis.port=<span class="number">6379</span></span><br><span class="line">#spring.redis.password=123456</span><br><span class="line">#spring.redis.database=0</span><br><span class="line">#spring.redis.pool.max-active=8</span><br><span class="line">#spring.redis.pool.max-idle=8</span><br><span class="line">#spring.redis.pool.max-wait=-1</span><br><span class="line">#spring.redis.pool.min-idle=0</span><br><span class="line">#spring.redis.timeout=0</span><br></pre></td></tr></table></figure>
+<p>实现类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisComponent</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(String key, String value)</span> </span>&#123;</span><br><span class="line">        ValueOperations&lt;String, String&gt; ops = <span class="keyword">this</span>.stringRedisTemplate.opsForValue();</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.stringRedisTemplate.hasKey(key)) &#123;</span><br><span class="line">            ops.set(key, value);</span><br><span class="line">            System.out.println(<span class="string">"set key success"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 存在则打印之前的 value 值</span></span><br><span class="line">            System.out.println(<span class="string">"this key = "</span> + ops.get(key));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.stringRedisTemplate.opsForValue().get(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">del</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> RedisComponent redisComponent;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    redisComponent.set(<span class="string">"dodd"</span>, <span class="string">"hello world"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(redisComponent.get(<span class="string">"dodd"</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">del</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    redisComponent.del(<span class="string">"dodd"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -569,7 +577,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-count">112</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

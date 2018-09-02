@@ -28,6 +28,8 @@ pom文件引入：
 2. 数据连接池默认使用 tomcat-jdbc 
 3. 连接池的配置： spring.datasource.tomcat.*  
 
+设置日志打印：<logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug"/>
+
 <!-- more -->
 
 实体类：

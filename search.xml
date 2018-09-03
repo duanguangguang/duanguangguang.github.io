@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[Spring Boot（十九）：异步消息AMQP（RabbitMQ）]]></title>
     <url>%2F2018%2F09%2F02%2FSpringBoot%2Frabbitmq%2F</url>
-    <content type="text"><![CDATA[介绍]]></content>
+    <content type="text"><![CDATA[介绍pom文件引入： 1234&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt;&lt;/dependency&gt; 注解启用：@EnableRabbit AmqpConfiguration： 123456789import org.springframework.amqp.core.Queue;@Configurationpublic class AmqpConfiguration &#123; @Bean public Queue queue() &#123; return new Queue("dodd.queue"); &#125;&#125; AmqpComponent： 1234567891011121314@Componentpublic class AmqpComponent &#123; @Autowired private AmqpTemplate amqpTemplate; public void send(String msg) &#123; this.amqpTemplate.convertAndSend("dodd.queue", msg); &#125; @RabbitListener(queues = "dodd.queue") public void receiveQueue(String text) &#123; System.out.println("接受到：" + text); &#125;&#125; 测试类： 1234567@Autowiredprivate AmqpComponent amqpComponent;@Testpublic void send() &#123; amqpComponent.send("hello world");&#125;]]></content>
       <categories>
         <category>SpringBoot</category>
       </categories>
@@ -14,7 +14,7 @@
   <entry>
     <title><![CDATA[Spring Boot（十八）：异步消息JMS（ActiveMQ）]]></title>
     <url>%2F2018%2F09%2F02%2FSpringBoot%2Factivemq%2F</url>
-    <content type="text"><![CDATA[介绍]]></content>
+    <content type="text"><![CDATA[介绍pom文件引入： 1234&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-activemq&lt;/artifactId&gt;&lt;/dependency&gt; 启用JMS注解：@EnableJms mq配置： 123456789import javax.jms.Queue;@Configurationpublic class JmsConfiguration &#123; @Bean public Queue queue() &#123; return new ActiveMQQueue("dodd.queue"); &#125;&#125; 实现类： 1234567891011121314151617@Componentpublic class JmsComponent &#123; @Autowired private JmsMessagingTemplate jmsMessagingTemplate; @Autowired private Queue queue; public void send(String msg) &#123; this.jmsMessagingTemplate.convertAndSend(this.queue, msg); &#125; @JmsListener(destination = "dodd.queue") public void receiveQueue(String text) &#123; System.out.println("接受到：" + text); &#125;&#125; 配置文件： 12#放在缓存中，不用连接真正的mqspring.activemq.in-memory=true 测试类： 1234567@Autowiredprivate JmsComponent jmsComponent;@Testpublic void send() &#123; jmsComponent.send("hello world");&#125;]]></content>
       <categories>
         <category>SpringBoot</category>
       </categories>

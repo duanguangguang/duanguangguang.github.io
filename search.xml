@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Spring Boot（二十六）：基于HTTP的监控]]></title>
+    <url>%2F2018%2F09%2F09%2FSpringBoot%2Fhttpjk%2F</url>
+    <content type="text"><![CDATA[介绍]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Boot（二十五）：springBoot集成Swagger]]></title>
+    <url>%2F2018%2F09%2F09%2FSpringBoot%2Fswagger%2F</url>
+    <content type="text"><![CDATA[介绍]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Boot（二十四）：springBoot集成Druid]]></title>
+    <url>%2F2018%2F09%2F09%2FSpringBoot%2Fdruid%2F</url>
+    <content type="text"><![CDATA[介绍]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Boot（二十三）：springBoot集成mybatis]]></title>
+    <url>%2F2018%2F09%2F09%2FSpringBoot%2Fmybatis%2F</url>
+    <content type="text"><![CDATA[介绍]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Boot（二十二）：spring session实现集群-redis]]></title>
+    <url>%2F2018%2F09%2F09%2FSpringBoot%2Fspsession%2F</url>
+    <content type="text"><![CDATA[介绍Spring Boot中spring session支持方式有： JDBC MongoDB Redis Hazelcast HashMap session集群的解决方案： 扩展指定server 利用Servlet容器提供的插件功能，自定义HttpSession的创建和管理策略，并通过配置的方式替换掉默认的策略。缺点：耦合Tomcat/Jetty等Servlet容器，不能随意更换容器。 利用Filter 利用HttpServletRequestWrapper，实现自己的 getSession()方法，接管创建和管理Session数据的工作。spring-session就是通过这样的思路实现的。 pom文件引入： 12345678910&lt;!-- spring session --&gt;&lt;dependency&gt; &lt;groupId&gt;org.springframework.session&lt;/groupId&gt; &lt;artifactId&gt;spring-session&lt;/artifactId&gt;&lt;/dependency&gt;&lt;!-- redis --&gt;&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-redis&lt;/artifactId&gt;&lt;/dependency&gt; 配置： 123456# spring session使用存储类型spring.session.store-type=redis# spring session刷新模式：默认on-savespring.session.redis.flush-mode=on-save# session超时时间，单位秒server.session.timeout=30 测试： 定义两个项目，更改配置文件spring.session.store-type=redis和spring.session.store-type=none比较两个文件的sessionID： 123456@RequestMapping(value = "/index")public String index(ModelMap map, HttpSession httpSession) &#123; map.put("title", "第一个应用：sessionID=" + httpSession.getId()); System.out.println("sessionID=" + httpSession.getId()); return "index";&#125;]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Boot（二十一）：发送邮件（多账号轮询发送）]]></title>
+    <url>%2F2018%2F09%2F09%2FSpringBoot%2Fsendmail%2F</url>
+    <content type="text"><![CDATA[介绍pom文件引入： 1234&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-mail&lt;/artifactId&gt;&lt;/dependency&gt; 配置： 1234spring.mail.host = spring.mail.username = spring.mail.password =spring.mail.properties.mail.smtp.auth = true 多账号实现： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162@Configuration@EnableConfigurationProperties(MailProperties.class)public class DoddJavaMailSenderImpl extends JavaMailSenderImpl implements JavaMailSender &#123; private ArrayList&lt;String&gt; usernameList; private ArrayList&lt;String&gt; passwordList; private int currentMailId = 0; private final MailProperties properties; public DoddJavaMailSenderImpl(MailProperties properties) &#123; this.properties = properties; // 初始化账号 if (usernameList == null) usernameList = new ArrayList&lt;String&gt;(); String[] userNames = this.properties.getUsername().split(","); if (userNames != null) &#123; for (String user : userNames) &#123; usernameList.add(user); &#125; &#125; // 初始化密码 if (passwordList == null) passwordList = new ArrayList&lt;String&gt;(); String[] passwords = this.properties.getPassword().split(","); if (passwords != null) &#123; for (String pw : passwords) &#123; passwordList.add(pw); &#125; &#125; &#125; @Override protected void doSend(MimeMessage[] mimeMessage, Object[] object) throws MailException &#123; super.setUsername(usernameList.get(currentMailId)); super.setPassword(passwordList.get(currentMailId)); // 设置编码和各种参数 super.setHost(this.properties.getHost()); super.setDefaultEncoding(this.properties.getDefaultEncoding().name()); super.setJavaMailProperties(asProperties(this.properties.getProperties())); super.doSend(mimeMessage, object); // 轮询 currentMailId = (currentMailId + 1) % usernameList.size(); &#125; private Properties asProperties(Map&lt;String, String&gt; source) &#123; Properties properties = new Properties(); properties.putAll(source); return properties; &#125; @Override public String getUsername() &#123; return usernameList.get(currentMailId); &#125;&#125; 实现类： 123456789101112131415161718192021222324252627282930313233343536373839404142@Componentpublic class DoddJavaMailComponent &#123; private static final String template = "mail/dodd.ftl"; @Autowired private FreeMarkerConfigurer freeMarkerConfigurer; @Autowired private DoddJavaMailSenderImpl javaMailSender; public void sendMail(String email) &#123; Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;(); map.put("email", email); try &#123; String text = getTextByTemplate(template, map); send(email, text); &#125; catch (IOException | TemplateException e) &#123; e.printStackTrace(); &#125; catch (MessagingException e) &#123; e.printStackTrace(); &#125; &#125; //使用模板方式 private String getTextByTemplate(String template, Map&lt;String, Object&gt; model) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException, TemplateException &#123; return FreeMarkerTemplateUtils.processTemplateIntoString(freeMarkerConfigurer.getConfiguration().getTemplate(template), model); &#125; private String send(String email, String text) throws MessagingException, UnsupportedEncodingException &#123; MimeMessage message = javaMailSender.createMimeMessage(); MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8"); InternetAddress from = new InternetAddress(); from.setAddress(javaMailSender.getUsername()); from.setPersonal("Dodd", "UTF-8"); helper.setFrom(from); helper.setTo(email); helper.setSubject("测试邮件"); helper.setText(text, true); javaMailSender.send(message); return text; &#125;&#125; controller： 12345678910111213@RestController@RequestMapping("/api")public class MailController &#123; @Autowired private DoddJavaMailComponent component; @RequestMapping(value = "mail") public String mail(String email) &#123; component.sendMail(email); return "success"; &#125;&#125;]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Boot（二十）：调用REST服务]]></title>
+    <url>%2F2018%2F09%2F09%2FSpringBoot%2Frest%2F</url>
+    <content type="text"><![CDATA[介绍pom文件引入： 1234&lt;dependency&gt; &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt; &lt;artifactId&gt;httpclient&lt;/artifactId&gt;&lt;/dependency&gt; 代码实现： 1234567891011121314151617181920212223242526272829303132333435@RestController@RequestMapping(value = "/rest", method = RequestMethod.POST)public class RestController &#123; @Autowired private UserLogCache userLogCache; @RequestMapping(value = "/update") public UserLog update(@RequestBody JsonNode jsonNode) &#123; System.out.println("jsonNode=" + jsonNode); UserLog bean = userLogCache.selectById(jsonNode.get("id").asInt(1)); if(bean == null)&#123; bean = new UserLog(); &#125; bean.setUserName("测试"); bean.setCreateTime(new Date()); bean.setUserIp("192.168.1.1"); userLogCache.updateById(bean); return bean; &#125; @RequestMapping(value = "/update/&#123;id&#125;", method = RequestMethod.GET) public UserLog update2(@PathVariable(value = "id") Integer id) &#123; UserLog bean = userLogCache.selectById(id); if(bean == null)&#123; bean = new UserLog(); &#125; bean.setUserName("测试"); bean.setCreateTime(new Date()); bean.setUserIp("192.168.1.1"); userLogCache.updateById(bean); return bean; &#125;&#125; 测试： 12345678910111213141516@Autowired//springboot会自动注入RestTemplateBuilderprivate RestTemplateBuilder restTemplateBuilder;/** * get请求 */@Testpublic void getForObject() &#123; UserLog bean = restTemplateBuilder.build().getForObject("http://localhost:8080/rest/update/&#123;id&#125;", UserLog.class, 6); System.out.println(bean); Map&lt;String,Object&gt; map = new HashMap&lt;String,Object&gt;(); map.put("id", 7); bean=restTemplateBuilder.build().postForObject("http://localhost:8080/rest/update", map, UserLog.class); System.out.println(bean);&#125; 代理调用实现类： 12345678910111213141516171819202122class ProxyCustomizer implements RestTemplateCustomizer &#123; @Override public void customize(RestTemplate restTemplate) &#123; String proxyHost = "119.29.177.120"; //代理ip int proxyPort = 1080; //代理端口 HttpHost proxy = new HttpHost(proxyHost, proxyPort); HttpClient httpClient = HttpClientBuilder.create().setRoutePlanner(new DefaultProxyRoutePlanner(proxy) &#123; @Override public HttpHost determineProxy(HttpHost target, HttpRequest request, HttpContext context) throws HttpException &#123; System.out.println(target.getHostName());//对hostneme做过滤 return super.determineProxy(target, request, context); &#125; &#125;).build(); HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(httpClient); // 连接超时时间 httpComponentsClientHttpRequestFactory.setConnectTimeout(10000); // 读超时时间 httpComponentsClientHttpRequestFactory.setReadTimeout(60000); restTemplate.setRequestFactory(httpComponentsClientHttpRequestFactory); &#125; &#125; 测试： 12345@Testpublic void getForObject() &#123; String result = restTemplateBuilder.additionalCustomizers(new ProxyCustomizer()).build().getForObject("http://www.baidu.com", String.class); System.out.println(result);&#125; 在线代理：http://ip.zdaye.com/]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Spring Boot（十九）：异步消息AMQP（RabbitMQ）]]></title>
     <url>%2F2018%2F09%2F02%2FSpringBoot%2Frabbitmq%2F</url>
     <content type="text"><![CDATA[介绍pom文件引入： 1234&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt;&lt;/dependency&gt; 注解启用：@EnableRabbit AmqpConfiguration： 123456789import org.springframework.amqp.core.Queue;@Configurationpublic class AmqpConfiguration &#123; @Bean public Queue queue() &#123; return new Queue("dodd.queue"); &#125;&#125; AmqpComponent： 1234567891011121314@Componentpublic class AmqpComponent &#123; @Autowired private AmqpTemplate amqpTemplate; public void send(String msg) &#123; this.amqpTemplate.convertAndSend("dodd.queue", msg); &#125; @RabbitListener(queues = "dodd.queue") public void receiveQueue(String text) &#123; System.out.println("接受到：" + text); &#125;&#125; 测试类： 1234567@Autowiredprivate AmqpComponent amqpComponent;@Testpublic void send() &#123; amqpComponent.send("hello world");&#125;]]></content>

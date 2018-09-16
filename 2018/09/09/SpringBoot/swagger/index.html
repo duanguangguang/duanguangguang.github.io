@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="介绍">
+<meta name="description" content="介绍Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。  http://swagger.io/  Springfox 的前身是 swagger-springmvc，是一个开源的 API doc 框架，可以将我们的 Controller 的 方法以文档的形式展现，基于 Swagger。  http://springfox.github.io/">
 <meta name="keywords" content="SpringBoot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Boot（二十五）：springBoot集成Swagger">
 <meta property="og:url" content="http://yoursite.com/2018/09/09/SpringBoot/swagger/index.html">
 <meta property="og:site_name" content="Dodd">
-<meta property="og:description" content="介绍">
+<meta property="og:description" content="介绍Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。  http://swagger.io/  Springfox 的前身是 swagger-springmvc，是一个开源的 API doc 框架，可以将我们的 Controller 的 方法以文档的形式展现，基于 Swagger。  http://springfox.github.io/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-09T09:02:57.845Z">
+<meta property="og:updated_time" content="2018-09-16T14:16:40.252Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot（二十五）：springBoot集成Swagger">
-<meta name="twitter:description" content="介绍">
+<meta name="twitter:description" content="介绍Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。  http://swagger.io/  Springfox 的前身是 swagger-springmvc，是一个开源的 API doc 框架，可以将我们的 Controller 的 方法以文档的形式展现，基于 Swagger。  http://springfox.github.io/">
 
 
 
@@ -438,7 +438,48 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><a id="more"></a>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><strong>Swagger</strong> 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。</p>
+<p> <a href="http://swagger.io/" target="_blank" rel="noopener">http://swagger.io/</a> </p>
+<p><strong>Springfox</strong> 的前身是 swagger-springmvc，是一个开源的 API doc 框架，可以将我们的 Controller 的 方法以文档的形式展现，基于 Swagger。 </p>
+<p><a href="http://springfox.github.io/springfox/" target="_blank" rel="noopener">http://springfox.github.io/springfox/</a>  </p>
+<a id="more"></a>
+<p>pom文件引入：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Swagger --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;io.springfox&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;2.6.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;io.springfox&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;2.6.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>Swagger配置类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger</span>2</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Swagger2Configuration</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Docket <span class="title">accessToken</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">"api"</span>)<span class="comment">// 定义组</span></span><br><span class="line">				.select() <span class="comment">// 选择那些路径和api会生成document</span></span><br><span class="line">				.apis(RequestHandlerSelectors.basePackage(<span class="string">"com.dodd.controller"</span>)) <span class="comment">// 拦截的包路径</span></span><br><span class="line">				.paths(regex(<span class="string">"/api/.*"</span>))<span class="comment">// 拦截的接口路径</span></span><br><span class="line">				.build() <span class="comment">// 创建</span></span><br><span class="line">				.apiInfo(apiInfo()); <span class="comment">// 配置说明</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> ApiInfo <span class="title">apiInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> ApiInfoBuilder()<span class="comment">//</span></span><br><span class="line">				.title(<span class="string">"dodd"</span>)<span class="comment">// 标题</span></span><br><span class="line">				.description(<span class="string">"spring boot swagger"</span>)<span class="comment">// 描述</span></span><br><span class="line">				.termsOfServiceUrl(<span class="string">"http://www.baidu.com"</span>)<span class="comment">//</span></span><br><span class="line">				.contact(<span class="keyword">new</span> Contact(<span class="string">"dodd"</span>, <span class="string">"http://www.baidu.com"</span>, <span class="string">"1234567@qq.com"</span>))<span class="comment">// 联系</span></span><br><span class="line">				<span class="comment">//.license("Apache License Version 2.0")// 开源协议</span></span><br><span class="line">				<span class="comment">//.licenseUrl("https://github.com/springfox/springfox/blob/master/LICENSE")// 地址</span></span><br><span class="line">				.version(<span class="string">"1.0"</span>)<span class="comment">// 版本</span></span><br><span class="line">				.build();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>自定义注解的使用：</p>
+<ol>
+<li><p>@ApiIgnore </p>
+<p>忽略暴露的 api 。例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ApiIgnore</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"/delete"</span>, method = RequestMethod.GET)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">delete</span><span class="params">(@RequestParam(defaultValue = <span class="string">"1"</span>)</span> Integer id) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> doddMappper.deleteByPrimaryKey(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>@ApiOperation(value = “查找”, notes = “根据用户 ID 查找用户”)</p>
+<p> 添加说明  。例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ApiOperation</span>(value = <span class="string">"查找"</span>, notes = <span class="string">"根据用户ID查找用户"</span>)</span><br><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"/select"</span>, method = RequestMethod.GET)</span><br><span class="line"><span class="function"><span class="keyword">public</span> RoncooUser <span class="title">get</span><span class="params">(@RequestParam(defaultValue = <span class="string">"1"</span>)</span> Integer id) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> doddMappper.selectByPrimaryKey(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>其他注解：</p>
+<ol>
+<li><p>@Api</p>
+<p> 用在类上，说明该类的作用 </p>
+</li>
+<li><p>@ApiImplicitParams</p>
+<p> 用在方法上包含一组参数说明 </p>
+</li>
+<li><p>@ApiResponses</p>
+<p> 用于表示一组响应  </p>
+</li>
+<li><p>@ApiResponse</p>
+<p> 用在@ApiResponses 中，一般用于表达一个错误的响应信息 code：数字，例如 400 message：信息，例如”请求参数没填好” response：抛出异常的类 </p>
+</li>
+<li><p>@ApiModel</p>
+<p> 描述一个 Model 的信息（这种一般用在 post 创建的时候，使用@RequestBody 这样的场 景，请求参数无法使用@ApiImplicitParam 注解进行描述的时候） </p>
+</li>
+<li><p>@ApiModelProperty</p>
+<p> 描述一个 model 的属性  </p>
+</li>
+</ol>
+<p><a href="https://github.com/swagger-api/swagger-core/wiki/Annotations" target="_blank" rel="noopener">更多</a></p>
 
       
     </div>

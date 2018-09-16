@@ -440,7 +440,15 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>利用Spring Boot的特性进行监控你的应用：</p>
+<ol>
+<li><p>通过HTTP（最简单方便）</p>
+</li>
+<li><p>通过JMX</p>
+</li>
+<li><p>通过远程shell</p>
+</li>
+</ol>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/09/09/SpringBoot/httpjk/#more" rel="contents">
@@ -608,7 +616,10 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><strong>Swagger</strong> 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。</p>
+<p> <a href="http://swagger.io/" target="_blank" rel="noopener">http://swagger.io/</a> </p>
+<p><strong>Springfox</strong> 的前身是 swagger-springmvc，是一个开源的 API doc 框架，可以将我们的 Controller 的 方法以文档的形式展现，基于 Swagger。 </p>
+<p><a href="http://springfox.github.io/springfox/" target="_blank" rel="noopener">http://springfox.github.io/springfox/</a>  </p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/09/09/SpringBoot/swagger/#more" rel="contents">
@@ -776,7 +787,74 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Druid为监控而生的数据库连接池，主要功能对比：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Druid</th>
+<th>BoneCP</th>
+<th>DBCP</th>
+<th>C3P0</th>
+<th>Proxool</th>
+<th>JBoss</th>
+<th>Tomcat-Jdbc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LUR</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td>？</td>
+</tr>
+<tr>
+<td>PSCache</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>√</td>
+</tr>
+<tr>
+<td>PSCache-Oracle-Optimized</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ExceptionSorter</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>更新维护</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>？</td>
+<td>√</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/alibaba/druid" target="_blank" rel="noopener">文档</a></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/09/09/SpringBoot/druid/#more" rel="contents">

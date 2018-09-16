@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="介绍">
+<meta name="description" content="介绍Druid为监控而生的数据库连接池，主要功能对比：     Druid BoneCP DBCP C3P0 Proxool JBoss Tomcat-Jdbc     LUR √  √  √ √ ？   PSCache √ √ √ √   √   PSCache-Oracle-Optimized √         ExceptionSorter √     √    更新维护 √     ？">
 <meta name="keywords" content="SpringBoot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Boot（二十四）：springBoot集成Druid">
 <meta property="og:url" content="http://yoursite.com/2018/09/09/SpringBoot/druid/index.html">
 <meta property="og:site_name" content="Dodd">
-<meta property="og:description" content="介绍">
+<meta property="og:description" content="介绍Druid为监控而生的数据库连接池，主要功能对比：     Druid BoneCP DBCP C3P0 Proxool JBoss Tomcat-Jdbc     LUR √  √  √ √ ？   PSCache √ √ √ √   √   PSCache-Oracle-Optimized √         ExceptionSorter √     √    更新维护 √     ？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-09T09:01:23.363Z">
+<meta property="og:updated_time" content="2018-09-16T13:57:45.758Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot（二十四）：springBoot集成Druid">
-<meta name="twitter:description" content="介绍">
+<meta name="twitter:description" content="介绍Druid为监控而生的数据库连接池，主要功能对比：     Druid BoneCP DBCP C3P0 Proxool JBoss Tomcat-Jdbc     LUR √  √  √ √ ？   PSCache √ √ √ √   √   PSCache-Oracle-Optimized √         ExceptionSorter √     √    更新维护 √     ？">
 
 
 
@@ -438,7 +438,100 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><a id="more"></a>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Druid为监控而生的数据库连接池，主要功能对比：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Druid</th>
+<th>BoneCP</th>
+<th>DBCP</th>
+<th>C3P0</th>
+<th>Proxool</th>
+<th>JBoss</th>
+<th>Tomcat-Jdbc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LUR</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td>？</td>
+</tr>
+<tr>
+<td>PSCache</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>√</td>
+</tr>
+<tr>
+<td>PSCache-Oracle-Optimized</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ExceptionSorter</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>更新维护</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>？</td>
+<td>√</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/alibaba/druid" target="_blank" rel="noopener">文档</a></p>
+<a id="more"></a>
+<p>pom文件引入：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;druid&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;1.0.26&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>Druid配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DruidConfiguration</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@ConditionalOnClass</span>(DruidDataSource.class)</span><br><span class="line">    <span class="meta">@ConditionalOnProperty</span>(name = <span class="string">"spring.datasource.type"</span>, havingValue = <span class="string">"com.alibaba.druid.pool.DruidDataSource"</span>, matchIfMissing = <span class="keyword">true</span>)</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Druid</span> <span class="keyword">extends</span> <span class="title">DruidConfiguration</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Bean</span></span><br><span class="line">        <span class="meta">@ConfigurationProperties</span>(<span class="string">"spring.datasource.druid"</span>)</span><br><span class="line">        <span class="function"><span class="keyword">public</span> DruidDataSource <span class="title">dataSource</span><span class="params">(DataSourceProperties properties)</span> </span>&#123;</span><br><span class="line">            DruidDataSource druidDataSource = (DruidDataSource) properties.initializeDataSourceBuilder().type(DruidDataSource.class).build();</span><br><span class="line">            DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(properties.determineUrl());</span><br><span class="line">            String validationQuery = databaseDriver.getValidationQuery();</span><br><span class="line">            <span class="keyword">if</span> (validationQuery != <span class="keyword">null</span>) &#123;</span><br><span class="line">                druidDataSource.setValidationQuery(validationQuery);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> druidDataSource;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>监控：</p>
+<ol>
+<li><p>配置servlet</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@WebServlet</span>(urlPatterns = &#123; <span class="string">"/druid/*"</span> &#125;, initParams = &#123; <span class="meta">@WebInitParam</span>(name = <span class="string">"loginUsername"</span>, value = <span class="string">"dodd"</span>), <span class="meta">@WebInitParam</span>(name = <span class="string">"loginPassword"</span>, value = <span class="string">"dodd"</span>) &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DruidStatViewServlet</span> <span class="keyword">extends</span> <span class="title">StatViewServlet</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>filter</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@WebFilter</span>(filterName = <span class="string">"druidWebStatFilter"</span>, urlPatterns = <span class="string">"/*"</span>, initParams = &#123; <span class="meta">@WebInitParam</span>(name = <span class="string">"exclusions"</span>, value = <span class="string">"*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"</span>) &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DruidWebStatFilter</span> <span class="keyword">extends</span> <span class="title">WebStatFilter</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>配置文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># mysql</span><br><span class="line">spring.datasource.url=</span><br><span class="line">spring.datasource.username=</span><br><span class="line">spring.datasource.password=</span><br><span class="line">spring.datasource.driver-<span class="class"><span class="keyword">class</span>-<span class="title">name</span></span>=com.mysql.jdbc.Driver</span><br><span class="line">spring.datasource.type=com.alibaba.druid.pool.DruidDataSource</span><br><span class="line">#spring.datasource.type=org.apache.tomcat.jdbc.pool.DataSource</span><br><span class="line">#初始化连接大小</span><br><span class="line">spring.datasource.druid.initial-size=<span class="number">8</span></span><br><span class="line">#最小空闲连接数</span><br><span class="line">spring.datasource.druid.min-idle=<span class="number">5</span></span><br><span class="line">#最大连接数</span><br><span class="line">spring.datasource.druid.max-active=<span class="number">10</span></span><br><span class="line">#查询超时时间</span><br><span class="line">spring.datasource.druid.query-timeout=<span class="number">6000</span></span><br><span class="line">#事务查询超时时间</span><br><span class="line">spring.datasource.druid.transaction-query-timeout=<span class="number">6000</span></span><br><span class="line">#关闭空闲连接超时时间</span><br><span class="line">spring.datasource.druid.remove-abandoned-timeout=<span class="number">1800</span></span><br></pre></td></tr></table></figure>
+<p>测试：<a href="http://localhost:8080/druid/index.html" target="_blank" rel="noopener">http://localhost:8080/druid/index.html </a></p>
+<p>sql监控配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#filter类名:stat,config,encoding,logging</span><br><span class="line">spring.datasource.druid.filter-<span class="class"><span class="keyword">class</span>-<span class="title">names</span></span>=stat</span><br><span class="line">spring.datasource.druid.filters=stat,config</span><br></pre></td></tr></table></figure>
+<p>spring监控配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ImportResource</span>(locations = &#123; <span class="string">"classpath:druid-bean.xml"</span> &#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>druid-bean.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">xmlns:aop</span>=<span class="string">"http://www.springframework.org/schema/aop"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">xsi:schemaLocation</span>=<span class="string">"</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">		http://www.springframework.org/schema/aop</span></span></span><br><span class="line"><span class="tag"><span class="string">		http://www.springframework.org/schema/aop/spring-aop.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">&lt;!-- 配置_Druid和Spring关联监控配置 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"druid-stat-interceptor"</span></span></span><br><span class="line"><span class="tag">		<span class="attr">class</span>=<span class="string">"com.alibaba.druid.support.spring.stat.DruidStatInterceptor"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">&lt;!-- 方法名正则匹配拦截配置 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"druid-stat-pointcut"</span> <span class="attr">class</span>=<span class="string">"org.springframework.aop.support.JdkRegexpMethodPointcut"</span></span></span><br><span class="line"><span class="tag">		<span class="attr">scope</span>=<span class="string">"prototype"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"patterns"</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">value</span>&gt;</span>com.dodd.mapper.*<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="tag">&lt;<span class="name">aop:config</span> <span class="attr">proxy-target-class</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"druid-stat-interceptor"</span></span></span><br><span class="line"><span class="tag">			<span class="attr">pointcut-ref</span>=<span class="string">"druid-stat-pointcut"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
     </div>

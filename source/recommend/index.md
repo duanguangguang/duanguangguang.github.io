@@ -69,6 +69,16 @@ date: 2017-12-09 17:32:33
 
 [AOP之AspectJ框架的使用](http://www.cnblogs.com/whgk/p/6627187.html)
 
+### Spring Boot
+
+[Spring Boot 干货系列](http://tengj.top/tags/Spring-Boot/)
+
+[Spring Boot 系列文章](http://www.ityouknow.com/spring-boot.html)
+
+### Spring Cloud
+
+[史上最简单的 SpringCloud 教程 | 终章](https://blog.csdn.net/forezp/article/details/70148833)
+
 ### 数据结构与算法
 
 [常见排序算法](http://bubkoo.com/2014/01/17/sort-algorithm/archives/)

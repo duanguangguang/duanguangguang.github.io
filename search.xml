@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Spring Cloud（七）：分布式配置中心Spring Cloud Config]]></title>
+    <url>%2F2018%2F10%2F07%2FSpringCloud%2Fconfiguration%2F</url>
+    <content type="text"><![CDATA[介绍]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Cloud（六）：路由网关Zuul]]></title>
+    <url>%2F2018%2F10%2F05%2FSpringCloud%2Fzuul%2F</url>
+    <content type="text"><![CDATA[介绍 参考资料 使用 API 网关构建微服务]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Cloud（五）：声明式Feign调用]]></title>
+    <url>%2F2018%2F10%2F04%2FSpringCloud%2Ffeign%2F</url>
+    <content type="text"><![CDATA[介绍Feign是一个声明式的web服务客户端，它使得写web服务变得更简单。使用Feign,只需要创建一个接口并注解。它具有可插拔的注解特性，包括Feign 注解和JAX-RS注解。总结： Feign 采用的是基于接口的注解 Feign 整合了ribbon，具有负载均衡的能力 Feign 整合了Hystrix，具有熔断的能力 feign调用 在调用的时候只需要把DeptClientService注册为bean，像调用本地方法一样。 服务降级 服务降级的逻辑的实现只需要为Feign客户端的定义接口编写一个具体实现类或者实现FallbackFactory，加上泛型，其中每个重写的方法的实现逻辑都可以用来定义相应的服务降级逻辑 feign禁用hystrix 禁用全局 配置：feign.hystrix.enabled = false，可以解决Feign调用超时的问题 禁用单个 加个配置代码Feign.Builder，默认是HystrixFeifn.Builder 参考资料 JAX-RS与JAX-WS]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Cloud（四）：断路器Hystrix]]></title>
+    <url>%2F2018%2F10%2F03%2FSpringCloud%2Fhystix%2F</url>
+    <content type="text"><![CDATA[介绍雪崩效应：在高并发的情况下，由于单个服务的延迟，可能导致所有的请求都处于延迟状态，甚至在几秒钟就使服务处于负载饱和的状态，资源耗尽，直到不可用，最终导致这个分布式系统都不可用，这就是“雪崩”。Hystrix实现了断路器、线程隔离等一系列服务保护功能。 Hystrix工作原理 超时机制 通过网络请求其他服务时，都必须设置超时时间。 Fallback Fallback(失败快速返回)：当某个服务发生故障之后，通过断路器的故障监控， 向调用方返回一个错误响应， 而不是长时间的等待。这样就不会使得线程因调用故障服务被长时间占用不释放，避免了故障在分布式系统中的蔓延。 1@HystrixCommand(fallbackMethod = "findByIdFallback") 线程池隔离 资源/依赖隔离(线程池隔离)：它会为每一个依赖服务创建一个独立的线程池，这样某个依赖服务出现延迟过高的情况，也只是对该依赖服务的调用产生影响， 而不会拖慢其他的依赖服务。commandProperties属性：获取线程本地上下文，使用不同的隔离策略将Hystrix切换为使用与调用者相同的线程 1@HystrixCommand(fallbackMethod = "findByIdFallback", commandProperties = @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")) THREAD：（默认）线程隔离策略，使用一个隔离的线程（不同的线程） SEMAPHOPE：信号量，使用请求的线程，并且并发请求会受到信号量的限制（同一个线程） 关键参数 Hystrix提供几个熔断关键参数：滑动窗口大小（20）、 熔断器开关间隔（5s）、错误率（50%） 每当20个请求中，有50%失败时，熔断器就会打开，此时再调用此服务，将会直接返回失败，不再调远程服务。 直到5s钟之后，重新检测该触发条件，判断是否把熔断器关闭，或者继续打开（分流：用少数流量请求失败的服务，查看服务状态）。 Dashboard与Turbine使用Turbine模拟Dashboard监控集群 参考资料 服务熔断、服务降级]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Cloud（三）：客户端负载均衡Ribbon]]></title>
+    <url>%2F2018%2F10%2F02%2FSpringCloud%2Fribbon%2F</url>
+    <content type="text"><![CDATA[介绍Ribbon是Netflix发布的云中间层服务开源项目，其主要功能是提供客户端侧负载均衡算法。简单的说，Ribbon是一个客户端负载均衡器，我们可以在配置文件中列出Load Balancer后面所有的机器，Ribbon会自动的帮助你基于某种规则（如简单轮询，随机连接等）去连接这些机器，我们也很容易使用Ribbon实现自定义的负载均衡算法。 Ribbon工作原理 Ribbon工作时分为两步： 第一步先选择 Eureka Server, 它优先选择在同一个Zone且负载较少的Server； 第二步再根据用户指定的策略，在从Server取到的服务注册列表中选择一个地址。其中Ribbon提供了多种策略，例如轮询round robin、随机Random、根据响应时间加权等。 负载均衡 客户端负载均衡（Ribbon）：服务实例的清单在客户端，客户端进行负载均衡算法分配； 服务端负载均衡（Nginx）：服务实例的清单在服务端，服务器进行负载均衡算法分配 ribbon负载均衡算法 AvailabilityFilteringRule 按可用性进行过滤服务的负载均衡策略。先线性轮询选出服务，通过predicate对象判断可用性 BestAvailableRule extends ClientConfigEnabledRoundRobinRule 从所有的没有断开的服务中，找到请求数量最小的服务 ClientConfigEnabledRoundRobinRule 默认通过RoundRobinRule策略选取服务，策略还不能自定义。这个策略的的目的就是通过继承该类，并且通过对choose的重写，来实现更多的功能 PredicateBasedRule extends ClientConfigEnabledRoundRobinRule 通过调用AbstractServerPredicate实现类的过滤方法来过滤出目标的服务，再通过轮询方法选出一个服务 RandomRule 随机选取负载均衡策略。通过随机Random对象，在所有服务实例数量中随机找一个服务的索引号，然后从上线的服务中获取对应的服务 RetryRule 这个策略默认就是用RoundRobinRule策略选取服务，当然可以通过配置，在构造RetryRule的时候传进想要的策略。为了应对在有可能出现无法选取出服务的情况，比如瞬时断线的情况，那么就要提供一种重试机制，在最大重试时间的限定下重复尝试选取服务，直到选取出一个服务或者超时 RoundRobinRule 线性轮询负载均衡策略。在类中维护了一个原子性的成员变量作为当前服务的索引号，每次在所有服务数量的限制下，就是将服务的索引号加1，到达服务数量限制时再从头开始 WeightedResponseTimeRule extends RoundRobinRule 响应时间作为选取权重的负载均衡策略。响应时间越短的服务被选中的可能性大 自定义ribbon负载均衡策略 使用@RibbonClient 这里的name属性必须是注册在Eureka Server上的服务名称 定义Configuration配置类 注意事项： FooConfiguration必须是@Configuration，但要注意它不在主应用程序上下文的@ComponentScan中，否则它将由所有@RibbonClients共享。 如果使用@ComponentScan（或@SpringBootApplication），则需要采取措施以避免包含它（例如将其放在单独的非重叠包中，或指定要在@ComponentScan中显式扫描的包）。 参考资料 ribbon负载均衡策略 Nginx 学习 —— 负载均衡]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring Cloud（二）：服务注册发现Eureka]]></title>
+    <url>%2F2018%2F09%2F29%2FSpringCloud%2Feureka%2F</url>
+    <content type="text"><![CDATA[介绍Eureka是Netflix开发的服务发现框架，本身是一个基于REST的服务，主要用于定位运行在AWS域中的中间层服务，以达到负载均衡和中间层服务故障转移的目的。Spring Cloud将它集成在其子项目spring-cloud-netflix中。 服务间调用 将大的系统拆分成小的系统，子系统间远程调用就必须知道IP地址和端口，手动维护IP地址的变更就很麻烦，而在在SpringCloud中一般使用Eureka进行服务发现注册。 服务注册发现创建一个服务发现组件，Eureka服务，将服务消费者和服务提供者都注册到Eureka服务上，Eureka服务维护这些注册服务的信息，包括：服务名和IP地址。 服务消费者和服务提供者都可以拿到Eureka服务的注册清单，服务间相互调用不再通过具体的IP地址，而是通过服务名来调用，服务名一般不会变。 服务发现方式 客户端发现：Eureka, Zk 服务端发现：Consul, nginx Eureka原理 区域（Region）和可用区（Availability Zone，AZ）概念 Eureka原理 Application Service 就相当于服务提供者，Application Client就相当于服务消费者； Make Remote Call，可以简单理解为调用RESTful的接口； us-east-1c、us-east-1d等是zone，它们都属于us-east-1这个region； 由图可知，Eureka包含两个组件：Eureka Server 和 Eureka Client； Eureka Server提供服务注册服务，各个节点启动后，会在Eureka Server中进行注册； Eureka Client是一个Java客户端，用于简化与Eureka Server的交互，客户端同时也具备一个内置的、使用轮询（round-robin）负载算法的负载均衡器； 在应用启动后，将会向Eureka Server发送心跳（默认周期为30秒），如果Eureka Server在多个心跳周期内没有接收到某个节点的心跳，Eureka Server将会从服务注册表中把这个服务节点移除（默认90秒）； Eureka Server之间将会通过复制的方式完成数据的同步（数据一致性）； Eureka还提供了客户端缓存的机制，客户端可以利用缓存中的信息消费其他服务的API。 Eureka的服务注册发现机制Eureka Server 失效剔除：默认每隔一段时间（默认为60秒） 将当前清单中超时（默认为90秒）没有续约的服务剔除出去。 自我保护：EurekaServer 在运行期间，会统计心跳失败的比例在15分钟之内是否低于85%(通常由于网络不稳定导致)。 Eureka Server会将当前的实例注册信息保护起来， 让这些实例不会过期，尽可能保护这些注册信息。 服务提供者 服务注册：启动的时候会通过发送REST请求的方式将自己注册到Eureka Server上，同时带上了自身服务的一些元数据信息。 服务续约：在注册完服务之后，服务提供者会维护一个心跳用来持续告诉Eureka Server: “我还活着 ” 。 服务下线：当服务实例进行正常的关闭操作时，它会触发一个服务下线的REST请求给Eureka Server, 告诉服务注册中心：“我要下线了 ”。 服务消费者 获取服务：当我们启动服务消费者的时候，它会发送一个REST请求给服务注册中心，来获取上面注册的服务清单。 服务调用：服务消费者在获取服务清单后，通过服务名可以获得具体提供服务的实例名和该实例的元数据信息。在进行服务调用的时候，优先访问同处一个Zone中的服务提供方。 参考资料 服务发现方式 AWS的区域和可用区概念解释 分布式中几种服务注册与发现组件的原理与比较]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Spring Cloud（一）：微服务概述]]></title>
     <url>%2F2018%2F09%2F23%2FSpringCloud%2FmicroService%2F</url>
-    <content type="text"><![CDATA[介绍]]></content>
+    <content type="text"><![CDATA[介绍总结微服务以及与微服务相关的一些概念。 单体架构 一个归档包（例如war格式）包含了应用所有功能的应用程序。 集群同一个业务，部署在多个服务器上(不同的服务器运行同样的代码，干同一件事)特点： 通过多台计算机完成同一个工作。达到更高的效率。 两机或多机内容、工作过程等完全一样。如果一台死机，另一台可以起作用。 分布式一个业务分拆多个子业务，部署在不同的服务器上(不同的服务器，运行不同的代码，为了同一个目的)特点： 功能拆分，模块独立。 在使用的时候再将这些独立的模块组合起来就是一个系统。 SOA业务系统分解为多个组件，让每个组件都独立提供离散，自治，可复用的服务能力，通过服务的组合和编排来实现上层的业务流程 特点： 简化维护,降低整体风险,伸缩灵活 微服务架构 翻译：简而言之，微服务架构风格这种开发方法，是以开发一组小型服务的方式来开发一个独立的应用系统的。其中每个小型服务都运行在自己的进程中，并经常采用HTTP资源API这样轻量的机制来相互通信。这些服务围绕业务功能进行构建，并能通过全自动的部署机制来进行独立部署。这些微服务可以使用不同的语言来编写，并且可以使用不同的数据存储技术。对这些微服务我们仅做最低限度的集中管理。 特点：把一个大的服务拆分成多个小的服务，服务拆分具有了分布式基础，再结合集群做负载均衡。 所以微服务可以理解成：分布式+集群 参考资料 微服务定义 分布式、集群、微服务、SOA的区别 分布式与集群的区别 外行人都能看懂的SpringCloud]]></content>
       <categories>
         <category>SpringCloud</category>
       </categories>
@@ -122,9 +188,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Spring Boot（十六）：缓存之EhCach]]></title>
-    <url>%2F2018%2F09%2F02%2FSpringBoot%2Fehcach%2F</url>
-    <content type="text"><![CDATA[介绍Spring boot 支持的缓存： Generic JCache (JSR-107) EhCache 2.x Hazelcast Infinispan Couchbase Redis Caffeine Guava Simple pom文件引入： 123456789&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;&lt;/dependency&gt;&lt;!-- Ehcach --&gt;&lt;dependency&gt; &lt;groupId&gt;net.sf.ehcache&lt;/groupId&gt; &lt;artifactId&gt;ehcache&lt;/artifactId&gt;&lt;/dependency&gt; 配置文件： 12spring.cache.type=ehcachespring.cache.ehcache.config=classpath:config/ehcache.xml ehcache.xml： 12345678910111213&lt;ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd"&gt; &lt;cache name="doddCache" eternal="false" maxEntriesLocalHeap="0" timeToIdleSeconds="200"&gt;&lt;/cache&gt; &lt;!-- eternal： true表示对象永不过期，此时会忽略timeToIdleSeconds和 timeToLiveSeconds属性，默认为false --&gt; &lt;!-- maxEntriesLocalHeap：堆内存中最大缓存对象数， 0表示没有限制 --&gt; &lt;!-- timeToIdleSeconds： 设定允许对象处于空闲状态的最长时间，以秒为单位。 当对象自从最近一次被访问后，如果处于空闲状态的时间超过了timeToIdleSeconds 属性值，这个对象就会过期， EHCache将把它从缓存中清空。只有当eternal属性为 false，该属性才有效。如果该属性值为0，则表示对象可以无限期地处于空闲状态 --&gt;&lt;/ehcache&gt; 接口： 1234567891011121314public interface EhCache &#123; /** * 查询 */ JpaUser selectById(Integer id); /** * 更新 */ JpaUser updateById(JpaUser jpaUser); /** * 删除 */ String deleteById(Integer id);&#125; 实现类： 12345678910111213141516171819202122232425262728293031323334353637383940414243/** * @CacheConfig： 缓存配置 */@CacheConfig(cacheNames = "doddCache")@Repositorypublic class EhCacheImpl implements EhCache &#123; @Autowired private JpaUserDao jpaUserDao; /** * @Cacheable： 应用到读取数据的方法上，即可缓存的方法，如查找方法：先从缓存中读取，如果没有再调 * 用方法获取数据，然后把数据添加到缓存中。 适用于查找 */ @Cacheable(key = "#p0") @Override public JpaUser selectById(Integer id) &#123; System.out.println("查询功能，缓存找不到，直接读库, id=" + id); return jpaUserDao.findOne(id); &#125; /** * @CachePut： 主要针对方法配置，能够根据方法的请求参数对其结果进行缓存，和 @Cacheable 不同的 * 是，它每次都会触发真实方法的调用。 适用于更新和插入 */ @CachePut(key = "#p0") @Override public JpaUser updateById(JpaUser jpaUser) &#123; System.out.println("更新功能，更新缓存，直接写库, id=" + jpaUser); return jpaUserDao.save(jpaUser); &#125; /** * @CacheEvict： 主要针对方法配置，能够根据一定的条件对缓存进行清空。 适用于删除 */ @CacheEvict(key = "#p0") @Override public String deleteById(Integer id) &#123; System.out.println("删除功能，删除缓存，直接写库, id=" + id); return "清空缓存成功"; &#125;&#125; 启动类启用缓存注解：@EnableCaching 测试缓存： 12345678910111213141516171819202122232425@RestController@RequestMapping("/ehcache")public class EhCacheController &#123; @Autowired private EhCache ehCache; @RequestMapping(value = "/select", method = RequestMethod.GET) public JpaUser get(@RequestParam(defaultValue = "2") Integer id) &#123; return ehCache.selectById(id); &#125; @RequestMapping(value = "/update", method = RequestMethod.GET) public JpaUser update(@RequestParam(defaultValue = "2") Integer id) &#123; JpaUser bean = ehCache.selectById(id); bean.setUserName("dodd22"); bean.setCreateTime(new Date()); ehCache.updateById(bean); return bean; &#125; @RequestMapping(value = "/del", method = RequestMethod.GET) public String del(@RequestParam(defaultValue = "1") Integer id) &#123; return ehCache.deleteById(id); &#125;&#125; 缓存测试结果： 查询： 更新：]]></content>
+    <title><![CDATA[Spring Boot（十七）：缓存之Redis]]></title>
+    <url>%2F2018%2F09%2F02%2FSpringBoot%2Fcachredis%2F</url>
+    <content type="text"><![CDATA[介绍EhCache更多的是在本地做缓存，redis做集群比EhCache简单轻量。 pom文件引入： 1234&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-redis&lt;/artifactId&gt;&lt;/dependency&gt; 配置文件： 1spring.cache.type=redis 缓存使用优先级： 默认按照 spring boot 的加载顺序来实现 Generic JCache (JSR-107) EhCache 2.x Hazelcast Infinispan Couchbase Redis Caffeine Guava Simple 配置文件优先于默认 通用注解： redis缓存和EhCache缓存实现使用注解相同。redis做缓存的对象需要序列化。 所以一种实现方式是使用上一节ehcache的缓存策略和测试类测试接口等，测试结果如下： 查找： 更新（2次更新）： redis自定义缓存管理器： 1234567891011121314151617181920212223242526272829303132333435363738394041/** * 自定义缓存管理器. * */@Configurationpublic class RedisCacheConfiguration extends CachingConfigurerSupport &#123; @Bean public CacheManager cacheManager(RedisTemplate&lt;?, ?&gt; redisTemplate) &#123; RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate); // 设置默认的过期时间 cacheManager.setDefaultExpiration(20); Map&lt;String, Long&gt; expires = new HashMap&lt;String, Long&gt;(); // 单独设置 expires.put("doddCache", 200L); cacheManager.setExpires(expires); return cacheManager; &#125; /** * 自定义 key 的生成策略 * 自定义 key. 此方法将会根据类名+方法名+所有参数的值生成唯一的一个 key, * 即使@Cacheable 中的 value 属性一样， key 也会不一样。 */ @Override public KeyGenerator keyGenerator() &#123; return new KeyGenerator() &#123; @Override public Object generate(Object o, Method method, Object... objects) &#123; StringBuilder sb = new StringBuilder(); sb.append(o.getClass().getName()); sb.append(method.getName()); for (Object obj : objects) &#123; sb.append(obj.toString()); &#125; return sb.toString(); &#125; &#125;; &#125;&#125;]]></content>
       <categories>
         <category>SpringBoot</category>
       </categories>
@@ -133,9 +199,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Spring Boot（十七）：缓存之Redis]]></title>
-    <url>%2F2018%2F09%2F02%2FSpringBoot%2Fcachredis%2F</url>
-    <content type="text"><![CDATA[介绍EhCache更多的是在本地做缓存，redis做集群比EhCache简单轻量。 pom文件引入： 1234&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-redis&lt;/artifactId&gt;&lt;/dependency&gt; 配置文件： 1spring.cache.type=redis 缓存使用优先级： 默认按照 spring boot 的加载顺序来实现 Generic JCache (JSR-107) EhCache 2.x Hazelcast Infinispan Couchbase Redis Caffeine Guava Simple 配置文件优先于默认 通用注解： redis缓存和EhCache缓存实现使用注解相同。redis做缓存的对象需要序列化。 所以一种实现方式是使用上一节ehcache的缓存策略和测试类测试接口等，测试结果如下： 查找： 更新（2次更新）： redis自定义缓存管理器： 1234567891011121314151617181920212223242526272829303132333435363738394041/** * 自定义缓存管理器. * */@Configurationpublic class RedisCacheConfiguration extends CachingConfigurerSupport &#123; @Bean public CacheManager cacheManager(RedisTemplate&lt;?, ?&gt; redisTemplate) &#123; RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate); // 设置默认的过期时间 cacheManager.setDefaultExpiration(20); Map&lt;String, Long&gt; expires = new HashMap&lt;String, Long&gt;(); // 单独设置 expires.put("doddCache", 200L); cacheManager.setExpires(expires); return cacheManager; &#125; /** * 自定义 key 的生成策略 * 自定义 key. 此方法将会根据类名+方法名+所有参数的值生成唯一的一个 key, * 即使@Cacheable 中的 value 属性一样， key 也会不一样。 */ @Override public KeyGenerator keyGenerator() &#123; return new KeyGenerator() &#123; @Override public Object generate(Object o, Method method, Object... objects) &#123; StringBuilder sb = new StringBuilder(); sb.append(o.getClass().getName()); sb.append(method.getName()); for (Object obj : objects) &#123; sb.append(obj.toString()); &#125; return sb.toString(); &#125; &#125;; &#125;&#125;]]></content>
+    <title><![CDATA[Spring Boot（十六）：缓存之EhCach]]></title>
+    <url>%2F2018%2F09%2F02%2FSpringBoot%2Fehcach%2F</url>
+    <content type="text"><![CDATA[介绍Spring boot 支持的缓存： Generic JCache (JSR-107) EhCache 2.x Hazelcast Infinispan Couchbase Redis Caffeine Guava Simple pom文件引入： 123456789&lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;&lt;/dependency&gt;&lt;!-- Ehcach --&gt;&lt;dependency&gt; &lt;groupId&gt;net.sf.ehcache&lt;/groupId&gt; &lt;artifactId&gt;ehcache&lt;/artifactId&gt;&lt;/dependency&gt; 配置文件： 12spring.cache.type=ehcachespring.cache.ehcache.config=classpath:config/ehcache.xml ehcache.xml： 12345678910111213&lt;ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd"&gt; &lt;cache name="doddCache" eternal="false" maxEntriesLocalHeap="0" timeToIdleSeconds="200"&gt;&lt;/cache&gt; &lt;!-- eternal： true表示对象永不过期，此时会忽略timeToIdleSeconds和 timeToLiveSeconds属性，默认为false --&gt; &lt;!-- maxEntriesLocalHeap：堆内存中最大缓存对象数， 0表示没有限制 --&gt; &lt;!-- timeToIdleSeconds： 设定允许对象处于空闲状态的最长时间，以秒为单位。 当对象自从最近一次被访问后，如果处于空闲状态的时间超过了timeToIdleSeconds 属性值，这个对象就会过期， EHCache将把它从缓存中清空。只有当eternal属性为 false，该属性才有效。如果该属性值为0，则表示对象可以无限期地处于空闲状态 --&gt;&lt;/ehcache&gt; 接口： 1234567891011121314public interface EhCache &#123; /** * 查询 */ JpaUser selectById(Integer id); /** * 更新 */ JpaUser updateById(JpaUser jpaUser); /** * 删除 */ String deleteById(Integer id);&#125; 实现类： 12345678910111213141516171819202122232425262728293031323334353637383940414243/** * @CacheConfig： 缓存配置 */@CacheConfig(cacheNames = "doddCache")@Repositorypublic class EhCacheImpl implements EhCache &#123; @Autowired private JpaUserDao jpaUserDao; /** * @Cacheable： 应用到读取数据的方法上，即可缓存的方法，如查找方法：先从缓存中读取，如果没有再调 * 用方法获取数据，然后把数据添加到缓存中。 适用于查找 */ @Cacheable(key = "#p0") @Override public JpaUser selectById(Integer id) &#123; System.out.println("查询功能，缓存找不到，直接读库, id=" + id); return jpaUserDao.findOne(id); &#125; /** * @CachePut： 主要针对方法配置，能够根据方法的请求参数对其结果进行缓存，和 @Cacheable 不同的 * 是，它每次都会触发真实方法的调用。 适用于更新和插入 */ @CachePut(key = "#p0") @Override public JpaUser updateById(JpaUser jpaUser) &#123; System.out.println("更新功能，更新缓存，直接写库, id=" + jpaUser); return jpaUserDao.save(jpaUser); &#125; /** * @CacheEvict： 主要针对方法配置，能够根据一定的条件对缓存进行清空。 适用于删除 */ @CacheEvict(key = "#p0") @Override public String deleteById(Integer id) &#123; System.out.println("删除功能，删除缓存，直接写库, id=" + id); return "清空缓存成功"; &#125;&#125; 启动类启用缓存注解：@EnableCaching 测试缓存： 12345678910111213141516171819202122232425@RestController@RequestMapping("/ehcache")public class EhCacheController &#123; @Autowired private EhCache ehCache; @RequestMapping(value = "/select", method = RequestMethod.GET) public JpaUser get(@RequestParam(defaultValue = "2") Integer id) &#123; return ehCache.selectById(id); &#125; @RequestMapping(value = "/update", method = RequestMethod.GET) public JpaUser update(@RequestParam(defaultValue = "2") Integer id) &#123; JpaUser bean = ehCache.selectById(id); bean.setUserName("dodd22"); bean.setCreateTime(new Date()); ehCache.updateById(bean); return bean; &#125; @RequestMapping(value = "/del", method = RequestMethod.GET) public String del(@RequestParam(defaultValue = "1") Integer id) &#123; return ehCache.deleteById(id); &#125;&#125; 缓存测试结果： 查询： 更新：]]></content>
       <categories>
         <category>SpringBoot</category>
       </categories>

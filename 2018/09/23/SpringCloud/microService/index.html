@@ -79,18 +79,21 @@
 
 
 
-<meta name="description" content="介绍">
+<meta name="description" content="介绍总结微服务以及与微服务相关的一些概念。 单体架构 一个归档包（例如war格式）包含了应用所有功能的应用程序。">
 <meta name="keywords" content="SpringCloud">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Cloud（一）：微服务概述">
 <meta property="og:url" content="http://yoursite.com/2018/09/23/SpringCloud/microService/index.html">
 <meta property="og:site_name" content="Dodd">
-<meta property="og:description" content="介绍">
+<meta property="og:description" content="介绍总结微服务以及与微服务相关的一些概念。 单体架构 一个归档包（例如war格式）包含了应用所有功能的应用程序。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-23T10:26:03.536Z">
+<meta property="og:image" content="http://yoursite.com/2018/09/23/SpringCloud/microService/microservice01.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/23/SpringCloud/microService/microservice02.png">
+<meta property="og:updated_time" content="2018-10-21T06:40:38.155Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Cloud（一）：微服务概述">
-<meta name="twitter:description" content="介绍">
+<meta name="twitter:description" content="介绍总结微服务以及与微服务相关的一些概念。 单体架构 一个归档包（例如war格式）包含了应用所有功能的应用程序。">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/23/SpringCloud/microService/microservice01.png">
 
 
 
@@ -438,7 +441,39 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>总结微服务以及与微服务相关的一些概念。</p>
+<h4 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h4><p><img src="/2018/09/23/SpringCloud/microService/microservice01.png" alt=""></p>
+<p>一个归档包（例如war格式）包含了应用所有功能的应用程序。</p>
+<a id="more"></a>
+<h4 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h4><p>同一个业务，部署在多个服务器上(不同的服务器运行同样的代码，干同一件事)<br>特点：</p>
+<ol>
+<li>通过多台计算机完成同一个工作。达到更高的效率。</li>
+<li>两机或多机内容、工作过程等完全一样。如果一台死机，另一台可以起作用。</li>
+</ol>
+<h4 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h4><p>一个业务分拆多个子业务，部署在不同的服务器上(不同的服务器，运行不同的代码，为了同一个目的)<br>特点：</p>
+<ol>
+<li>功能拆分，模块独立。</li>
+<li>在使用的时候再将这些独立的模块组合起来就是一个系统。</li>
+</ol>
+<h4 id="SOA"><a href="#SOA" class="headerlink" title="SOA"></a>SOA</h4><p>业务系统分解为多个组件，让每个组件都独立提供离散，自治，可复用的服务能力，通过服务的组合和编排来实现上层的业务流程 </p>
+<p>特点：</p>
+<ol>
+<li>简化维护,降低整体风险,伸缩灵活</li>
+</ol>
+<h3 id="微服务架构"><a href="#微服务架构" class="headerlink" title="微服务架构"></a>微服务架构</h3><p><img src="/2018/09/23/SpringCloud/microService/microservice02.png" alt=""></p>
+<p>翻译：简而言之，微服务架构风格这种开发方法，是以开发一组小型服务的方式来开发一个独立的应用系统的。其中每个小型服务都运行在自己的进程中，并经常采用HTTP资源API这样<br>轻量的机制来相互通信。这些服务围绕业务功能进行构建，并能通过全自动的部署机制来进行独立部署。这些微服务可以使用不同的语言来编写，并且可以使用不同的数据存储技术。对<br>这些微服务我们仅做最低限度的集中管理。</p>
+<p>特点：把一个大的服务拆分成多个小的服务，服务拆分具有了分布式基础，再结合集群做负载均衡。</p>
+<p>所以微服务可以理解成：分布式+集群</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
+<li><p><a href="https://www.martinfowler.com/articles/microservices.html" target="_blank" rel="noopener">微服务定义</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/heatdeath/article/details/79038795" target="_blank" rel="noopener">分布式、集群、微服务、SOA的区别</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/20004877" target="_blank" rel="noopener">分布式与集群的区别</a></p>
+</li>
+<li><a href="https://mp.weixin.qq.com/s/q4U9972bdnEYGJ-FoqMw0A" target="_blank" rel="noopener">外行人都能看懂的SpringCloud</a></li>
+</ol>
+
       
     </div>
     
@@ -477,6 +512,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/29/SpringCloud/eureka/" rel="prev" title="Spring Cloud（二）：服务注册发现Eureka">
+                Spring Cloud（二）：服务注册发现Eureka <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -564,7 +603,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">127</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -653,7 +692,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单体架构"><span class="nav-number">1.1.</span> <span class="nav-text">单体架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群"><span class="nav-number">1.2.</span> <span class="nav-text">集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式"><span class="nav-number">1.3.</span> <span class="nav-text">分布式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SOA"><span class="nav-number">1.4.</span> <span class="nav-text">SOA</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务架构"><span class="nav-number">2.</span> <span class="nav-text">微服务架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>

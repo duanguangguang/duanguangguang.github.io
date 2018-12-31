@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/12/30/concurrent/ReadWriteLock/rw01.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/30/concurrent/ReadWriteLock/rw02.png">
-<meta property="og:updated_time" content="2018-12-30T09:54:11.542Z">
+<meta property="og:updated_time" content="2018-12-31T03:34:08.446Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java并发包锁原理解析（二）：ReadWriteLock">
 <meta name="twitter:description" content="介绍在上文中提到了Lock接口以及对象，使用它，很优雅的控制了竞争资源的安全访问，但是这种锁不区分读写，称这种锁为普通锁。为了提高性能，Java提供了读写锁，在读的地方使用读锁，在写的地方使用写锁，灵活控制，如果没有写锁的情况下，读是无阻塞的，在一定程度上提高了程序的执行效率。 读写锁允许访问共享数据的并发性高于互斥锁允许的并发性。它利用了这样一个事实：虽然一次只有一个线程可以修改共享数据，但在许">
@@ -445,8 +445,7 @@
 <p>读写锁允许访问共享数据的并发性高于互斥锁允许的并发性。它利用了这样一个事实：虽然一次只有一个线程可以修改共享数据，但在许多情况下，任何数量的线程都可以同时读取数据。理论上，使用读写锁所允许的并发性的增加将导致相互使用互斥锁的性能提高。实际上，这种并发性的增加只能在多处理器上完全实现，并且只有在共享数据的访问模式合适时才能实现。</p>
 <p>读写锁是适用于写少读多的场景。</p>
 <a id="more"></a>
-<p>###ReadWriteLock接口</p>
-<p>ReadWriteLock 描述的是：一个资源能够被多个读线程访问，或者被一个写线程访问，但是不能同时存在读写线程。也就是说读写锁使用的场合是一个共享资源被大量读取操作，而只有少量的写操作。</p>
+<h3 id="ReadWriteLock接口"><a href="#ReadWriteLock接口" class="headerlink" title="ReadWriteLock接口"></a>ReadWriteLock接口</h3><p>ReadWriteLock 描述的是：一个资源能够被多个读线程访问，或者被一个写线程访问，但是不能同时存在读写线程。也就是说读写锁使用的场合是一个共享资源被大量读取操作，而只有少量的写操作。</p>
 <p>ReadWriteLock是一个接口，在它里面只定义了两个方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReadWriteLock</span> </span>&#123;</span><br><span class="line">    <span class="function">Lock <span class="title">readLock</span><span class="params">()</span></span>;</span><br><span class="line"> </span><br><span class="line">    <span class="function">Lock <span class="title">writeLock</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>一个用来获取读锁，一个用来获取写锁。也就是说将文件的读写操作分开，分成2个锁来分配给线程，从而使得多个线程可以同时进行读操作。<strong>注意： 在同一线程中，持有读锁后，不能直接调用写锁的lock方法 ，否则会造成死锁。</strong></p>
@@ -721,7 +720,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-count">134</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -810,7 +809,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantReadWriteLock"><span class="nav-number">2.</span> <span class="nav-text">ReentrantReadWriteLock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写锁WriteLock-的获取和释放"><span class="nav-number">3.</span> <span class="nav-text">写锁WriteLock 的获取和释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读锁ReadLock的获取和释放"><span class="nav-number">4.</span> <span class="nav-text">读锁ReadLock的获取和释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用示例"><span class="nav-number">5.</span> <span class="nav-text">应用示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReadWriteLock接口"><span class="nav-number">2.</span> <span class="nav-text">ReadWriteLock接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantReadWriteLock"><span class="nav-number">3.</span> <span class="nav-text">ReentrantReadWriteLock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写锁WriteLock-的获取和释放"><span class="nav-number">4.</span> <span class="nav-text">写锁WriteLock 的获取和释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读锁ReadLock的获取和释放"><span class="nav-number">5.</span> <span class="nav-text">读锁ReadLock的获取和释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用示例"><span class="nav-number">6.</span> <span class="nav-text">应用示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>

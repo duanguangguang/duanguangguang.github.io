@@ -22,6 +22,8 @@ categories:
 
 由于每个线程执行的过程是不可控的，所以需要采用同步机制来协同对象可变状态的访问。 
 
+由于java中的线程与操作系统的原生线程是一一对应的，所以当阻塞一个线程时，需要从用户态切换到内核态执行阻塞操作，这是很耗时的操作，synchronized 的使用就会导致上下文切换。
+
 ### synchronized同步方法
 
 #### 实例方法
@@ -110,6 +112,12 @@ class InsertData {
 执行insert完毕
 */
 ~~~
+
+###synchronized的内存语义
+
+共享变量可见性问题主要是由于线程的工作内存导致的，进入synchronized块的内存语义是把synchronized块内使用到的变量从线程的工作内存中清除，这样synchronized块内使用到该变量就是直接从主内存中获取。推出synchronized块的内存语义是把synchronized块内对共享变量的修改刷新到主内存。
+
+这也就是加锁和释放锁的语义
 
 ### synchronized的原理
 

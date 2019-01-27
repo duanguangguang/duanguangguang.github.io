@@ -3,7 +3,7 @@ title: 友情链接
 date: 2017-12-09 17:32:33
 ---
 
-## git
+### git
 
 [git教程-廖雪峰](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/)
 
@@ -35,6 +35,10 @@ date: 2017-12-09 17:32:33
 
 [java中级开发工程师知识点归纳](http://blog.csdn.net/zhengzhihust/article/details/44151785)
 
+### java集合类
+
+[ConcurrentHashMap与红黑树实现分析Java8](https://www.jianshu.com/p/b7dda385f83d)
+
 ### JVM
 
 [深入理解java虚拟机-总结](https://www.cnblogs.com/prayers/p/5515245.html)
@@ -46,6 +50,8 @@ date: 2017-12-09 17:32:33
 ### SQL
 
 [提高sql的查询效率](http://mp.weixin.qq.com/s?__biz=MjM5MTM0NjQ2MQ==&mid=209354475&idx=1&sn=ec64c8e2c26feb6b5d714076ffb2ce61&mpshare=1&scene=24&srcid=0813dUUgqrs4CZPMfNlvwexa#rd)
+
+[重新理解mysql的锁、事务隔离级别及事务传播行为](https://segmentfault.com/a/1190000014811125)
 
 ### MyBatis
 
@@ -68,6 +74,8 @@ date: 2017-12-09 17:32:33
 [关于 Spring AOP (AspectJ)](http://blog.csdn.net/javazejian/article/details/56267036)
 
 [AOP之AspectJ框架的使用](http://www.cnblogs.com/whgk/p/6627187.html)
+
+[Spring事务管理与传播机制详解以及使用实例](https://blog.csdn.net/hcmony/article/details/77850183)
 
 ### Spring Boot
 

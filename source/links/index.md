@@ -23,6 +23,8 @@ date: 2019-03-02 14:26:15
 
 1. [40个Java多线程问题总结](https://www.cnblogs.com/xrq730/p/5060921.html)
 2. [JAVA多线程实现的四种方式](https://www.cnblogs.com/felixzh/p/6036074.html)
+3. [Fork/Join框架详解](https://www.cnblogs.com/senlinyang/p/7885964.html)
+4. [Java--8--新特性--串并行流与ForkJoin框架](https://www.cnblogs.com/wzqjy/p/7921063.html)
 
 ### MySQL
 
@@ -38,30 +40,31 @@ date: 2019-03-02 14:26:15
 3. [Spring：源码解读Spring IOC原理](https://www.cnblogs.com/ITtangtang/p/3978349.html)
 4. [Spring AOP实现原理分析](http://www.imooc.com/article/255890)
 5. [Spring Bean的生命周期](https://www.cnblogs.com/redcool/p/6397398.html)
+6. [了解一下Spring中用了哪些设计模式](https://mp.weixin.qq.com/s?__biz=MzA3ODQ0Mzg2OA==&mid=2649048999&idx=1&sn=ca3efda9a37983d1bd8500f649121e8f&chksm=87534394b024ca826a1f1cdd1256c97fc41b5bce38a72f286fd97019a5a9b0eeb51b2b9b9b88&mpshare=1&scene=24&srcid=#rd)
 
 ### http
 
 1. [WebSocket协议解析](https://www.cnblogs.com/unclekeith/p/8087182.html)
-
-### tcp
-
-1. [TCP三次握手四次分手超简单解析](https://baijiahao.baidu.com/s?id=1593714120815701015&wfr=spider&for=pc)
+2. [TCP三次握手四次分手超简单解析](https://baijiahao.baidu.com/s?id=1593714120815701015&wfr=spider&for=pc)
+3. [HTTP协议其实就是这么简单](https://blog.csdn.net/cai784921129/article/details/80177753)
+4. [《HTTP图解》2——简单了解HTTP协议](https://www.cnblogs.com/hlphlp/p/6515490.html)
 
 ### MyBatis
 
 1. [MyBatis二级缓存原理分析](http://www.cnblogs.com/sword-successful/p/7468754.html)
 2. [【MyBatis源码解析】MyBatis一二级缓存](https://www.cnblogs.com/xrq730/p/6991655.html)
 
-### redis
-
 ### 缓存
 
 1. [MemCache详细解读](https://www.cnblogs.com/xrq730/p/4948707.html)
 2. [guava cache 全解析](https://www.imooc.com/article/34924)
+3. redis
 
-### 算法
+### 数据结构&算法
 
 1. [对一致性Hash算法，Java代码实现的深入研究](https://www.cnblogs.com/xrq730/p/5186728.html)
+2. [B树、B-树、B+树、B*树介绍，和B+树更适合做文件索引的原因](https://www.cnblogs.com/qlqwjy/p/7965491.html)
+3. [【经典数据结构】B树与B+树](https://www.cnblogs.com/vincently/p/4526560.html)
 
 ### 网络
 
@@ -70,7 +73,7 @@ date: 2019-03-02 14:26:15
 ### ActiveMQ
 
 1. [ActiveMQ的queue同步和异步接收消息](https://blog.csdn.net/asdfsadfasdfsa/article/details/53583741)	
-	. [ActiveMQ持久化消息的三种方式](http://www.360doc.com/content/11/1027/19/1542811_159664188.shtml)	
+2. [ActiveMQ持久化消息的三种方式](http://www.360doc.com/content/11/1027/19/1542811_159664188.shtml)	
 3. [ActiveMQ消息数据持久化](https://www.jianshu.com/p/deb1816271d1)
 4. [影响ActiveMQ性能的几个重要因素](https://setting.iteye.com/blog/989593)
 5. [ActiveMQ性能调优](https://zcf9916.iteye.com/blog/2356128)
@@ -80,10 +83,6 @@ date: 2019-03-02 14:26:15
 
 1. [JVM系列分析- 内存模型](https://www.imooc.com/article/23536)
 2. [JVM系列分析- 垃圾回收](https://www.imooc.com/article/23556)
-
-### 设计模式
-
-1. [操作复杂对象结构——访问者模式（一）](https://blog.csdn.net/lovelion/article/details/7433523)
 
 ### 分布式事务
 

@@ -65,6 +65,7 @@ date: 2019-03-02 14:26:15
 1. [对一致性Hash算法，Java代码实现的深入研究](https://www.cnblogs.com/xrq730/p/5186728.html)
 2. [B树、B-树、B+树、B*树介绍，和B+树更适合做文件索引的原因](https://www.cnblogs.com/qlqwjy/p/7965491.html)
 3. [【经典数据结构】B树与B+树](https://www.cnblogs.com/vincently/p/4526560.html)
+4. [判断链表中是否有环 ----- 有关单链表中环的问题](https://www.cnblogs.com/dancingrain/p/3405197.html)
 
 ### 网络
 
@@ -73,7 +74,7 @@ date: 2019-03-02 14:26:15
 ### ActiveMQ
 
 1. [ActiveMQ的queue同步和异步接收消息](https://blog.csdn.net/asdfsadfasdfsa/article/details/53583741)	
-2. [ActiveMQ持久化消息的三种方式](http://www.360doc.com/content/11/1027/19/1542811_159664188.shtml)	
+	. [ActiveMQ持久化消息的三种方式](http://www.360doc.com/content/11/1027/19/1542811_159664188.shtml)	
 3. [ActiveMQ消息数据持久化](https://www.jianshu.com/p/deb1816271d1)
 4. [影响ActiveMQ性能的几个重要因素](https://setting.iteye.com/blog/989593)
 5. [ActiveMQ性能调优](https://zcf9916.iteye.com/blog/2356128)

@@ -8,11 +8,11 @@ tags:
 
 ### 一、安装JDK
 
-参考：[]()
+参考：[centos安装JDK](https://duanguangguang.github.io/2020/03/20/centos7/centos-install-jdk/ )
 
 ### 二、安装zookeeper
 
-参考：[]()
+参考：[centos安装zookeeper](https://duanguangguang.github.io/2020/03/20/centos7/centos-install-zookeeper/ )
 
 ### 三、安装kafka
 
@@ -29,6 +29,8 @@ tags:
    ~~~java
    log.dirs=/home/duan/myhome/soft/kafka/kafka_2.13-2.4.0/logs/kafka
    ~~~
+
+<!-- more -->
 
 ### 四、启动kafka
 

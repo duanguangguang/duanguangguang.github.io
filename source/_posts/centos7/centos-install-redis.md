@@ -21,6 +21,8 @@ tags:
 [root@common redis]# tar -zxvf redis-5.0.3.tar.gz
 ~~~
 
+<!-- more -->
+
 ### 三、执行编译
 
 cd切换到redis解压目录下，执行编译 :

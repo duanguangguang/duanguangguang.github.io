@@ -8,7 +8,7 @@ tags:
 
 ### 一、下载安装包
 
-从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考：[]()
+从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考：[centos安装JDK](https://duanguangguang.github.io/2020/03/20/centos7/centos-install-jdk/ )
 
 ### 二、下载以及解压 
 
@@ -23,6 +23,8 @@ tags:
 目录结构：
 
 ![](C:\duanguangguang.github.io\source\_posts\centos7\centos-install-zookeeper\01zookeeper安装目录结构.png)
+
+<!-- more -->
 
 - bin目录：zk的可执行脚本目录，包括zk服务进程，zk客户端，等脚本。其中.sh是Linux环境下的脚本，.cmd是Windows环境下的脚本
 - conf目录：配置文件目录。zoo_sample.cfg为样例配置文件，需要修改为自己的名称，一般为zoo.cfg。log4j.properties为日志配置文件

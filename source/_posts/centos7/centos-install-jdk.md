@@ -22,6 +22,8 @@ CentOS系统默认安装了openjdk的（如果操作系统不是最小安装）�
 tar -zxvf jdk-8u231-linux-x64.tar.gz
 ~~~
 
+<!-- more -->
+
 ### 三、配置环境变量 
 
 输入`vim /etc/profile`编辑环境变量，进入编辑状态。在编辑栏底部添加以下配置：

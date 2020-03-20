@@ -88,7 +88,7 @@
 <meta property="og:description" content="一、安装gcc依赖由于 redis 是用 C 语言开发，安装之前必先确认是否安装 gcc 环境（gcc -v），如果没有安装，执行以下命令进行安装 。切换到root用户下，执行yum -y install gcc命令：  1[root@common soft]# yum install -y gcc 二、下载并解压安装包12[root@common redis]# wget http://down">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/03/20/centos7/centos-install-redis/duanguangguang.github.io/source/_posts/centos7/centos-install-redis/01-redis启动成功.png">
-<meta property="og:updated_time" content="2020-03-20T10:17:56.158Z">
+<meta property="og:updated_time" content="2020-03-20T16:05:41.366Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos7安装redis">
 <meta name="twitter:description" content="一、安装gcc依赖由于 redis 是用 C 语言开发，安装之前必先确认是否安装 gcc 环境（gcc -v），如果没有安装，执行以下命令进行安装 。切换到root用户下，执行yum -y install gcc命令：  1[root@common soft]# yum install -y gcc 二、下载并解压安装包12[root@common redis]# wget http://down">
@@ -453,6 +453,7 @@
         <h3 id="一、安装gcc依赖"><a href="#一、安装gcc依赖" class="headerlink" title="一、安装gcc依赖"></a>一、安装gcc依赖</h3><p>由于 redis 是用 C 语言开发，安装之前必先确认是否安装 gcc 环境（gcc -v），如果没有安装，执行以下命令进行安装 。切换到root用户下，执行yum -y install gcc命令： </p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@common soft]# yum install -y gcc</span><br></pre></td></tr></table></figure>
 <h3 id="二、下载并解压安装包"><a href="#二、下载并解压安装包" class="headerlink" title="二、下载并解压安装包"></a>二、下载并解压安装包</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@common redis]# wget http://download.redis.io/releases/redis-5.0.3.tar.gz</span><br><span class="line">[root@common redis]# tar -zxvf redis-5.0.3.tar.gz</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <h3 id="三、执行编译"><a href="#三、执行编译" class="headerlink" title="三、执行编译"></a>三、执行编译</h3><p>cd切换到redis解压目录下，执行编译 :</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@common redis]# cd redis-5.0.3</span><br><span class="line">[root@common redis-5.0.3]# make</span><br></pre></td></tr></table></figure>
 <h3 id="四、安装"><a href="#四、安装" class="headerlink" title="四、安装"></a>四、安装</h3><p>安装并指定安装目录 :</p>

@@ -88,7 +88,7 @@
 <meta property="og:description" content="一、卸载openJDKCentOS系统默认安装了openjdk的（如果操作系统不是最小安装），查看版本：rpm -qa | grep java或者java -version 。删除系统自带的OpenJDKrpm -e --nodepsxxx`。xxx为查询出来的jdk名字。 二、安装JDK下载JDK到本机，并传输到CentOS上 。  解压JDK： 1tar -zxvf jdk-8u231-lin">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/03/20/centos7/centos-install-jdk/duanguangguang.github.io/source/_posts/centos7/centos-install-jdk/01.png">
-<meta property="og:updated_time" content="2020-03-20T11:10:09.613Z">
+<meta property="og:updated_time" content="2020-03-20T16:04:59.470Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos安装jdk">
 <meta name="twitter:description" content="一、卸载openJDKCentOS系统默认安装了openjdk的（如果操作系统不是最小安装），查看版本：rpm -qa | grep java或者java -version 。删除系统自带的OpenJDKrpm -e --nodepsxxx`。xxx为查询出来的jdk名字。 二、安装JDK下载JDK到本机，并传输到CentOS上 。  解压JDK： 1tar -zxvf jdk-8u231-lin">
@@ -455,6 +455,7 @@
 <p><img src="/2020/03/20/centos7/centos-install-jdk/duanguangguang.github.io\source\_posts\centos7\centos-install-jdk\01.png" alt=""></p>
 <p>解压JDK：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf jdk-<span class="number">8</span>u231-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <h3 id="三、配置环境变量"><a href="#三、配置环境变量" class="headerlink" title="三、配置环境变量"></a>三、配置环境变量</h3><p>输入<code>vim /etc/profile</code>编辑环境变量，进入编辑状态。在编辑栏底部添加以下配置：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/home/duan/myhome/soft/jdk/jdk1.8.0_231</span><br><span class="line">export JRE_HOME=/home/duan/myhome/soft/jdk/jdk1.8.0_231/jre</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/jre/lib/rt.jar:$&#123;JAVA_HOME&#125;/lib/dt.jar:$&#123;JAVA_HOME&#125;/lib/tools.jar</span><br><span class="line">export PATH=$PATH:$&#123;JAVA_HOME&#125;/bin</span><br></pre></td></tr></table></figure>
 <p>使/etc/profile里的配置立即生效  </p>

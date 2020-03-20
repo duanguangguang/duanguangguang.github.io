@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="一、安装JDK参考： 二、安装zookeeper参考： 三、安装kafka 解压kafka 1[root@common kafka]# tar -zxvf kafka_2.13-2.4.0.tgz  修改kafka配置文件 我的kafka是2.4版本的需要自己创建并配置日志路径 1log.dirs=/home/duan/myhome/soft/kafka/kafka_2.13-2.4.0/logs">
+<meta name="description" content="一、安装JDK参考：centos安装JDK 二、安装zookeeper参考：centos安装zookeeper 三、安装kafka 解压kafka 1[root@common kafka]# tar -zxvf kafka_2.13-2.4.0.tgz  修改kafka配置文件 我的kafka是2.4版本的需要自己创建并配置日志路径 1log.dirs=/home/duan/myhome/soft">
 <meta name="keywords" content="Centos7">
 <meta property="og:type" content="article">
 <meta property="og:title" content="centos单机安装kafka">
 <meta property="og:url" content="http://yoursite.com/2020/03/20/centos7/centos-install-kafka/index.html">
 <meta property="og:site_name" content="Dodd">
-<meta property="og:description" content="一、安装JDK参考： 二、安装zookeeper参考： 三、安装kafka 解压kafka 1[root@common kafka]# tar -zxvf kafka_2.13-2.4.0.tgz  修改kafka配置文件 我的kafka是2.4版本的需要自己创建并配置日志路径 1log.dirs=/home/duan/myhome/soft/kafka/kafka_2.13-2.4.0/logs">
+<meta property="og:description" content="一、安装JDK参考：centos安装JDK 二、安装zookeeper参考：centos安装zookeeper 三、安装kafka 解压kafka 1[root@common kafka]# tar -zxvf kafka_2.13-2.4.0.tgz  修改kafka配置文件 我的kafka是2.4版本的需要自己创建并配置日志路径 1log.dirs=/home/duan/myhome/soft">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/03/20/centos7/centos-install-kafka/duanguangguang.github.io/source/_posts/centos7/centos-install-kafka/01kafka启动成功.png">
 <meta property="og:image" content="http://yoursite.com/2020/03/20/centos7/centos-install-kafka/duanguangguang.github.io/source/_posts/centos7/centos-install-kafka/02kafka测试成功.png">
-<meta property="og:updated_time" content="2020-03-20T15:55:33.245Z">
+<meta property="og:updated_time" content="2020-03-20T16:05:18.656Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos单机安装kafka">
-<meta name="twitter:description" content="一、安装JDK参考： 二、安装zookeeper参考： 三、安装kafka 解压kafka 1[root@common kafka]# tar -zxvf kafka_2.13-2.4.0.tgz  修改kafka配置文件 我的kafka是2.4版本的需要自己创建并配置日志路径 1log.dirs=/home/duan/myhome/soft/kafka/kafka_2.13-2.4.0/logs">
+<meta name="twitter:description" content="一、安装JDK参考：centos安装JDK 二、安装zookeeper参考：centos安装zookeeper 三、安装kafka 解压kafka 1[root@common kafka]# tar -zxvf kafka_2.13-2.4.0.tgz  修改kafka配置文件 我的kafka是2.4版本的需要自己创建并配置日志路径 1log.dirs=/home/duan/myhome/soft">
 <meta name="twitter:image" content="http://yoursite.com/2020/03/20/centos7/centos-install-kafka/duanguangguang.github.io/source/_posts/centos7/centos-install-kafka/01kafka启动成功.png">
 
 
@@ -451,8 +451,8 @@
       
 
       
-        <h3 id="一、安装JDK"><a href="#一、安装JDK" class="headerlink" title="一、安装JDK"></a>一、安装JDK</h3><p>参考：<a href=""></a></p>
-<h3 id="二、安装zookeeper"><a href="#二、安装zookeeper" class="headerlink" title="二、安装zookeeper"></a>二、安装zookeeper</h3><p>参考：<a href=""></a></p>
+        <h3 id="一、安装JDK"><a href="#一、安装JDK" class="headerlink" title="一、安装JDK"></a>一、安装JDK</h3><p>参考：<a href="https://duanguangguang.github.io/2020/03/20/centos7/centos-install-jdk/" target="_blank" rel="noopener">centos安装JDK</a></p>
+<h3 id="二、安装zookeeper"><a href="#二、安装zookeeper" class="headerlink" title="二、安装zookeeper"></a>二、安装zookeeper</h3><p>参考：<a href="https://duanguangguang.github.io/2020/03/20/centos7/centos-install-zookeeper/" target="_blank" rel="noopener">centos安装zookeeper</a></p>
 <h3 id="三、安装kafka"><a href="#三、安装kafka" class="headerlink" title="三、安装kafka"></a>三、安装kafka</h3><ol>
 <li><p>解压kafka</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@common kafka]# tar -zxvf kafka_2.13-2.4.0.tgz</span><br></pre></td></tr></table></figure>
@@ -462,6 +462,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log.dirs=/home/duan/myhome/soft/kafka/kafka_2.13-<span class="number">2.4</span>.0/logs/kafka</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<a id="more"></a>
 <h3 id="四、启动kafka"><a href="#四、启动kafka" class="headerlink" title="四、启动kafka"></a>四、启动kafka</h3><ol>
 <li><p>采用自带的zookeeper</p>
 <ul>

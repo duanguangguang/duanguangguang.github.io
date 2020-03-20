@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="一、下载安装包从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考： 二、下载以及解压下载地址：http://mirror.bit.edu.cn/apache/zookeeper/  解压： 1[root@common backup]# tar -">
+<meta name="description" content="一、下载安装包从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考：centos安装JDK 二、下载以及解压下载地址：http://mirror.bit.edu.cn/apache/zookeeper/  解压： 1[root@common bac">
 <meta name="keywords" content="Centos7">
 <meta property="og:type" content="article">
 <meta property="og:title" content="centos单机安装zookeeper">
 <meta property="og:url" content="http://yoursite.com/2020/03/20/centos7/centos-install-zookeeper/index.html">
 <meta property="og:site_name" content="Dodd">
-<meta property="og:description" content="一、下载安装包从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考： 二、下载以及解压下载地址：http://mirror.bit.edu.cn/apache/zookeeper/  解压： 1[root@common backup]# tar -">
+<meta property="og:description" content="一、下载安装包从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考：centos安装JDK 二、下载以及解压下载地址：http://mirror.bit.edu.cn/apache/zookeeper/  解压： 1[root@common bac">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/03/20/centos7/centos-install-zookeeper/duanguangguang.github.io/source/_posts/centos7/centos-install-zookeeper/01zookeeper安装目录结构.png">
 <meta property="og:image" content="http://yoursite.com/2020/03/20/centos7/centos-install-zookeeper/duanguangguang.github.io/source/_posts/centos7/centos-install-zookeeper/02zkCli启动成功.png">
-<meta property="og:updated_time" content="2020-03-20T10:56:31.778Z">
+<meta property="og:updated_time" content="2020-03-20T16:04:39.570Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos单机安装zookeeper">
-<meta name="twitter:description" content="一、下载安装包从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考： 二、下载以及解压下载地址：http://mirror.bit.edu.cn/apache/zookeeper/  解压： 1[root@common backup]# tar -">
+<meta name="twitter:description" content="一、下载安装包从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考：centos安装JDK 二、下载以及解压下载地址：http://mirror.bit.edu.cn/apache/zookeeper/  解压： 1[root@common bac">
 <meta name="twitter:image" content="http://yoursite.com/2020/03/20/centos7/centos-install-zookeeper/duanguangguang.github.io/source/_posts/centos7/centos-install-zookeeper/01zookeeper安装目录结构.png">
 
 
@@ -451,12 +451,13 @@
       
 
       
-        <h3 id="一、下载安装包"><a href="#一、下载安装包" class="headerlink" title="一、下载安装包"></a>一、下载安装包</h3><p>从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考：<a href=""></a></p>
+        <h3 id="一、下载安装包"><a href="#一、下载安装包" class="headerlink" title="一、下载安装包"></a>一、下载安装包</h3><p>从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考：<a href="https://duanguangguang.github.io/2020/03/20/centos7/centos-install-jdk/" target="_blank" rel="noopener">centos安装JDK</a></p>
 <h3 id="二、下载以及解压"><a href="#二、下载以及解压" class="headerlink" title="二、下载以及解压"></a>二、下载以及解压</h3><p>下载地址：<a href="http://mirror.bit.edu.cn/apache/zookeeper/" target="_blank" rel="noopener">http://mirror.bit.edu.cn/apache/zookeeper/</a> </p>
 <p>解压：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@common backup]# tar -zxvf apache-zookeeper-3.5.7-bin.tar.gz</span><br></pre></td></tr></table></figure>
 <p>目录结构：</p>
 <p><img src="/2020/03/20/centos7/centos-install-zookeeper/duanguangguang.github.io\source\_posts\centos7\centos-install-zookeeper\01zookeeper安装目录结构.png" alt=""></p>
+<a id="more"></a>
 <ul>
 <li>bin目录：zk的可执行脚本目录，包括zk服务进程，zk客户端，等脚本。其中.sh是Linux环境下的脚本，.cmd是Windows环境下的脚本</li>
 <li>conf目录：配置文件目录。zoo_sample.cfg为样例配置文件，需要修改为自己的名称，一般为zoo.cfg。log4j.properties为日志配置文件</li>

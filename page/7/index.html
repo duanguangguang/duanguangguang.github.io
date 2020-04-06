@@ -336,7 +336,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/javaAdvance/java-transmit/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/02/SpringBoot/mongodb/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -355,7 +355,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/16/javaAdvance/java-transmit/" itemprop="url">Java值传递和引用传递</a></h1>
+                <a class="post-title-link" href="/2018/09/02/SpringBoot/mongodb/" itemprop="url">Spring Boot（十五）：NoSql数据库mongodb</a></h1>
         
 
         <div class="post-meta">
@@ -367,8 +367,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T15:06:01+08:00">
-                2018-03-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-02T14:59:44+08:00">
+                2018-09-02
               </time>
             
 
@@ -390,19 +390,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JAVA/" itemprop="url" rel="index">
-                    <span itemprop="name">JAVA</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JAVA/Java进阶/" itemprop="url" rel="index">
-                    <span itemprop="name">Java进阶</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -419,9 +408,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/03/16/javaAdvance/java-transmit/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/02/SpringBoot/mongodb/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/16/javaAdvance/java-transmit/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/02/SpringBoot/mongodb/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -429,7 +418,7 @@
 
           
           
-             <span id="/2018/03/16/javaAdvance/java-transmit/" class="leancloud_visitors" data-flag-title="Java值传递和引用传递">
+             <span id="/2018/09/02/SpringBoot/mongodb/" class="leancloud_visitors" data-flag-title="Spring Boot（十五）：NoSql数据库mongodb">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -461,14 +450,11 @@
 
       
         
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>关于Java传参时是引用传递还是值传递，一直是一个讨论比较多的话题，下面总结一下这个问题。Java中数据类型分为两大类，<strong>基本类型和对象类型</strong>。相应的，变量也有两种类型：基本类型和引用类型。</p>
-<p>基本类型的变量保存原始值，即它代表的值就是数值本身；</p>
-<p>而引用类型的变量保存引用值，<code>引用值</code>指向内存空间的地址，代表了某个对象的引用，而不是对象本身，对象本身存放在这个引用值所表示的地址的位置。</p>
-<p><strong>基本类型包括：byte,short,int,long,char,float,double,Boolean</strong></p>
-<p><strong>引用类型包括：类类型，接口类型和数组。</strong></p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>pom文件引入：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-mongodb&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/16/javaAdvance/java-transmit/#more" rel="contents">
+            <a class="btn" href="/2018/09/02/SpringBoot/mongodb/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -519,7 +505,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/13/dataBase/mysql-engine/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/02/SpringBoot/redis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -538,7 +524,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/13/dataBase/mysql-engine/" itemprop="url">MySQL存储引擎</a></h1>
+                <a class="post-title-link" href="/2018/09/02/SpringBoot/redis/" itemprop="url">Spring Boot（十四）：NoSql数据库redis</a></h1>
         
 
         <div class="post-meta">
@@ -550,8 +536,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-13T14:22:17+08:00">
-                2018-03-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-02T13:59:44+08:00">
+                2018-09-02
               </time>
             
 
@@ -573,19 +559,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/MySQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MySQL</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -602,9 +577,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/03/13/dataBase/mysql-engine/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/02/SpringBoot/redis/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/13/dataBase/mysql-engine/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/02/SpringBoot/redis/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -612,7 +587,7 @@
 
           
           
-             <span id="/2018/03/13/dataBase/mysql-engine/" class="leancloud_visitors" data-flag-title="MySQL存储引擎">
+             <span id="/2018/09/02/SpringBoot/redis/" class="leancloud_visitors" data-flag-title="Spring Boot（十四）：NoSql数据库redis">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -644,10 +619,11 @@
 
       
         
-          <h2 id="MySQL存储引擎"><a href="#MySQL存储引擎" class="headerlink" title="MySQL存储引擎"></a>MySQL存储引擎</h2><p>存储引擎说白了就是如何存储数据、如何为存储的数据建立索引和如何更新、查询数据等技术的实现方法。因为在关系数据库中数据的存储是以表的形式存储的，所以存储引擎也可以称为表类型（即存储和操作此表的类型）。<br>在Oracle 和SQL Server等数据库中只有一种存储引擎，所有数据存储管理机制都是一样的。而MySql数据库提供了多种存储引擎。用户可以根据不同的需求为数据表选择不同的存储引擎，用户也可以根据自己的需要编写自己的存储引擎。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>pom文件引入：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/13/dataBase/mysql-engine/#more" rel="contents">
+            <a class="btn" href="/2018/09/02/SpringBoot/redis/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -698,7 +674,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/02/algorithm/LSD/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/02/SpringBoot/transactional/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -717,7 +693,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/02/algorithm/LSD/" itemprop="url">字符串排序</a></h1>
+                <a class="post-title-link" href="/2018/09/02/SpringBoot/transactional/" itemprop="url">Spring Boot（十三）：事务处理</a></h1>
         
 
         <div class="post-meta">
@@ -729,8 +705,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-02T11:07:37+08:00">
-                2018-02-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-02T12:59:44+08:00">
+                2018-09-02
               </time>
             
 
@@ -752,19 +728,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">Algorithm</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -781,9 +746,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/02/02/algorithm/LSD/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/02/SpringBoot/transactional/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/02/02/algorithm/LSD/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/02/SpringBoot/transactional/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -791,7 +756,7 @@
 
           
           
-             <span id="/2018/02/02/algorithm/LSD/" class="leancloud_visitors" data-flag-title="字符串排序">
+             <span id="/2018/09/02/SpringBoot/transactional/" class="leancloud_visitors" data-flag-title="Spring Boot（十三）：事务处理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -823,12 +788,16 @@
 
       
         
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>低位优先（Least-Significant-DigitFirst，LSD）</strong> 的字符串排序：从右到左检查键中的字符。如果将一个字符串看作一个256进制的数字，那么从右向左检查字符串就等价于先检查数字的最低位。这种方法最适合用于键的长度都相同的字符串排序应用。</p>
-<p><strong>高位优先（MSD）</strong> 的字符串排序：从左到右检查键中的字符，首先查看的是最高位的字符。高位优先的字符串排序的吸引人之处在于。它们不一定需要检查所有的输入就能够完成排序。高位优先的字符串排序和快速排序类似，因为它们都会将需要排序的数组切分为独立的部分并递归地用相同的方法处理子数组来完成排序。<strong>区别在于</strong> 高位优先的字符串排序算法在切分时仅使用键的第一个字符，而快速排序的比较会涉及键的全部。</p>
-<p>低位优先方法会为每个字符创建一个切分，而高位优先方法总会产生三个切分，分别对应被搜素键的第一个字符小于、等于或大于切分键的第一个字符的情况。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>关系型数据库实物处理通过注解<code>@Transactional</code>来实现。</p>
+<h3 id="事务的四个特性"><a href="#事务的四个特性" class="headerlink" title="事务的四个特性"></a>事务的四个特性</h3><ol>
+<li>原子性（Atomicity）：事务是一个原子操作，由一系列动作组成。事务的原子性确保动作要么全部完成， 要么完全不起作用。 </li>
+<li>一致性（Consistency）：一旦事务完成（不管成功还是失败），系统必须确保它所建模的业务处于一致的状 态，而不会是部分完成部分失败。在现实中的数据不应该被破坏。 </li>
+<li>隔离性（Isolation）：可能有许多事务会同时处理相同的数据，因此每个事务都应该与其他事务隔离开来， 防止数据损坏。</li>
+<li>持久性（Durability）：一旦事务完成，无论发生什么系统错误，它的结果都不应该受到影响，这样就能从 任何系统崩溃中恢复过来。通常情况下，事务的结果被写到持久化存储器中。  </li>
+</ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/02/algorithm/LSD/#more" rel="contents">
+            <a class="btn" href="/2018/09/02/SpringBoot/transactional/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -879,7 +848,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/30/algorithm/HST/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/02/SpringBoot/jpa/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -898,7 +867,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/30/algorithm/HST/" itemprop="url">散列表</a></h1>
+                <a class="post-title-link" href="/2018/09/02/SpringBoot/jpa/" itemprop="url">Spring Boot（十二）：关系型数据库之spring-data-jpa</a></h1>
         
 
         <div class="post-meta">
@@ -910,8 +879,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-30T20:03:10+08:00">
-                2018-01-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-02T11:26:13+08:00">
+                2018-09-02
               </time>
             
 
@@ -933,19 +902,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">Algorithm</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -962,9 +920,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/30/algorithm/HST/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/02/SpringBoot/jpa/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/30/algorithm/HST/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/02/SpringBoot/jpa/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -972,7 +930,7 @@
 
           
           
-             <span id="/2018/01/30/algorithm/HST/" class="leancloud_visitors" data-flag-title="散列表">
+             <span id="/2018/09/02/SpringBoot/jpa/" class="leancloud_visitors" data-flag-title="Spring Boot（十二）：关系型数据库之spring-data-jpa">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1004,12 +962,13 @@
 
       
         
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>用一个数组来实现无序的符号表，将键作为数组的索引而数组中键i处存储的就是它对应的值。这样我们就可以快速访问任意键的值。<strong>散列表</strong>就是这种简易方法的扩展并能够处理更加复杂的类型的键。我们需要用算术操作将键转化为数组的索引来访问数组中的键值对。</p>
-<p>使用散列的查找算法分为两步。第一步是用<strong>散列函数</strong>将被查找的键转化为数组的一个索引。第二步是一个<strong>处理碰撞冲突</strong>的过程。两种解决碰撞的方法：<strong>拉链法</strong> 和 <strong>线性探测法</strong> 。散列表的核心问题碰撞冲突如下图：</p>
-<p><img src="/2018/01/30/algorithm/HST/hst01.png" alt=""></p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>pom引入：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>JPA配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># JPA自动更新检查，没有表则会新增</span><br><span class="line">spring.jpa.hibernate.ddl-auto= update</span><br><span class="line"># 显示sql语句</span><br><span class="line">spring.jpa.show-sql=<span class="keyword">true</span></span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/30/algorithm/HST/#more" rel="contents">
+            <a class="btn" href="/2018/09/02/SpringBoot/jpa/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1060,7 +1019,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/29/algorithm/redblackBST/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/02/SpringBoot/jdbcTemplate/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1079,7 +1038,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/29/algorithm/redblackBST/" itemprop="url">平衡查找树（红黑二叉查找树）</a></h1>
+                <a class="post-title-link" href="/2018/09/02/SpringBoot/jdbcTemplate/" itemprop="url">Spring Boot（十一）：关系型数据库之jdbcTemplate</a></h1>
         
 
         <div class="post-meta">
@@ -1091,8 +1050,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T17:06:31+08:00">
-                2018-01-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-02T10:14:54+08:00">
+                2018-09-02
               </time>
             
 
@@ -1114,19 +1073,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">Algorithm</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -1143,9 +1091,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/29/algorithm/redblackBST/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/02/SpringBoot/jdbcTemplate/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/29/algorithm/redblackBST/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/02/SpringBoot/jdbcTemplate/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1153,7 +1101,7 @@
 
           
           
-             <span id="/2018/01/29/algorithm/redblackBST/" class="leancloud_visitors" data-flag-title="平衡查找树（红黑二叉查找树）">
+             <span id="/2018/09/02/SpringBoot/jdbcTemplate/" class="leancloud_visitors" data-flag-title="Spring Boot（十一）：关系型数据库之jdbcTemplate">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1185,10 +1133,17 @@
 
       
         
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在一颗含有N个结点的树中，我们希望树高为~lgN，这样就能保证所有查找都能在~lgN次比较内结束，就和二分查找一样。但是在动态插入中保持树的完美平衡的代价太高了。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>pom文件引入：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- jdbc --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;!-- mysql --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>可以不指定 driver-class-name， spring boot 会自动识别 url </li>
+<li>数据连接池默认使用 tomcat-jdbc </li>
+<li>连接池的配置： spring.datasource.tomcat.*  </li>
+</ol>
+<p>设置日志打印：<logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug"></logger></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/29/algorithm/redblackBST/#more" rel="contents">
+            <a class="btn" href="/2018/09/02/SpringBoot/jdbcTemplate/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1239,7 +1194,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/26/algorithm/bst/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/01/SpringBoot/upload/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1258,7 +1213,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/26/algorithm/bst/" itemprop="url">二叉查找树</a></h1>
+                <a class="post-title-link" href="/2018/09/01/SpringBoot/upload/" itemprop="url">Spring Boot（十）：文件上传</a></h1>
         
 
         <div class="post-meta">
@@ -1270,8 +1225,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-26T17:17:51+08:00">
-                2018-01-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-01T22:26:25+08:00">
+                2018-09-01
               </time>
             
 
@@ -1293,19 +1248,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">Algorithm</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -1322,9 +1266,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/26/algorithm/bst/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/01/SpringBoot/upload/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/26/algorithm/bst/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/01/SpringBoot/upload/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1332,7 +1276,7 @@
 
           
           
-             <span id="/2018/01/26/algorithm/bst/" class="leancloud_visitors" data-flag-title="二叉查找树">
+             <span id="/2018/09/01/SpringBoot/upload/" class="leancloud_visitors" data-flag-title="Spring Boot（十）：文件上传">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1364,12 +1308,10 @@
 
       
         
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>定义：</strong>一颗二叉查找树（BST）是一颗二叉树，其中每个结点都含有一个Comparable的键（以及相关联的值）且每个结点的键都大于其左子树中的任意结点的键而小于右子树的任意结点的键。二叉查找树如下图：</p>
-<p><img src="/2018/01/26/algorithm/bst/bst01.png" alt=""></p>
-<p>在二叉树中，每个结点只能有一个父结点（根结点没有父结点），每个结点包含的链接可以为空或者只有左右两个链接，分别指向自己的左子结点和右子结点。因此可以将二叉查找树定义为一个空链接，或者是一个有左右两个链接的结点，每个链接都指向一颗独立的子二叉树。二叉查找树是一种能够将链表插入的灵活性和有序数组查找的高效性结合起来的符号表实现。具体来说，就是使用每个结点含有<strong>两个链接</strong> （链表中每个结点只含有一个链接）的二叉查找树来高效的实现符号表。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/26/algorithm/bst/#more" rel="contents">
+            <a class="btn" href="/2018/09/01/SpringBoot/upload/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1420,7 +1362,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/26/algorithm/st/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/31/SpringBoot/cros/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1439,7 +1381,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/26/algorithm/st/" itemprop="url">符号表</a></h1>
+                <a class="post-title-link" href="/2018/08/31/SpringBoot/cros/" itemprop="url">Spring Boot（九）：CORS支持</a></h1>
         
 
         <div class="post-meta">
@@ -1451,8 +1393,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-26T09:25:36+08:00">
-                2018-01-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-31T21:41:48+08:00">
+                2018-08-31
               </time>
             
 
@@ -1474,19 +1416,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构与算法</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构与算法/Algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">Algorithm</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -1503,9 +1434,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/26/algorithm/st/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/31/SpringBoot/cros/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/26/algorithm/st/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/31/SpringBoot/cros/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1513,7 +1444,7 @@
 
           
           
-             <span id="/2018/01/26/algorithm/st/" class="leancloud_visitors" data-flag-title="符号表">
+             <span id="/2018/08/31/SpringBoot/cros/" class="leancloud_visitors" data-flag-title="Spring Boot（九）：CORS支持">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1545,67 +1476,17 @@
 
       
         
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>定义：</strong>符号表是一种存储键值对的数据结构，支持两种操作：插入（put），即将一组新的键值对存入表中；查找（get），即根据给定的键得到相应的值。</p>
-<p>一种简单得泛型符号表API：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">public class ST&lt;Key, Value&gt;</th>
-<th style="text-align:center">描述</th>
-<th>默认实现</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">ST()</td>
-<td style="text-align:center">创建一张符号表</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">void put(Key key, Value val)</td>
-<td style="text-align:center">将键值对存入表中（若值为空则将键key从表中删除）</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">Value get(Key key)</td>
-<td style="text-align:center">获取键key对应的值（若键key不存在则返回null）</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">void delete(Key key)</td>
-<td style="text-align:center">从表中删除键key（及其对应的值）</td>
-<td>put(key, null)</td>
-</tr>
-<tr>
-<td style="text-align:center">boolean contains(key key)</td>
-<td style="text-align:center">键key在表中是否有对应的值</td>
-<td>return get(key) != null</td>
-</tr>
-<tr>
-<td style="text-align:center">boolean isEmpty()</td>
-<td style="text-align:center">表是否为空</td>
-<td>return size() == 0</td>
-</tr>
-<tr>
-<td style="text-align:center">int size()</td>
-<td style="text-align:center">表中键值对数量</td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align:center">Iterable<key> keys()</key></td>
-<td style="text-align:center">表中所有键的集合</td>
-</tr>
-</tbody>
-</table>
-<p>说明：</p>
-<ul>
-<li>不允许存在重复的键，并且键不为空；</li>
-<li>新值会替代旧值，并且值不为空；</li>
-<li>两种删除：延时删除，即将键对应的值置为空，某个时候删除所有值为空的键；即时删除，立刻从表中删除指定的键。</li>
-</ul>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Web 开发经常会遇到跨域问题，解决方案有： jsonp， iframe，CORS 等。</p>
+<p> CORS 与 JSONP 相比 ：</p>
+<ol>
+<li>JSONP 只能实现 GET 请求，而 CORS 支持所有类型的 HTTP 请求。</li>
+<li>使用 CORS，开发者可以使用普通的 XMLHttpRequest 发起请求和获得数据，比起 JSONP 有更好的 错误处理。 </li>
+<li>JSONP 主要被老的浏览器支持，它们往往不支持 CORS，而绝大多数现代浏览器都已经支持了 CORS 。</li>
+</ol>
+<p>CORS 的实现可以通过全局配置或是全局设置。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/26/algorithm/st/#more" rel="contents">
+            <a class="btn" href="/2018/08/31/SpringBoot/cros/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1656,7 +1537,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/23/dataBase/mysqloptimize/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/31/SpringBoot/servletfliterlistener/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1675,7 +1556,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/23/dataBase/mysqloptimize/" itemprop="url">MySQL性能优化</a></h1>
+                <a class="post-title-link" href="/2018/08/31/SpringBoot/servletfliterlistener/" itemprop="url">Spring Boot（八）：Servlets、Filters、listeners</a></h1>
         
 
         <div class="post-meta">
@@ -1687,8 +1568,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-23T16:32:41+08:00">
-                2018-01-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-31T16:48:16+08:00">
+                2018-08-31
               </time>
             
 
@@ -1710,8 +1591,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -1728,9 +1609,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/23/dataBase/mysqloptimize/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/31/SpringBoot/servletfliterlistener/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/23/dataBase/mysqloptimize/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/31/SpringBoot/servletfliterlistener/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1738,7 +1619,7 @@
 
           
           
-             <span id="/2018/01/23/dataBase/mysqloptimize/" class="leancloud_visitors" data-flag-title="MySQL性能优化">
+             <span id="/2018/08/31/SpringBoot/servletfliterlistener/" class="leancloud_visitors" data-flag-title="Spring Boot（八）：Servlets、Filters、listeners">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1770,18 +1651,10 @@
 
       
         
-          <h2 id="一、优化SQL语句的一般步骤"><a href="#一、优化SQL语句的一般步骤" class="headerlink" title="一、优化SQL语句的一般步骤"></a>一、优化SQL语句的一般步骤</h2><h3 id="1-通过-show-status-命令了解各种-SQL-的执行频率"><a href="#1-通过-show-status-命令了解各种-SQL-的执行频率" class="headerlink" title="1. 通过 show status 命令了解各种 SQL 的执行频率"></a>1. 通过 show status 命令了解各种 SQL 的执行频率</h3><p>MySQL 客户端连接成功后，通过<strong>show [session|global] status </strong>命令可以提供服务器状态信息，也可以在操作系统上使用 <strong>mysqladmin extended-status </strong>命令获得这些消息。<strong>show [session|global] status </strong>可以根据需要加上参数<strong>session</strong>或者<strong>global</strong>来显示 session 级（当前连接）的统计结果和 global 级（自数据库上次启动至今）的统计结果。如果不写默认使用参数是<strong>session</strong>。</p>
-<p>Com_xxx 表示每个 xxx 语句执行的次数,我们通常比较关心的是以下几个统计参数：</p>
-<ul>
-<li>Com_select：执行 select 操作的次数,一次查询只累加 1。</li>
-<li>Com_insert：执行 INSERT 操作的次数,对于批量插入的 INSERT 操作，只累加一次。</li>
-<li>Com_update：执行 UPDATE 操作的次数。</li>
-<li>Com_delete：执行 DELETE 操作的次数。</li>
-</ul>
-<p>上面这些参数对于所有存储引擎的表操作都会进行累计。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Web 开发使用 Controller 基本上可以完成大部分需求， 但是我们还可能会用到 Servlet、 Filter、 Listener 等，并且在 spring boot 中的三种实现方式  。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/23/dataBase/mysqloptimize/#more" rel="contents">
+            <a class="btn" href="/2018/08/31/SpringBoot/servletfliterlistener/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1832,7 +1705,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/22/dataBase/optimizesql/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/30/SpringBoot/springboot-web/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1851,7 +1724,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/22/dataBase/optimizesql/" itemprop="url">sql优化</a></h1>
+                <a class="post-title-link" href="/2018/08/30/SpringBoot/springboot-web/" itemprop="url">Spring Boot（七）：web开发之模板引擎</a></h1>
         
 
         <div class="post-meta">
@@ -1863,8 +1736,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T18:07:19+08:00">
-                2018-01-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-30T16:48:16+08:00">
+                2018-08-30
               </time>
             
 
@@ -1886,8 +1759,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -1904,9 +1777,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/22/dataBase/optimizesql/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/30/SpringBoot/springboot-web/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/22/dataBase/optimizesql/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/30/SpringBoot/springboot-web/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1914,7 +1787,7 @@
 
           
           
-             <span id="/2018/01/22/dataBase/optimizesql/" class="leancloud_visitors" data-flag-title="sql优化">
+             <span id="/2018/08/30/SpringBoot/springboot-web/" class="leancloud_visitors" data-flag-title="Spring Boot（七）：web开发之模板引擎">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1946,17 +1819,11 @@
 
       
         
-          <p>本节针对sql优化的常见优化点做一总结：</p>
-<h2 id="一、常见sql语句优化"><a href="#一、常见sql语句优化" class="headerlink" title="一、常见sql语句优化"></a>一、常见sql语句优化</h2><ol>
-<li><p>对查询进行优化，应尽量避免全表扫描，首先应考虑在where及order by 涉及的列上建立索引。</p>
-</li>
-<li><p>避免在where子句中使用is null 或 is not null对字段进行判断。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select id from table where name is null</span><br></pre></td></tr></table></figure>
-<p>在这个查询中，就算我们为 name 字段设置了索引，查询分析器也不会使用，因此查询效率底下。为了避免这样的查询，在数据库设计的时候，尽量将可能会出现 null 值的字段设置默认值，这里如果我们将 name 字段的默认值设置为0，那么我们就可以这样查询：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select id from table where name = 0</span><br></pre></td></tr></table></figure></li></ol>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>目前开发大都前后端分离，这里学习模板引擎只做了解。模板引擎的选择可以有：FreeMarker、Thymeleaf、Groovy、Mustache等。增加的css、js、等文件的目录结构：</p>
+<p><img src="/2018/08/30/SpringBoot/springboot-web/fm01.png" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/22/dataBase/optimizesql/#more" rel="contents">
+            <a class="btn" href="/2018/08/30/SpringBoot/springboot-web/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2007,7 +1874,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/20/dataBase/sqlindex/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/30/SpringBoot/environment/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -2026,7 +1893,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/20/dataBase/sqlindex/" itemprop="url">索引实现原理</a></h1>
+                <a class="post-title-link" href="/2018/08/30/SpringBoot/environment/" itemprop="url">Spring Boot（六）：多环境配置</a></h1>
         
 
         <div class="post-meta">
@@ -2038,8 +1905,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-20T14:18:23+08:00">
-                2018-01-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-30T13:46:46+08:00">
+                2018-08-30
               </time>
             
 
@@ -2061,8 +1928,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
                   </a>
                 </span>
 
@@ -2079,9 +1946,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/20/dataBase/sqlindex/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/30/SpringBoot/environment/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/20/dataBase/sqlindex/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/30/SpringBoot/environment/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2089,7 +1956,7 @@
 
           
           
-             <span id="/2018/01/20/dataBase/sqlindex/" class="leancloud_visitors" data-flag-title="索引实现原理">
+             <span id="/2018/08/30/SpringBoot/environment/" class="leancloud_visitors" data-flag-title="Spring Boot（六）：多环境配置">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -2121,12 +1988,10 @@
 
       
         
-          <p>数据库索引是数据库管理系统中一个排序的数据结构，以协助快速查询、更新数据库表中数据。索引的实现通常使用<strong>B树</strong>及其变种<strong>B+树</strong>。</p>
-<p>下图展示了一种可能的索引方式。左边是数据表，一共有两列七条记录，最左边的是数据记录的物理地址（注意逻辑上相邻的记录在磁盘上也并不是一定物理相邻的）。为了加快Col2的查找，可以维护一个右边所示的二叉查找树，每个节点分别包含索引键值和一个指向对应数据记录物理地址的指针，这样就可以运用二叉查找在O(log2n)的复杂度内获取到相应数据。</p>
-<p><img src="/2018/01/20/dataBase/sqlindex/sqlindex01.png" alt=""></p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在开发应用时，常用部署的应用是多个的，比如：开发、测试、联调、生产等不同的应用环境，这些应用环境都对应不同的配置项，比如swagger一般上在生产时是关闭的；不同环境数据库地址、端口号等都是不尽相同的，要是没有多环境的自由切换，部署起来是很繁琐也容易出错的。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/20/dataBase/sqlindex/#more" rel="contents">
+            <a class="btn" href="/2018/08/30/SpringBoot/environment/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2168,7 +2033,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2218,7 +2083,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-count">168</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2229,7 +2094,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2240,7 +2105,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

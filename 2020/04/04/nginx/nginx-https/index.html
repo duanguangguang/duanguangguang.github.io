@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="nginx," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍因为HTTP协议是不安全的，会发生下面几点情况：  传输数据被中间人盗用、信息泄露 数据内容劫持、篡改  所以需要使用HTTPS协议，有了HTTPS就能解决HTTP传输不安全的问题，因为HTTPS对传输内容进行加密以及身份验证。">
+<meta name="keywords" content="nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx https服务">
+<meta property="og:url" content="http://yoursite.com/2020/04/04/nginx/nginx-https/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍因为HTTP协议是不安全的，会发生下面几点情况：  传输数据被中间人盗用、信息泄露 数据内容劫持、篡改  所以需要使用HTTPS协议，有了HTTPS就能解决HTTP传输不安全的问题，因为HTTPS对传输内容进行加密以及身份验证。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="c:/duanguangguang.github.io/source/_posts/nginx/nginx-https/对称加密.png">
+<meta property="og:image" content="c:/duanguangguang.github.io/source/_posts/nginx/nginx-https/非对称加密.png">
+<meta property="og:image" content="c:/duanguangguang.github.io/source/_posts/nginx/nginx-https/https加密协议原理.png">
+<meta property="og:image" content="c:/duanguangguang.github.io/source/_posts/nginx/nginx-https/中间人劫持.png">
+<meta property="og:image" content="c:/duanguangguang.github.io/source/_posts/nginx/nginx-https/CA证书.png">
+<meta property="og:image" content="c:/duanguangguang.github.io/source/_posts/nginx/nginx-https/ca证书演示一.png">
+<meta property="og:image" content="c:/duanguangguang.github.io/source/_posts/nginx/nginx-https/ca证书演示二.png">
+<meta property="og:updated_time" content="2020-04-05T09:50:57.620Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx https服务">
+<meta name="twitter:description" content="介绍因为HTTP协议是不安全的，会发生下面几点情况：  传输数据被中间人盗用、信息泄露 数据内容劫持、篡改  所以需要使用HTTPS协议，有了HTTPS就能解决HTTP传输不安全的问题，因为HTTPS对传输内容进行加密以及身份验证。">
+<meta name="twitter:image" content="c:/duanguangguang.github.io/source/_posts/nginx/nginx-https/对称加密.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/04/nginx/nginx-https/"/>
+
+
+
+
+
+  <title>nginx https服务 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            links
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/04/nginx/nginx-https/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nginx https服务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-04T11:47:24+08:00">
+                2020-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/04/nginx/nginx-https/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/04/04/nginx/nginx-https/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/04/nginx/nginx-https/" class="leancloud_visitors" data-flag-title="nginx https服务">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>因为HTTP协议是不安全的，会发生下面几点情况：</p>
+<ul>
+<li>传输数据被中间人盗用、信息泄露</li>
+<li>数据内容劫持、篡改</li>
+</ul>
+<p>所以需要使用HTTPS协议，有了HTTPS就能解决HTTP传输不安全的问题，因为HTTPS对传输内容进行加密以及身份验证。</p>
+<a id="more"></a>
+<h3 id="一、加密方式"><a href="#一、加密方式" class="headerlink" title="一、加密方式"></a>一、加密方式</h3><ol>
+<li><p>对称加密</p>
+<p><img src="C:\duanguangguang.github.io\source\_posts\nginx\nginx-https\对称加密.png" alt=""></p>
+<p>明文的数据在发送方进行数据的加密，在接收方进行数据的解密，发送方用的加密秘钥，接收方用的解密秘钥，对称加密加密秘钥和解密秘钥是一对的，一样的秘钥。</p>
+</li>
+<li><p>非对称加密</p>
+<p><img src="C:\duanguangguang.github.io\source\_posts\nginx\nginx-https\非对称加密.png" alt=""></p>
+<p>非对称加密的加密秘钥和解密秘钥是两串秘钥，是不一样的，分为公钥和私钥，只有通过公钥加密的东西，才能通过对应的私钥进行解密。</p>
+</li>
+<li><p>HTTPS加密协议原理</p>
+<p><img src="C:\duanguangguang.github.io\source\_posts\nginx\nginx-https\https加密协议原理.png" alt=""></p>
+<p>同时用到了加密和非对称加密，首先当用户端发起SSL连接的时候，进行的是非对称加密，服务端保管唯一私钥，将公钥发送给客户端，客户端收到公钥之后，再用公钥加密接下来要进行对称加密的密码，并发送到服务端。</p>
+<p>HTTPS采用对称加密和非对称加密的原因：因为非对称对连接要求较高，多次的连接情况下对性能会有所损耗，对称加密对性能来说比较简单，所以在第一次连接之后，完全可以用对称加密的方式了。</p>
+</li>
+<li><p>中间人劫持</p>
+<p><img src="C:\duanguangguang.github.io\source\_posts\nginx\nginx-https\中间人劫持.png" alt=""></p>
+<p>中间人可以在前面进行握手的时候，对客户端发送服务端的数据进行劫持，伪装成客户端，并且在服务端发送数据给客户端时也能伪装成服务端，进行劫持，对多次连接进行劫持。解决这个问题就用到了HTTPS的CA证书。</p>
+<p><img src="C:\duanguangguang.github.io\source\_posts\nginx\nginx-https\CA证书.png" alt=""></p>
+<p>服务端想客户端之前是发送的公钥，现在发送的是CA签名证书，这时中间人劫持就没有用了，中间人无法生成一个匹配CA签名证书的校验的，因为客户端会对CA证书进行校验，与第三方机构进行校验，如果校验成功则利用公钥加密，CA证书包含对应的公钥，如果校验失败，则停止会话。</p>
+</li>
+</ol>
+<h3 id="二、HTTPS生成CA证书"><a href="#二、HTTPS生成CA证书" class="headerlink" title="二、HTTPS生成CA证书"></a>二、HTTPS生成CA证书</h3><p>介绍自签证书。对于生成秘钥和CA证书，首先确认系统有没有装openssl。</p>
+<ol>
+<li><p>查看系统openssl</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 conf.d]# openssl version</span><br><span class="line">OpenSSL <span class="number">1.0</span>.2k-fips  <span class="number">26</span> Jan <span class="number">2017</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看nginx有没有编译http_ssl_module</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 conf.d]# nginx -V</span><br><span class="line">nginx version: nginx/<span class="number">1.16</span>.1</span><br><span class="line">built by gcc <span class="number">4.8</span>.5 <span class="number">20150623</span> (Red Hat <span class="number">4.8</span>.5-<span class="number">36</span>) (GCC) </span><br><span class="line">built with OpenSSL <span class="number">1.0</span>.2k-fips  <span class="number">26</span> Jan <span class="number">2017</span></span><br><span class="line">TLS SNI support enabled</span><br><span class="line">configure arguments: --with-http_ssl_module</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>生成证书步骤：</p>
+<ol>
+<li><p>生成key秘钥</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ssl_key]# openssl genrsa -idea -out duan.key 1024</span><br><span class="line">Generating RSA <span class="keyword">private</span> key, <span class="number">1024</span> bit <span class="keyword">long</span> modulus</span><br><span class="line">........++++++</span><br><span class="line">...................................................++++++</span><br><span class="line">e is <span class="number">65537</span> (<span class="number">0x10001</span>)</span><br><span class="line">Enter pass phrase <span class="keyword">for</span> duan.key:</span><br><span class="line">Verifying - Enter pass phrase <span class="keyword">for</span> duan.key:</span><br><span class="line">[root@node1 ssl_key]# ls</span><br><span class="line">duan.key</span><br></pre></td></tr></table></figure>
+<ul>
+<li>idea：这时一种对称加密的算法</li>
+<li>out：key文件</li>
+<li>1024：位数越高，精度越高</li>
+</ul>
+</li>
+<li><p>生成证书签名请求文件（csr文件）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ssl_key]# openssl req -new -key duan.key -out duan.csr</span><br><span class="line">Enter pass phrase <span class="keyword">for</span> duan.key:</span><br><span class="line">You are about to be asked to enter information that will be incorporated</span><br><span class="line">into your certificate request.</span><br><span class="line">What you are about to enter is what is called a Distinguished Name or a DN.</span><br><span class="line">There are quite a few fields but you can leave some blank</span><br><span class="line">For some fields there will be a <span class="keyword">default</span> value,</span><br><span class="line">If you enter <span class="string">'.'</span>, the field will be left blank.</span><br><span class="line">-----</span><br><span class="line"><span class="function">Country <span class="title">Name</span> <span class="params">(<span class="number">2</span> letter code)</span> [XX]:CN</span></span><br><span class="line"><span class="function">State or Province <span class="title">Name</span> <span class="params">(full name)</span> []:shenzhen</span></span><br><span class="line"><span class="function">Locality <span class="title">Name</span> <span class="params">(eg, city)</span> [Default City]:shenzhen</span></span><br><span class="line"><span class="function">Organization <span class="title">Name</span> <span class="params">(eg, company)</span> [Default Company Ltd]:CN</span></span><br><span class="line"><span class="function">Organizational Unit <span class="title">Name</span> <span class="params">(eg, section)</span> []:dodd</span></span><br><span class="line"><span class="function">Common <span class="title">Name</span> <span class="params">(eg, your name or your server<span class="string">'s hostname) []:node1</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="string">Email Address []:1@qq.com</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="string"></span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="string">Please enter the following '</span>extra<span class="string">' attributes</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="string">to be sent with your certificate request</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="string">A challenge password []:</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="string">An optional company name []:dodd</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="string">[root@node1 ssl_key]# ls</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="string">duan.csr  duan.key</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>new：表示生成一个新文件</li>
+<li>有了这两个文件，就可以找第三方机构进行CA证书签名</li>
+</ul>
+</li>
+<li><p>生成证书签名文件（CA文件）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ssl_key]# openssl x509 -req -days 3650 -in duan.csr -signkey duan.key -out duan.crt</span><br><span class="line">Signature ok</span><br><span class="line">subject=/C=CN/ST=shenzhen/L=shenzhen/O=CN/OU=dodd/CN=node1/emailAddress=<span class="number">1</span><span class="meta">@qq</span>.com</span><br><span class="line">Getting Private key</span><br><span class="line">Enter pass phrase <span class="keyword">for</span> duan.key:</span><br><span class="line">[root@node1 ssl_key]# ls</span><br><span class="line">duan.crt  duan.csr  duan.key</span><br></pre></td></tr></table></figure>
+<ul>
+<li>days 3650：表示签名证书的过期时间，默认一个月</li>
+<li>in：表示需要将csr文件加入进去</li>
+</ul>
+</li>
+</ol>
+<p>nginxdeHTTPS语法配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	ssl on|off;</span><br><span class="line">Default: ssl off;</span><br><span class="line">Context: http,server</span><br><span class="line"></span><br><span class="line"><span class="comment">// 证书文件</span></span><br><span class="line">Syntax:	ssl_certificate file;</span><br><span class="line">Default: --</span><br><span class="line">Context: http,server</span><br><span class="line"></span><br><span class="line"><span class="comment">// 证书密码文件</span></span><br><span class="line">Syntax:	ssl_certificate_key file;</span><br><span class="line">Default: --</span><br><span class="line">Context: http,server</span><br></pre></td></tr></table></figure>
+<p>场景演示：</p>
+<ol>
+<li><p>演示html文件</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">	&lt;title&gt;admin&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body style=<span class="string">"background-color:red;"</span>&gt;</span><br><span class="line">&lt;h1&gt;Admin&lt;/h1&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置nginx</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server</span><br><span class="line"> &#123;</span><br><span class="line">   listen       <span class="number">443</span>;</span><br><span class="line">   server_name  <span class="number">192.168</span>.x.xxx node1;</span><br><span class="line">   ssl on;</span><br><span class="line">   ssl_certificate /etc/nginx/ssl_key/duan.crt;</span><br><span class="line">   ssl_certificate_key /etc/nginx/ssl_key/duan.key;</span><br><span class="line">   #ssl_certificate_key /etc/nginx/ssl_key/duan_nopass.key;</span><br><span class="line"></span><br><span class="line">   index index.html index.htm;</span><br><span class="line">   location / &#123;</span><br><span class="line">       root  /opt/app/code;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启nginx服务</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 conf.d]# nginx -s stop -c /etc/nginx/nginx.conf </span><br><span class="line">nginx: [warn] the <span class="string">"ssl"</span> directive is deprecated, use the <span class="string">"listen ... ssl"</span> directive instead in /etc/nginx/conf.d/test_https.conf:<span class="number">5</span></span><br><span class="line">Enter PEM pass phrase:</span><br><span class="line">[root@node1 conf.d]# nginx -c /etc/nginx/nginx.conf </span><br><span class="line">nginx: [warn] the <span class="string">"ssl"</span> directive is deprecated, use the <span class="string">"listen ... ssl"</span> directive instead in /etc/nginx/conf.d/test_https.conf:<span class="number">5</span></span><br><span class="line">Enter PEM pass phrase:</span><br></pre></td></tr></table></figure>
+<p>发现每次重启服务都需要输入密码。</p>
+</li>
+<li><p>查看系统有没有开启443端口监听</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 conf.d]# netstat -luntp|grep 443</span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.0.0:<span class="number">443</span>             <span class="number">0.0</span>.0.0:*               LISTEN      <span class="number">4988</span>/nginx: master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>访问测试</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:<span class="comment">//192.168.x.xxx/admin.html</span></span><br></pre></td></tr></table></figure>
+<p><img src="C:\duanguangguang.github.io\source\_posts\nginx\nginx-https\ca证书演示一.png" alt=""></p>
+<p>继续访问：</p>
+<p><img src="C:\duanguangguang.github.io\source\_posts\nginx\nginx-https\ca证书演示二.png" alt=""></p>
+</li>
+</ol>
+<h3 id="三、配置苹果要求的证书"><a href="#三、配置苹果要求的证书" class="headerlink" title="三、配置苹果要求的证书"></a>三、配置苹果要求的证书</h3><p>要求：</p>
+<ul>
+<li>服务器所有的连接使用TLS1.2以上版本（openssl1.0.2）</li>
+<li>HTTPS证书必须使用SHA256以上哈希算法签名</li>
+<li>HTTPS证书必须使用RSA 2048位或ECC 256位以上公钥算法</li>
+<li>使用前向加密技术</li>
+</ul>
+<p>查看openssl版本：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ssl_key]# openssl version</span><br><span class="line">OpenSSL <span class="number">1.0</span>.2k-fips  <span class="number">26</span> Jan <span class="number">2017</span></span><br></pre></td></tr></table></figure>
+<p>可以看到版本是1.0.2。</p>
+<p>查看加密算法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ssl_key]# openssl x509 -noout -text -in ./duan.crt</span><br><span class="line">Certificate:</span><br><span class="line">    Data:</span><br><span class="line">        Version: <span class="number">1</span> (<span class="number">0x0</span>)</span><br><span class="line">        Serial Number:</span><br><span class="line">            f2:d8:fe:<span class="number">44</span>:<span class="number">4</span>a:<span class="number">95</span>:<span class="number">54</span>:<span class="number">66</span></span><br><span class="line">    Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">        Issuer: C=CN, ST=shenzhen, L=shenzhen, O=CN, OU=dodd, CN=node1/emailAddress=<span class="number">1</span><span class="meta">@qq</span>.com</span><br><span class="line">        Validity</span><br><span class="line">            Not Before: Apr  <span class="number">5</span> <span class="number">09</span>:<span class="number">06</span>:<span class="number">28</span> <span class="number">2020</span> GMT</span><br><span class="line">            Not After : Apr  <span class="number">3</span> <span class="number">09</span>:<span class="number">06</span>:<span class="number">28</span> <span class="number">2030</span> GMT</span><br><span class="line">        Subject: C=CN, ST=shenzhen, L=shenzhen, O=CN, OU=dodd, CN=node1/emailAddress=<span class="number">1</span><span class="meta">@qq</span>.com</span><br><span class="line">        Subject Public Key Info:</span><br><span class="line">            Public Key Algorithm: rsaEncryption</span><br><span class="line">                Public-Key: (<span class="number">1024</span> bit)</span><br></pre></td></tr></table></figure>
+<p>可以看到加密算法使用：sha256，位数：1024。</p>
+<p>直接通过key生成crt文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -days <span class="number">36500</span> -x509 -sha256 -nodes -newkey rsa:<span class="number">2048</span> -keyout duan.key -out duan_apple.crt</span><br></pre></td></tr></table></figure>
+<p>替换证书，修改nginx配置文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#ssl_certificate /etc/nginx/ssl_key/duan.crt;</span><br><span class="line">ssl_certificate /etc/nginx/ssl_key/duan_apple.crt;</span><br></pre></td></tr></table></figure>
+<p>去掉保护码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsa -in ./duan.key -out ./duan_nopass.key</span><br></pre></td></tr></table></figure>
+<h3 id="四、HTTPS服务优化"><a href="#四、HTTPS服务优化" class="headerlink" title="四、HTTPS服务优化"></a>四、HTTPS服务优化</h3><p>HTTPS的建立是要在HTTP之前建立ssl握手，HTTPS的认证就会多一次连接，对于服务端就会需要进行对应的认证，会消耗服务端的cpu资源以及io资源。</p>
+<p>方式一：激活keepalive长连接</p>
+<p>方式二：设置ssl session缓存</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server</span><br><span class="line"> &#123;</span><br><span class="line">   listen       <span class="number">443</span>;</span><br><span class="line">   server_name  <span class="number">192.168</span>.x.xxx node1;</span><br><span class="line"> </span><br><span class="line">   keepalive_timeout <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">   ssl on;</span><br><span class="line">   ssl_session_cache   shared:SSL:<span class="number">10</span>m;</span><br><span class="line">   ssl_session_timeout <span class="number">10</span>m;</span><br><span class="line"></span><br><span class="line">   #ssl_certificate /etc/nginx/ssl_key/duan.crt;</span><br><span class="line">   ssl_certificate /etc/nginx/ssl_key/duan_apple.crt;</span><br><span class="line">   ssl_certificate_key /etc/nginx/ssl_key/duan.key;</span><br><span class="line">   #ssl_certificate_key /etc/nginx/ssl_key/duan_nopass.key;</span><br><span class="line"></span><br><span class="line">   index index.html index.htm;</span><br><span class="line">   location / &#123;</span><br><span class="line">       root  /opt/app/code;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nginx/" rel="tag"># nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/04/nginx/nginx-advanced/" rel="next" title="nginx高级模块">
+                <i class="fa fa-chevron-left"></i> nginx高级模块
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/04/nginx/nginx-lua/" rel="prev" title="nginx与Lua开发">
+                nginx与Lua开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、加密方式"><span class="nav-number">2.</span> <span class="nav-text">一、加密方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、HTTPS生成CA证书"><span class="nav-number">3.</span> <span class="nav-text">二、HTTPS生成CA证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、配置苹果要求的证书"><span class="nav-number">4.</span> <span class="nav-text">三、配置苹果要求的证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、HTTPS服务优化"><span class="nav-number">5.</span> <span class="nav-text">四、HTTPS服务优化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/04/nginx/nginx-https/';
+          this.page.identifier = '2020/04/04/nginx/nginx-https/';
+          this.page.title = 'nginx https服务';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

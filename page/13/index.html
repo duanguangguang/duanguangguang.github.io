@@ -336,7 +336,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/08/designPattern/abstractFactory/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/17/designPattern/visitor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -355,7 +355,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/08/designPattern/abstractFactory/" itemprop="url">java设计模式（二）抽象工厂模式（Abstract Factory）</a></h1>
+                <a class="post-title-link" href="/2017/09/17/designPattern/visitor/" itemprop="url">java设计模式（二十一）访问者模式（Visitor）</a></h1>
         
 
         <div class="post-meta">
@@ -367,8 +367,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-08T12:38:53+08:00">
-                2017-09-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-17T17:37:52+08:00">
+                2017-09-17
               </time>
             
 
@@ -419,9 +419,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/08/designPattern/abstractFactory/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/17/designPattern/visitor/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/09/08/designPattern/abstractFactory/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/17/designPattern/visitor/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -429,7 +429,7 @@
 
           
           
-             <span id="/2017/09/08/designPattern/abstractFactory/" class="leancloud_visitors" data-flag-title="java设计模式（二）抽象工厂模式（Abstract Factory）">
+             <span id="/2017/09/17/designPattern/visitor/" class="leancloud_visitors" data-flag-title="java设计模式（二十一）访问者模式（Visitor）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -461,11 +461,13 @@
 
       
         
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>工厂方法模式</strong>有一个问题就是，类的创建依赖工厂类，也就是说，如果想要拓展程序，必须对工厂类进行修改，这违背了闭包原则</p>
-<p><strong>抽象工厂模式</strong>  创建多个工厂类，这样一旦需要增加新的功能，直接增加新的工厂类就可以了，不需要修改之前的代码.提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类</p>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>访问者模式(Visitor Pattern)：</strong>表示一个作用于某对象结构中的各元素的操作，它使我们可以在不改变各元素的类的前提下定义作用于这些元素的新操作。访问者模式是一种对象行为型模式。</p>
+<p>简单来说，访问者模式就是一种分离对象数据结构与行为的方法，通过这种分离，可达到为一个被访问者动态添加新的操作而无需做其它的修改的效果。</p>
+<p>关系图：</p>
+<p><img src="/2017/09/17/designPattern/visitor/dp2101.jpg" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/09/08/designPattern/abstractFactory/#more" rel="contents">
+            <a class="btn" href="/2017/09/17/designPattern/visitor/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -516,7 +518,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/07/designPattern/factoryModel/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/17/designPattern/state/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -535,7 +537,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/07/designPattern/factoryModel/" itemprop="url">java设计模式（一）工厂方法模式（Factory Model）</a></h1>
+                <a class="post-title-link" href="/2017/09/17/designPattern/state/" itemprop="url">java设计模式（二十）状态模式（State）</a></h1>
         
 
         <div class="post-meta">
@@ -547,8 +549,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-07T16:33:57+08:00">
-                2017-09-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-17T17:29:37+08:00">
+                2017-09-17
               </time>
             
 
@@ -599,9 +601,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/07/designPattern/factoryModel/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/17/designPattern/state/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/09/07/designPattern/factoryModel/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/17/designPattern/state/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -609,7 +611,7 @@
 
           
           
-             <span id="/2017/09/07/designPattern/factoryModel/" class="leancloud_visitors" data-flag-title="java设计模式（一）工厂方法模式（Factory Model）">
+             <span id="/2017/09/17/designPattern/state/" class="leancloud_visitors" data-flag-title="java设计模式（二十）状态模式（State）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -641,17 +643,17 @@
 
       
         
-          <h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p><strong>工厂方法模式分为四种：</strong></p>
-<ul>
-<li>简单工厂模式</li>
-<li>多个工厂方法模式</li>
-<li>静态工厂方法模式</li>
-<li>工厂方法模式</li>
-</ul>
-<p>其中前三种都属于简单工厂模式，又叫做静态工厂方法模式，但不属于23种GOF设计模式之一。</p>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>状态模式(State Pattern) ：</strong>允许一个对象在其内部状态改变时改变它的行为，对外看起来似乎修改了它的类。其别名为状态对象(Objects for States)，状态模式是一种对象行为型模式。</p>
+<p>核心思想就是：当对象的状态改变时，同时改变其行为，很好理解！就拿QQ来说，有几种状态，在线、隐身、忙碌等，每个状态对应不同的操作，而且你的好友也能看到你的状态，所以，状态模式就两点：</p>
+<ol>
+<li>可以通过改变状态来获得不同的行为。</li>
+<li>你的好友能同时看到你的变化。</li>
+</ol>
+<p>关系图：</p>
+<p><img src="/2017/09/17/designPattern/state/dp2001.jpg" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/09/07/designPattern/factoryModel/#more" rel="contents">
+            <a class="btn" href="/2017/09/17/designPattern/state/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -702,7 +704,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/03/designPattern/designPattern00/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/17/designPattern/memento/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -721,7 +723,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/03/designPattern/designPattern00/" itemprop="url">设计模式</a></h1>
+                <a class="post-title-link" href="/2017/09/17/designPattern/memento/" itemprop="url">java设计模式（十九）备忘录模式（Memento）</a></h1>
         
 
         <div class="post-meta">
@@ -733,8 +735,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T15:59:03+08:00">
-                2017-09-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-17T17:21:48+08:00">
+                2017-09-17
               </time>
             
 
@@ -785,9 +787,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/03/designPattern/designPattern00/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/17/designPattern/memento/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/09/03/designPattern/designPattern00/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/17/designPattern/memento/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -795,7 +797,7 @@
 
           
           
-             <span id="/2017/09/03/designPattern/designPattern00/" class="leancloud_visitors" data-flag-title="设计模式">
+             <span id="/2017/09/17/designPattern/memento/" class="leancloud_visitors" data-flag-title="java设计模式（十九）备忘录模式（Memento）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -827,13 +829,13 @@
 
       
         
-          <h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><p>原文：<a href="http://blog.csdn.net/zhangerqing/article/details/8194653" target="_blank" rel="noopener">Java之美[从菜鸟到高手演变]之设计模式</a></p>
-<p>参考：<a href="http://www.cnblogs.com/maowang1991/archive/2013/04/15/3023236.html" target="_blank" rel="noopener">Java开发中的23种设计模式详解</a></p>
-<p>设计模式（Design pattern）是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。使用设计模式是为了可重用代码、让代码更容易被他人理解、保证代码可靠性。设计模式间关系：</p>
-<p><img src="/2017/09/03/designPattern/designPattern00/dp00.jpg" alt=""></p>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>备忘录模式(Memento Pattern)：</strong>在不破坏封装的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样可以在以后将对象恢复到原先保存的状态。它是一种对象行为型模式，其别名为Token。</p>
+<p>主要目的是保存一个对象的某个状态，以便在适当的时候恢复对象，通俗的讲下：假设有原始类A，A中有各种属性，A可以决定需要备份的属性，备忘录类B是用来存储A的一些内部状态，类C呢，就是一个用来存储备忘录的，且只能存储，不能修改等操作。</p>
+<p>关系图：</p>
+<p><img src="/2017/09/17/designPattern/memento/dp1901.jpg" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/09/03/designPattern/designPattern00/#more" rel="contents">
+            <a class="btn" href="/2017/09/17/designPattern/memento/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -884,7 +886,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/01/dataBase/sqlselect/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/17/designPattern/command/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -903,7 +905,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/01/dataBase/sqlselect/" itemprop="url">SQL查询</a></h1>
+                <a class="post-title-link" href="/2017/09/17/designPattern/command/" itemprop="url">java设计模式（十八）命令模式（Command）</a></h1>
         
 
         <div class="post-meta">
@@ -915,8 +917,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-01T18:00:30+08:00">
-                2017-09-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-17T17:12:53+08:00">
+                2017-09-17
               </time>
             
 
@@ -938,8 +940,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -956,9 +969,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/01/dataBase/sqlselect/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/17/designPattern/command/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/09/01/dataBase/sqlselect/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/17/designPattern/command/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -966,7 +979,7 @@
 
           
           
-             <span id="/2017/09/01/dataBase/sqlselect/" class="leancloud_visitors" data-flag-title="SQL查询">
+             <span id="/2017/09/17/designPattern/command/" class="leancloud_visitors" data-flag-title="java设计模式（十八）命令模式（Command）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -998,13 +1011,13 @@
 
       
         
-          <h2 id="SQL查询"><a href="#SQL查询" class="headerlink" title="SQL查询"></a>SQL查询</h2><p>针对常用的SQL查询总结一下</p>
-<h3 id="一、检索"><a href="#一、检索" class="headerlink" title="一、检索"></a>一、检索</h3><ol>
-<li><p>distinct过滤相同的列</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select distinct column_name from products;--唯一性，distinct作用于所有列</span><br></pre></td></tr></table></figure></li></ol>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>命令模式(Command Pattern)：</strong>将一个请求封装为一个对象，从而使我们可用不同的请求对客户进行参数化；对请求排队或者记录请求日志，以及支持可撤销的操作。命令模式是一种对象行为型模式，其别名为动作(Action)模式或事务(Transaction)模式。</p>
+<p>命令模式很好理解，举个例子，司令员下令让士兵去干件事情，从整个事情的角度来考虑，司令员的作用是，发出口令，口令经过传递，传到了士兵耳朵里，士兵去执行。这个过程好在，三者相互解耦，任何一方都不用去依赖其他人，只需要做好自己的事儿就行，司令员要的是结果，不会去关注到底士兵是怎么实现的。</p>
+<p>关系图：</p>
+<p><img src="/2017/09/17/designPattern/command/dp1801.jpg" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/09/01/dataBase/sqlselect/#more" rel="contents">
+            <a class="btn" href="/2017/09/17/designPattern/command/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1055,7 +1068,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/29/dataBase/index/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/17/designPattern/chain/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1074,7 +1087,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/29/dataBase/index/" itemprop="url">索引基本概念</a></h1>
+                <a class="post-title-link" href="/2017/09/17/designPattern/chain/" itemprop="url">java设计模式（十七）责任链模式（Chain of Responsibility）</a></h1>
         
 
         <div class="post-meta">
@@ -1086,8 +1099,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-29T19:55:17+08:00">
-                2017-08-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-17T17:04:12+08:00">
+                2017-09-17
               </time>
             
 
@@ -1109,8 +1122,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -1127,9 +1151,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/08/29/dataBase/index/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/17/designPattern/chain/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/08/29/dataBase/index/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/17/designPattern/chain/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1137,7 +1161,7 @@
 
           
           
-             <span id="/2017/08/29/dataBase/index/" class="leancloud_visitors" data-flag-title="索引基本概念">
+             <span id="/2017/09/17/designPattern/chain/" class="leancloud_visitors" data-flag-title="java设计模式（十七）责任链模式（Chain of Responsibility）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1169,17 +1193,14 @@
 
       
         
-          <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>索引用来排序数据以加快搜索和排序操作的速度。使用索引，可以在一个或多个列上定义索引，使DBMS保存其内容的一个排过序的列表。在定义了索引后，DBMS搜索排过序的索引，找出匹配的位置，然后检索这些行。</p>
-<p>创建索引语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create [unique][clustered|nonclustered]index index_name --索引名必须唯一</span><br><span class="line">	 on &#123;table_name|view_name&#125;[with [index_property]];--on指定被索引的表，括号中指明索引包含的列</span><br><span class="line">--例：建立唯一索引</span><br><span class="line">SQL&gt; create unique index emp_email on employees(email) tablespace users;</span><br></pre></td></tr></table></figure>
-<p>说明：<strong>unique</strong>：建立唯一索引，<strong>clustered</strong>：建立聚集索引，<strong>nonclustered</strong>：建立非聚集索引，<strong>index_property</strong>：索引属性。unique索引既可以采用聚集索引结构，也可以采用非聚集索引的结构。</p>
-<p>删除索引语法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; drop index table_name.index_name[,table_name.index_name]--索引所在的表名称.索引名称</span><br></pre></td></tr></table></figure>
-<p>显示索引信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">--oracle用user_indexes和user_ind_columns系统表查看已经存在的索引</span><br><span class="line">--user_indexes: 系统视图存放是索引的名称以及该索引是否是唯一索引等信息。</span><br><span class="line">--user_ind_column: 系统视图存放的是索引名称，对应的表和列等。</span><br><span class="line">--查看索引个数和类别:</span><br><span class="line">SQL&gt; select * from user_indexes where table=&apos;表名&apos;;</span><br><span class="line">--查看索引被索引的字段:</span><br><span class="line">SQL&gt; select * from user_ind_columns where index_name=upper(&apos;&amp;index_name&apos;);</span><br><span class="line">--通过类似下面的语句来查看一个表的索引的基本情况：</span><br><span class="line">SQL&gt; select user_ind_columns.index_name,user_ind_columns.column_name,</span><br><span class="line">	 user_ind_columns.column_position,user_indexes.uniqueness</span><br><span class="line">	 from user_ind_columns,user_indexes</span><br><span class="line">	 where user_ind_columns.index_name = user_indexes.index_name</span><br><span class="line">	 and user_ind_columns.table_name = &apos;你想要查询的表名字&apos;;</span><br><span class="line"></span><br><span class="line">--SQL Server使用系统存储过程：sp_helpindex 查看指定表的索引信息。</span><br><span class="line">SQL&gt; Exec sp_helpindex book1;</span><br></pre></td></tr></table></figure>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>职责链模式(Chain of Responsibility Pattern)：避免请求发送者与接收者耦合在一起，让多个对象都有可能接收请求，将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止。它是一种对象行为型模式。</p>
+<p>责任链模式，有多个对象，每个对象持有对下一个对象的引用，这样就会形成一条链，请求在这条链上传递，直到某一对象决定处理该请求。但是发出者并不清楚到底最终那个对象会处理该请求，所以，责任链模式可以实现，在隐瞒客户端的情况下，对系统进行动态的调整。</p>
+<p>关系图：</p>
+<p><img src="/2017/09/17/designPattern/chain/dp1701.jpg" alt=""></p>
+<p>Abstracthandler类提供了get和set方法，方便MyHandle类设置和修改引用对象，MyHandle类是核心，实例化后生成一系列相互持有的对象，构成一条链。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/29/dataBase/index/#more" rel="contents">
+            <a class="btn" href="/2017/09/17/designPattern/chain/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1230,7 +1251,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/29/dataBase/view/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/17/designPattern/iterator/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1249,7 +1270,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/29/dataBase/view/" itemprop="url">视图</a></h1>
+                <a class="post-title-link" href="/2017/09/17/designPattern/iterator/" itemprop="url">java设计模式（十六）迭代器模式（Iterator）</a></h1>
         
 
         <div class="post-meta">
@@ -1261,8 +1282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-29T19:46:21+08:00">
-                2017-08-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-17T16:51:09+08:00">
+                2017-09-17
               </time>
             
 
@@ -1284,8 +1305,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -1302,9 +1334,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/08/29/dataBase/view/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/17/designPattern/iterator/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/08/29/dataBase/view/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/17/designPattern/iterator/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1312,7 +1344,7 @@
 
           
           
-             <span id="/2017/08/29/dataBase/view/" class="leancloud_visitors" data-flag-title="视图">
+             <span id="/2017/09/17/designPattern/iterator/" class="leancloud_visitors" data-flag-title="java设计模式（十六）迭代器模式（Iterator）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1344,15 +1376,14 @@
 
       
         
-          <h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p>视图是一张虚拟表，它表示一张表的部分数据或多张表的综合数据，其结构和数据是建立在对表的查询基础上。视图中并不存放数据，视图只包含使用时动态检索数据的查询。存放在视图所引用的原始表（基表）中同一张原始表，根据不同用户的不同需求，可以创建不同的视图。DBMS支持说明：</p>
-<ul>
-<li>Microsoft Access不支持视图</li>
-<li>MySQL从1.5版本开始支持视图</li>
-<li>SQLite仅支持只读视图，所以视图可以创建，可以读，但不能修改</li>
-</ul>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>迭代器模式(Iterator Pattern) ：</strong>提供一种方法来访问聚合对象，而不用暴露这个对象的内部表示，其别名为游标(Cursor)。迭代器模式是一种对象行为型模式。</p>
+<p>迭代器模式就是顺序访问聚集中的对象，一般来说，集合中非常常见。这句话包含两层意思：一是需要遍历的对象，即聚集对象，二是迭代器对象，用于对聚集对象进行遍历访问。</p>
+<p>关系图：</p>
+<p><img src="/2017/09/17/designPattern/iterator/dp1601.jpg" alt=""></p>
+<p>这个思路和我们常用的一模一样，MyCollection中定义了集合的一些操作，MyIterator中定义了一系列迭代操作，且持有Collection实例。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/29/dataBase/view/#more" rel="contents">
+            <a class="btn" href="/2017/09/17/designPattern/iterator/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1403,7 +1434,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/29/dataBase/affair/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/16/designPattern/observer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1422,7 +1453,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/29/dataBase/affair/" itemprop="url">数据库事务</a></h1>
+                <a class="post-title-link" href="/2017/09/16/designPattern/observer/" itemprop="url">java设计模式（十五）观察者模式（Observer）</a></h1>
         
 
         <div class="post-meta">
@@ -1434,8 +1465,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-29T16:47:03+08:00">
-                2017-08-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T14:20:14+08:00">
+                2017-09-16
               </time>
             
 
@@ -1457,8 +1488,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -1475,9 +1517,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/08/29/dataBase/affair/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/16/designPattern/observer/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/08/29/dataBase/affair/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/16/designPattern/observer/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1485,7 +1527,7 @@
 
           
           
-             <span id="/2017/08/29/dataBase/affair/" class="leancloud_visitors" data-flag-title="数据库事务">
+             <span id="/2017/09/16/designPattern/observer/" class="leancloud_visitors" data-flag-title="java设计模式（十五）观察者模式（Observer）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1517,16 +1559,14 @@
 
       
         
-          <h2 id="数据库之事务"><a href="#数据库之事务" class="headerlink" title="数据库之事务"></a>数据库之事务</h2><h3 id="一、事务"><a href="#一、事务" class="headerlink" title="一、事务"></a>一、事务</h3><p><strong>事务</strong>是一组原子操作单元，从数据库角度说，就是一组SQL指令，要么全部执行成功，若因为某个原因其中一条指令执行有错误，则撤销先前执行过的所有指令。<strong>要么全部执行成功，要么撤销不执行</strong>。例：网上转帐就是典型的要用事务来处理，用以保证数据的一致性</p>
-<h4 id="1-ACID原则"><a href="#1-ACID原则" class="headerlink" title="1. ACID原则"></a>1. ACID原则</h4><ul>
-<li>原子性（atomicity）：事务执行过程中的任何失败都将导致事务所做的任何修改失效</li>
-<li>一致性（consistency）：当事务执行失败时，所有被该事务影响的数据都应该恢复到事务执行前的状态</li>
-<li>隔离性（isolation）：在事务执行过程中对数据的修改，在事务提交之前对其他事务不可见</li>
-<li>持久性（durability）：已提交的数据在事务执行失败时，数据的状态都应该正确</li>
-</ul>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>观察者模式(Observer Pattern)：</strong>定义对象间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。观察者模式又叫做发布-订阅（Publish/Subscribe）模式、模型-视图（Model/View）模式、源-监听器（Source/Listener）模式或从属者（Dependents）模式。观察者模式是一种对象行为型模式。</p>
+<p>观察者模式很好理解，类似于邮件订阅和RSS订阅，当我们浏览一些博客或wiki时，经常会看到RSS图标，就这的意思是，当你订阅了该文章，如果后续有更新，会及时通知你。其实，简单来讲就一句话：当一个对象变化时，其它依赖该对象的对象都会收到通知，并且随着变化！对象之间是一种一对多的关系。</p>
+<p>关系图：</p>
+<p><img src="/2017/09/16/designPattern/observer/dp1501.jpg" alt=""></p>
+<p>MySubject类就是我们的主对象，Observer1和Observer2是依赖于MySubject的对象，当MySubject变化时，Observer1和Observer2必然变化。AbstractSubject类中定义着需要监控的对象列表，可以对其进行修改：增加或删除被监控对象，且当MySubject变化时，负责通知在列表内存在的对象。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/29/dataBase/affair/#more" rel="contents">
+            <a class="btn" href="/2017/09/16/designPattern/observer/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1577,7 +1617,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/28/dataBase/trigger/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/16/designPattern/template/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1596,7 +1636,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/28/dataBase/trigger/" itemprop="url">触发器</a></h1>
+                <a class="post-title-link" href="/2017/09/16/designPattern/template/" itemprop="url">java设计模式（十四）模板方法模式（Template Method）</a></h1>
         
 
         <div class="post-meta">
@@ -1608,8 +1648,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-28T16:53:24+08:00">
-                2017-08-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T13:31:06+08:00">
+                2017-09-16
               </time>
             
 
@@ -1631,8 +1671,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -1649,9 +1700,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/08/28/dataBase/trigger/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/16/designPattern/template/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/08/28/dataBase/trigger/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/16/designPattern/template/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1659,7 +1710,7 @@
 
           
           
-             <span id="/2017/08/28/dataBase/trigger/" class="leancloud_visitors" data-flag-title="触发器">
+             <span id="/2017/09/16/designPattern/template/" class="leancloud_visitors" data-flag-title="java设计模式（十四）模板方法模式（Template Method）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1691,11 +1742,14 @@
 
       
         
-          <h2 id="Oracle触发器"><a href="#Oracle触发器" class="headerlink" title="Oracle触发器"></a>Oracle触发器</h2><p>数据库<strong>触发器</strong>是一个与表相关联的、存储的PL/SQL程序。触发器作用：每当一个特定的数据操作语句（insert、update、delete）在指定的表上发出时，oracle自动地执行触发器中定义的语句序列。例：每当成功插入新员工后自动打印“成功插入新员工”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create trigger saysuccemp</span><br><span class="line">	 after insert</span><br><span class="line">	 on emp</span><br><span class="line">	 declare</span><br><span class="line">	 begin</span><br><span class="line">		dbms_output.put_line(&apos;成功插入新员工&apos;);</span><br><span class="line">	 end;</span><br><span class="line">	 /</span><br><span class="line">--插入数据库操作</span><br><span class="line">SQL&gt; insert into emp(empno,ename,sal,deptno)</span><br><span class="line">	 values</span><br><span class="line">	 (1001,&apos;Tom&apos;,3000,10);</span><br></pre></td></tr></table></figure>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>模板方法模式(Template Method Pattern)：</strong>定义一个操作中算法的骨架，而将一些步骤延迟到子类中，模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。模板方法是一种类行为型模式。</p>
+<p>模板方法模式就是指：一个抽象类中，有一个主方法，再定义1…n个方法，可以是抽象的，也可以是实际的方法，定义一个类，继承该抽象类，重写抽象方法，通过调用抽象类，实现对子类的调用。</p>
+<p>先看个关系图：</p>
+<p><img src="/2017/09/16/designPattern/template/dp1401.jpg" alt=""></p>
+<p>就是在AbstractCalculator类中定义一个主方法calculate，calculate()调用spilt()等，Plus和Minus分别继承AbstractCalculator类，通过对AbstractCalculator的调用实现对子类的调用。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/28/dataBase/trigger/#more" rel="contents">
+            <a class="btn" href="/2017/09/16/designPattern/template/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1746,7 +1800,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/27/dataBase/procedure/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/16/designPattern/strategy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1765,7 +1819,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/27/dataBase/procedure/" itemprop="url">存储过程和存储函数</a></h1>
+                <a class="post-title-link" href="/2017/09/16/designPattern/strategy/" itemprop="url">java设计模式（十三）策略模式（Strategy）</a></h1>
         
 
         <div class="post-meta">
@@ -1777,8 +1831,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T22:52:55+08:00">
-                2017-08-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T12:26:05+08:00">
+                2017-09-16
               </time>
             
 
@@ -1800,8 +1854,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -1818,9 +1883,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/08/27/dataBase/procedure/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/16/designPattern/strategy/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/08/27/dataBase/procedure/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/16/designPattern/strategy/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1828,7 +1893,7 @@
 
           
           
-             <span id="/2017/08/27/dataBase/procedure/" class="leancloud_visitors" data-flag-title="存储过程和存储函数">
+             <span id="/2017/09/16/designPattern/strategy/" class="leancloud_visitors" data-flag-title="java设计模式（十三）策略模式（Strategy）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1860,71 +1925,12 @@
 
       
         
-          <h2 id="存储过程和存储函数"><a href="#存储过程和存储函数" class="headerlink" title="存储过程和存储函数"></a>存储过程和存储函数</h2><p>存储在数据库中供所有用户程序调用的子程序叫<strong>存储过程</strong>、<strong>存储函数</strong>。两者的相同点是：完成特点功能的程序。区别是：存储函数可以使用return语句返回值，存储过程不可以。存储过程的有点：</p>
-<ul>
-<li>执行速度更快</li>
-<li>允许模块化程序设计</li>
-<li>提高系统安全性</li>
-<li>减少网络流通量</li>
-</ul>
-<p>系统存储过程存放在master数据库中，名称都以<strong>sp_</strong>开头或<strong>xp_</strong>开头，类似Java语言类库中的方法：</p>
-<table>
-<thead>
-<tr>
-<th>系统存储过程</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>sp_databases</td>
-<td>列出服务器上的所有数据库</td>
-</tr>
-<tr>
-<td>sp_helpdb</td>
-<td>报告有关指定数据库或所有数据库的信息</td>
-</tr>
-<tr>
-<td>sp_renamedb</td>
-<td>更改数据库的名称</td>
-</tr>
-<tr>
-<td>sp_tables</td>
-<td>返回当前环境下可查询的对象的列表</td>
-</tr>
-<tr>
-<td>sp_columns</td>
-<td>返回某个表列的信息</td>
-</tr>
-<tr>
-<td>sp_help</td>
-<td>查看某个表的所有信息</td>
-</tr>
-<tr>
-<td>sp_helpconstraint</td>
-<td>查看某个表的约束</td>
-</tr>
-<tr>
-<td>sp_helpindex</td>
-<td>查看某个表的索引</td>
-</tr>
-<tr>
-<td>sp_stored_procedures</td>
-<td>列出当前环境中的所有存储过程</td>
-</tr>
-<tr>
-<td>sp_password</td>
-<td>添加或修改登录账户的密码</td>
-</tr>
-<tr>
-<td>sp_helptext</td>
-<td>显示默认值、未加密的存储过程、用户定义的存储过程、触发器或视图的实际文本</td>
-</tr>
-</tbody>
-</table>
+          <p>下面开始行为型模式。11种行为型模式的关系：</p>
+<p><img src="/2017/09/16/designPattern/strategy/dp1301.jpg" alt=""></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>策略模式(Strategy Pattern)：</strong>定义了一系列算法，并将每个算法封装起来，使他们可以相互替换，且算法的变化不会影响到使用算法的客户。需要设计一个接口，为一系列实现类提供统一的方法，多个实现类实现该接口，设计一个抽象类（可有可无，属于辅助类），提供辅助函数。策略模式是一种对象行为型模式。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/27/dataBase/procedure/#more" rel="contents">
+            <a class="btn" href="/2017/09/16/designPattern/strategy/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1975,7 +1981,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/27/dataBase/oracle-function/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/16/designPattern/flyweight/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1994,7 +2000,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/27/dataBase/oracle-function/" itemprop="url">oracle函数</a></h1>
+                <a class="post-title-link" href="/2017/09/16/designPattern/flyweight/" itemprop="url">java设计模式（十一）享元模式（Flyweight）</a></h1>
         
 
         <div class="post-meta">
@@ -2006,8 +2012,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T17:11:33+08:00">
-                2017-08-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T11:40:18+08:00">
+                2017-09-16
               </time>
             
 
@@ -2029,8 +2035,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/JAVA/" itemprop="url" rel="index">
+                    <span itemprop="name">JAVA</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JAVA/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -2047,9 +2064,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/08/27/dataBase/oracle-function/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/16/designPattern/flyweight/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/08/27/dataBase/oracle-function/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/16/designPattern/flyweight/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -2057,7 +2074,7 @@
 
           
           
-             <span id="/2017/08/27/dataBase/oracle-function/" class="leancloud_visitors" data-flag-title="oracle函数">
+             <span id="/2017/09/16/designPattern/flyweight/" class="leancloud_visitors" data-flag-title="java设计模式（十一）享元模式（Flyweight）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -2089,12 +2106,13 @@
 
       
         
-          <h2 id="Oracle之函数"><a href="#Oracle之函数" class="headerlink" title="Oracle之函数"></a>Oracle之函数</h2><h3 id="一、数值函数"><a href="#一、数值函数" class="headerlink" title="一、数值函数"></a>一、数值函数</h3><ol>
-<li><p>四舍五入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; ROUND(n[,m]);</span><br><span class="line">--省略m或者m等于0：取整</span><br><span class="line">--m&gt;0：小数点后m位,保留m位小数</span><br><span class="line">--m&lt;0：小数点前m位，从m位进行四舍五入</span><br><span class="line"></span><br><span class="line">SQL&gt; select round(23.4),round(23.45,1),round(23.45,-1) from dual;</span><br><span class="line">--23, 23.5, 23</span><br></pre></td></tr></table></figure></li></ol>
+          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><strong>享元模式(Flyweight Pattern)：</strong>运用共享技术有效地支持大量细粒度对象的复用。系统只使用少量的对象，而这些对象都很相似，状态变化很小，可以实现对象的多次复用。由于享元模式要求能够共享的对象必须是细粒度对象，因此它又称为轻量级模式，它是一种对象结构型模式。</p>
+<p>享元模式的主要目的是实现对象的共享，即共享池，当系统中对象多的时候可以减少内存的开销，通常与工厂模式一起使用。</p>
+<p><img src="/2017/09/16/designPattern/flyweight/dp1201.jpg" alt=""></p>
+<p>FlyWeightFactory负责创建和管理享元单元，当一个客户端请求时，工厂需要检查当前对象池中是否有符合条件的对象，如果有，就返回已经存在的对象，如果没有，则创建一个新对象，FlyWeight是超类。一提到共享池，我们很容易联想到Java里面的JDBC连接池，想想每个连接的特点，我们不难总结出：适用于作共享的一些个对象，他们有一些共有的属性，就拿数据库连接池来说，url、driverClassName、username、password及dbname，这些属性对于每个连接来说都是一样的，所以就适合用享元模式来处理，建一个工厂类，将上述类似属性作为内部数据，其它的作为外部数据，在方法调用时，当做参数传进来，这样就节省了空间，减少了实例的数量。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/27/dataBase/oracle-function/#more" rel="contents">
+            <a class="btn" href="/2017/09/16/designPattern/flyweight/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2136,7 +2154,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2186,7 +2204,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-count">168</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2197,7 +2215,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2208,7 +2226,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

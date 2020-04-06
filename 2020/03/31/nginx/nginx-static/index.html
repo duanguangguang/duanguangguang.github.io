@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="nginx," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍Nginx作为静态资源的HTTP server，他可以接收客户端 REQ:jpeg、htm、flv这种静态资源的请求，然后直接通过静态资源的存储，得到这些文件返回给客户端，这种方式是一个典型的比较高效的传输模式。这种场景常常会应用在静态资源的请求，处理，以及动静分离。那么什么是静态资源？ 非服务器动态运行生成的文件。    类型 种类     浏览器端渲染 HTML、CSS、JS   图片 J">
+<meta name="keywords" content="nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx作为静态资源">
+<meta property="og:url" content="http://yoursite.com/2020/03/31/nginx/nginx-static/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍Nginx作为静态资源的HTTP server，他可以接收客户端 REQ:jpeg、htm、flv这种静态资源的请求，然后直接通过静态资源的存储，得到这些文件返回给客户端，这种方式是一个典型的比较高效的传输模式。这种场景常常会应用在静态资源的请求，处理，以及动静分离。那么什么是静态资源？ 非服务器动态运行生成的文件。    类型 种类     浏览器端渲染 HTML、CSS、JS   图片 J">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/cdn.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/gzip.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/浏览器缓存1.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/浏览器缓存2.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/校验缓存过期.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/第一次访问.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/第二次访问.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/加过期时间访问.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/跨站访问.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/禁止跨站访问.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/测试跨域访问.png">
+<meta property="og:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/test_refer.png">
+<meta property="og:updated_time" content="2020-04-02T15:30:16.095Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx作为静态资源">
+<meta name="twitter:description" content="介绍Nginx作为静态资源的HTTP server，他可以接收客户端 REQ:jpeg、htm、flv这种静态资源的请求，然后直接通过静态资源的存储，得到这些文件返回给客户端，这种方式是一个典型的比较高效的传输模式。这种场景常常会应用在静态资源的请求，处理，以及动静分离。那么什么是静态资源？ 非服务器动态运行生成的文件。    类型 种类     浏览器端渲染 HTML、CSS、JS   图片 J">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/31/nginx/nginx-static/duanguangguang.github.io/source/_posts/nginx/nginx-static/cdn.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/31/nginx/nginx-static/"/>
+
+
+
+
+
+  <title>nginx作为静态资源 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            links
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/nginx/nginx-static/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nginx作为静态资源</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-31T23:22:42+08:00">
+                2020-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/31/nginx/nginx-static/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/31/nginx/nginx-static/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/03/31/nginx/nginx-static/" class="leancloud_visitors" data-flag-title="nginx作为静态资源">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Nginx作为静态资源的HTTP server，他可以接收客户端 REQ:jpeg、htm、flv这种静态资源的请求，然后直接通过静态资源的存储，得到这些文件返回给客户端，这种方式是一个典型的比较高效的传输模式。这种场景常常会应用在静态资源的请求，处理，以及动静分离。那么什么是静态资源？</p>
+<p>非服务器动态运行生成的文件。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>种类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>浏览器端渲染</td>
+<td>HTML、CSS、JS</td>
+</tr>
+<tr>
+<td>图片</td>
+<td>JPEG、GIF、PNG</td>
+</tr>
+<tr>
+<td>视频</td>
+<td>FLV、MPEG</td>
+</tr>
+<tr>
+<td>文件</td>
+<td>TXT等任意下载文件</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<p>动态生成：我们需要进过服务端的解释器进行一些比较复杂的逻辑运算，对应的数据进行封装，再去返回给用户。</p>
+<p>非服务器动态生成：客户端直接请求，服务端从文件系统直接就可以找到文件返回给用户。</p>
+<h3 id="一、CDN场景"><a href="#一、CDN场景" class="headerlink" title="一、CDN场景"></a>一、CDN场景</h3><p>CDN全称为内容分发网络，我们在请求静态资源的时候常常会用到。</p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\cdn.png" alt=""></p>
+<p>对于CDN来说，我们要求的是传输延迟的最小化。</p>
+<p>配置语法：sendfile</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	sendfile on|off;</span><br><span class="line">Default: sendfile off;</span><br><span class="line">Context: http,server,location,<span class="keyword">if</span> in location</span><br></pre></td></tr></table></figure>
+<p>对于nginx读取文件的方式，除了sendfile这种内核优化方式外，也用到了<code>--with-file-aio</code>异步文件读取方式。</p>
+<p>配置语法：tcp_nopush</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	tcp_nopush on|off;</span><br><span class="line">Default: tcp_nopush off;</span><br><span class="line">Context: http,server,location</span><br></pre></td></tr></table></figure>
+<p>作用：sendfile开启的情况下，提高网络包的传输效率。把多个包首体进行整合，一次性发送出去给用户端，这个对于报文的处理，提升了网络的传输的效率。</p>
+<p>配置语法：tcp_nodelay</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	tcp_nodelay on|off;</span><br><span class="line">Default: tcp_nodelay off;</span><br><span class="line">Context: http,server,location</span><br></pre></td></tr></table></figure>
+<p>作用：该网络包尽量不要等待，实时性的发送给用户，keepalive连接下，提高网络包的传输实时性。</p>
+<p>配置语法：gzip压缩</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	gzip on|off;</span><br><span class="line">Default: gzip off;</span><br><span class="line">Context: http,server,location,<span class="keyword">if</span> in location</span><br></pre></td></tr></table></figure>
+<p>作用：压缩传输，需要对nginx进行静态资源的压缩，减小不必要的网络资源的消耗和传输的等待。</p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\gzip.png" alt=""></p>
+<p>配置语法：gzip_comp_level压缩比</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	gzip_comp_level level;</span><br><span class="line">Default: gzip_comp_level <span class="number">1</span>;</span><br><span class="line">Context: http,server,location</span><br></pre></td></tr></table></figure>
+<p>作用：level越大，文件压缩比率更大，传输的文件也就越小，但是压缩本身也需要消耗服务端的性能。</p>
+<p>配置语法：gzip_comp_level http的版本</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	gzip_http_version <span class="number">1.0</span>|<span class="number">1.1</span>;</span><br><span class="line">Default: gzip_http_version <span class="number">1.1</span>;</span><br><span class="line">Context: http,server,location</span><br></pre></td></tr></table></figure>
+<p>作用：目前主流的http都是1.1的版本。</p>
+<p>扩展Nginx压缩模块：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http_gzip_static_module <span class="comment">// 预读gzip功能</span></span><br><span class="line">http_gunzip_module <span class="comment">// 应用支持gunzip的压缩方式，为了解决很少一部分浏览器无法支持gzip压缩</span></span><br></pre></td></tr></table></figure>
+<p>场景演示：</p>
+<p>新建code文件：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 log]# cd /opt/app/code/</span><br><span class="line">[root@node1 code]# ls</span><br><span class="line">admin.html  black.html  doc  download  images  red.html  submodule.html</span><br><span class="line">[root@node1 code]# cd images/</span><br><span class="line">[root@node1 images]# ls</span><br><span class="line">wei.png</span><br><span class="line">[root@node1 images]# cd ../doc</span><br><span class="line">[root@node1 doc]# ls</span><br><span class="line">access.txt</span><br><span class="line">[root@node1 doc]# cd ../download/</span><br><span class="line">[root@node1 download]# ls</span><br><span class="line">test.img.gz</span><br><span class="line">[root@node1 download]#</span><br></pre></td></tr></table></figure>
+<ul>
+<li>wei.png：验证图片压缩</li>
+<li>access.txt：验证文本压缩</li>
+<li>test.img.gz：验证download</li>
+</ul>
+<p>配置文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       <span class="number">80</span>;</span><br><span class="line">    server_name  <span class="number">192.168</span>.x.xxx node1;</span><br><span class="line">    </span><br><span class="line">    sendfile on;</span><br><span class="line">    #charset koi8-r;</span><br><span class="line">    access_log  /var/log/nginx/log/static_access.log  main;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    location ~ .*\.(jpg|gif|png)$ &#123;</span><br><span class="line">        gzip on;</span><br><span class="line">        gzip_http_version <span class="number">1.1</span>;</span><br><span class="line">        gzip_comp_level <span class="number">2</span>;</span><br><span class="line">        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;</span><br><span class="line">        root  /opt/app/code/images;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ .*\.(txt|xml)$ &#123;</span><br><span class="line">        gzip on;</span><br><span class="line">        gzip_http_version <span class="number">1.1</span>;</span><br><span class="line">        gzip_comp_level <span class="number">1</span>;</span><br><span class="line">        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;</span><br><span class="line">        root  /opt/app/code/doc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~ ^/download &#123;</span><br><span class="line">        gzip_static on;</span><br><span class="line">        tcp_nopush on;</span><br><span class="line">        root /opt/app/code;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在没有打开gzip的情况下和打开gzip情况下访问：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//192.168.x.xxx/wei.png</span></span><br><span class="line">http:<span class="comment">//192.168.x.xxx/access.txt</span></span><br><span class="line">http:<span class="comment">//192.168.x.xxx/test.img //当gzip_static off情况下回找不到文件报错，on会保存原文件</span></span><br></pre></td></tr></table></figure>
+<p>对比压缩前后的大小。</p>
+<h3 id="二、浏览器缓存原理"><a href="#二、浏览器缓存原理" class="headerlink" title="二、浏览器缓存原理"></a>二、浏览器缓存原理</h3><p>浏览器是有自己的缓存机制的，是基于HTTP协议的缓存机制（如：Expires，cache-control等）。实现浏览器的缓存就是依赖的HTTP头信息来跟服务端进行验证。</p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\浏览器缓存1.png" alt=""></p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\浏览器缓存2.png" alt=""></p>
+<p>校验过期机制：</p>
+<table>
+<thead>
+<tr>
+<th>校验是否过期</th>
+<th>Expires、Cache-Control(max-age)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协议中Etag头信息校验</td>
+<td>Etag</td>
+</tr>
+<tr>
+<td>Last-Modified头信息校验</td>
+<td>Last-Modified</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li><p>校验本地缓存是否过期（本地缓存文件里面的http头信息）</p>
+<ul>
+<li>Expires：http1.0版本</li>
+<li>Cache-Control：http1.1版本</li>
+<li>max-age：周期，表示缓存文件在多久时间内表示过期</li>
+</ul>
+</li>
+<li><p>如果本地缓存过期了，进行Etag验证和Last-Modified验证（相同，都是向服务端进行验证）</p>
+<p>向服务端先进行Etag验证，判断Etag是否过期，因为Last-Modified只能精确到秒，在1秒内的更新服务端是无法识别的。Etag是一串特殊的字符串，所以服务端也会保留一串特殊的字符串，来进行与Etag进行校验。</p>
+</li>
+<li><p>Last-Modified校验</p>
+<p>Last-Modified是一个具体的年与日时分秒，用来跟服务端文件和本地文件进行校验，如果本地文件在该时间周期有更新，那么服务端对应的文件的时间就会更新，出现客户端与服务端文件时间不一致，这样的话服务端就会返回最新的文件给客户端。</p>
+</li>
+</ol>
+<p>整体流程如下：</p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\校验缓存过期.png" alt=""></p>
+<p>配置语法：expires</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	expires[modified]time;</span><br><span class="line">        expires epoch|max|off;</span><br><span class="line">Default: expires off</span><br><span class="line">Context: http,server,location,<span class="keyword">if</span> in location</span><br></pre></td></tr></table></figure>
+<p>expires的原理就是对客户端的response报文的头信息里面添加Cache-Control和Expires头。</p>
+<p>场景演示：</p>
+<p>新建code：test_expires.html</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">	&lt;title&gt;duan admin&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body style=<span class="string">"background-color:red;"</span>&gt;</span><br><span class="line">&lt;h1&gt;Hello Word!&lt;/h1&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>增加配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.(htm|html)$ &#123;</span><br><span class="line">        #expires 24h;</span><br><span class="line">        root /opt/app/code/html;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>访问测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//192.168.x.xxx/test_expires.html</span></span><br></pre></td></tr></table></figure>
+<p>第一次访问：</p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\第一次访问.png" alt=""></p>
+<p>第二次访问：</p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\第二次访问.png" alt=""></p>
+<ul>
+<li>第二次访问多了Cache-Control:max–age=0。这个是浏览器自己加进去的，max–age=0或者max–age&lt;0表示每一次请求都要向服务端进行一次校验，看文件有没有更新，如果有更新则返回200，如果没有更新，则返回304</li>
+</ul>
+<p>修改配置：打开过期时间</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.(htm|html)$ &#123;</span><br><span class="line">        #expires 24h;</span><br><span class="line">        root /opt/app/code/html;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\加过期时间访问.png" alt=""></p>
+<ul>
+<li>发现在Response Headers里面多加了两个头<ul>
+<li>Cache-Control:max–age=86400（秒）</li>
+<li>Expires: Thu, 02 Apr 2020 15:26:53 GMT</li>
+</ul>
+</li>
+<li>但是客户端浏览器遵循自己设置的Cache-Control:max–age=0，去请求服务端</li>
+</ul>
+<h3 id="三、跨站访问"><a href="#三、跨站访问" class="headerlink" title="三、跨站访问"></a>三、跨站访问</h3><p>理论上浏览器都会禁止网站进行一个页面进行跨站式访问。跨站式访问：浏览器访问一个服务端，一个页面里面当访问a时，同时会访问b（ajax），浏览器一般是会禁止的，主要是出于安全的考虑。</p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\跨站访问.png" alt=""></p>
+<p>为什么浏览器禁止跨域访问？原因是不安全，容易出现CSRF攻击</p>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\禁止跨站访问.png" alt=""></p>
+<p>一般一个用户去访问一个正规的网站A，A会返回给用户session，cookie等信息，存放在客户端，当客户一不小心点到了一些非法的网站B，这时网站B就可以给用户response一些带有恶意的请求，让用户去请求网站A，这样就形成了跨站访问。</p>
+<p>打开跨站访问配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	add_header name value[always];</span><br><span class="line">Default: --</span><br><span class="line">Context: http,server,location,<span class="keyword">if</span> in location</span><br></pre></td></tr></table></figure>
+<p>浏览器会判断头信息：<code>Access-Control-Allow-Origin</code>，看是否允许跨站访问。</p>
+<p>跨站演示：</p>
+<p>新建test_oringin.html：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;html lang=<span class="string">"en"</span>&gt;  </span><br><span class="line">&lt;head&gt;  </span><br><span class="line">&lt;meta charset=<span class="string">"UTF-8"</span> /&gt;  </span><br><span class="line">&lt;title&gt;测试ajax和跨域访问&lt;/title&gt;  </span><br><span class="line">&lt;script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"&gt;&lt;/script&gt;  </span><br><span class="line">&lt;/head&gt;  </span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;  </span><br><span class="line">$(document).ready(function()&#123;  </span><br><span class="line">    $.ajax(&#123;  </span><br><span class="line">        type: <span class="string">"GET"</span>,  </span><br><span class="line">        url: <span class="string">"http://node2/1.html"</span>,  </span><br><span class="line">        success: function(data) &#123;   </span><br><span class="line">            alert(<span class="string">"sucess!!!"</span>);  </span><br><span class="line">        &#125;,  </span><br><span class="line">        error: function() &#123;  </span><br><span class="line">            alert(<span class="string">"fail!!!,请刷新再试!"</span>);  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;);  </span><br><span class="line">&#125;);  </span><br><span class="line">&lt;/script&gt;  </span><br><span class="line">&lt;body&gt;  </span><br><span class="line">     &lt;h1&gt;测试跨域访问&lt;/h1&gt;</span><br><span class="line">&lt;/body&gt;  </span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>新增配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.(htm|html)$ &#123;</span><br><span class="line">        #add_header Access-Control-Allow-Origin *; </span><br><span class="line">        #add_header Access-Control-Allow-Methods GET,POST,PUT,DELETE,OPTIONS;</span><br><span class="line">        #expires 24h;</span><br><span class="line">        root  /opt/app/code/html;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\测试跨域访问.png" alt=""></p>
+<h3 id="四、防盗链"><a href="#四、防盗链" class="headerlink" title="四、防盗链"></a>四、防盗链</h3><p>防盗链的目的是防止网站资源被盗用，防盗链设置的首要方式是区别哪些请求是非正常的用户请求。</p>
+<p>基于http_refer防盗链配置模块。配置语法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	valid_referers none|blocked|server_names|string...;</span><br><span class="line">Default: --</span><br><span class="line">Context: server,location</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>新建test_refer.html</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">    &lt;title&gt;imooc1&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body style=<span class="string">"background-color:red;"</span>&gt;</span><br><span class="line">    &lt;img src=<span class="string">"http://192.168.x.xxx/wei.png"</span>/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>在不配置http_refer防盗链测试refer功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//192.168.x.xxx/test_refer.html</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/03/31/nginx/nginx-static/duanguangguang.github.io\source\_posts\nginx\nginx-static\test_refer.png" alt=""></p>
+</li>
+<li><p>添加http_refer配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.(jpg|gif|png)$ &#123;</span><br><span class="line">    	#valid_referers none blocked 192.168.x.xxx ~/google\./; //支持正则方式</span><br><span class="line">	    valid_referers none blocked <span class="number">192.168</span>.x.xxx;</span><br><span class="line">        <span class="keyword">if</span> ($invalid_referer) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">403</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        root  /opt/app/code/images;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>valid_referers</p>
+<p>表示允许那些信息过来访问。</p>
+</li>
+<li><p>none</p>
+<p>表示允许没有带refer信息的请求过来。</p>
+</li>
+<li><p>blocked</p>
+<p>表示refer信息不是标准http://，也是不允许访问的。</p>
+</li>
+<li><p>ip</p>
+<p>表示只允许该ip过来访问。</p>
+</li>
+<li><p>$invalid_referer</p>
+<p>如果没有设置ip，$invalid_referer变量值就会为1，返回403。</p>
+</li>
+</ul>
+</li>
+<li><p>访问测试</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不带refer信息</span></span><br><span class="line">[root@node1 conf.d]# curl -I http://192.168.x.xxx/wei.png</span><br><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">Server: nginx/<span class="number">1.16</span>.1</span><br><span class="line">Date: Thu, <span class="number">02</span> Apr <span class="number">2020</span> <span class="number">15</span>:<span class="number">21</span>:<span class="number">43</span> GMT</span><br><span class="line">Content-Type: image/png</span><br><span class="line">Content-Length: <span class="number">244044</span></span><br><span class="line">Last-Modified: Tue, <span class="number">08</span> Aug <span class="number">2017</span> <span class="number">09</span>:<span class="number">17</span>:<span class="number">25</span> GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">ETag: <span class="string">"598981a5-3b94c"</span></span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line"></span><br><span class="line"><span class="comment">// 带refer信息</span></span><br><span class="line">[root@node1 conf.d]# curl -e "http://www.baidu.com" -I http://192.168.x.xxx/wei.png</span><br><span class="line">HTTP/<span class="number">1.1</span> <span class="number">403</span> Forbidden <span class="comment">// 防盗链起作用</span></span><br><span class="line">Server: nginx/<span class="number">1.16</span>.1</span><br><span class="line">Date: Thu, <span class="number">02</span> Apr <span class="number">2020</span> <span class="number">15</span>:<span class="number">22</span>:<span class="number">11</span> GMT</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Content-Length: <span class="number">153</span></span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改成配置的可访问的ip</span></span><br><span class="line">[root@node1 conf.d]# curl -e "http://192.168.x.xxx" -I http://192.168.x.xxx/wei.png</span><br><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">Server: nginx/<span class="number">1.16</span>.1</span><br><span class="line">Date: Thu, <span class="number">02</span> Apr <span class="number">2020</span> <span class="number">15</span>:<span class="number">23</span>:<span class="number">17</span> GMT</span><br><span class="line">Content-Type: image/png</span><br><span class="line">Content-Length: <span class="number">244044</span></span><br><span class="line">Last-Modified: Tue, <span class="number">08</span> Aug <span class="number">2017</span> <span class="number">09</span>:<span class="number">17</span>:<span class="number">25</span> GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">ETag: <span class="string">"598981a5-3b94c"</span></span><br><span class="line">Accept-Ranges: bytes</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nginx/" rel="tag"># nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/28/nginx/nginx-access-control/" rel="next" title="nginx访问控制">
+                <i class="fa fa-chevron-left"></i> nginx访问控制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/31/nginx/nginx-proxy/" rel="prev" title="nginx作为代理服务">
+                nginx作为代理服务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">168</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、CDN场景"><span class="nav-number">2.</span> <span class="nav-text">一、CDN场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、浏览器缓存原理"><span class="nav-number">3.</span> <span class="nav-text">二、浏览器缓存原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、跨站访问"><span class="nav-number">4.</span> <span class="nav-text">三、跨站访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、防盗链"><span class="nav-number">5.</span> <span class="nav-text">四、防盗链</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/31/nginx/nginx-static/';
+          this.page.identifier = '2020/03/31/nginx/nginx-static/';
+          this.page.title = 'nginx作为静态资源';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

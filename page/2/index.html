@@ -336,7 +336,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/13/concurrent/countdownlatch/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/nginx/nginx-load-balance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -355,7 +355,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/13/concurrent/countdownlatch/" itemprop="url">Java并发包中线程同步器原理解析</a></h1>
+                <a class="post-title-link" href="/2020/03/31/nginx/nginx-load-balance/" itemprop="url">nginx作为负载均衡服务</a></h1>
         
 
         <div class="post-meta">
@@ -367,8 +367,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-13T14:36:44+08:00">
-                2019-01-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-31T23:23:47+08:00">
+                2020-03-31
               </time>
             
 
@@ -390,8 +390,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -408,9 +408,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/13/concurrent/countdownlatch/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/31/nginx/nginx-load-balance/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/13/concurrent/countdownlatch/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/31/nginx/nginx-load-balance/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -418,7 +418,7 @@
 
           
           
-             <span id="/2019/01/13/concurrent/countdownlatch/" class="leancloud_visitors" data-flag-title="Java并发包中线程同步器原理解析">
+             <span id="/2020/03/31/nginx/nginx-load-balance/" class="leancloud_visitors" data-flag-title="nginx作为负载均衡服务">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -450,10 +450,22 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在日常开发中经常遇到需要在主线程中开启多个线程去并行执行任务，并且主线程需要等待所有子线程执行完毕后再进行汇总的场景，在CountDownLatch出现之前一直都使用join()方法来实现这一点，但是join 方法不够灵活，不能满足不同场景的需要，比如使用ExecutorService线程池来管理线程时传递的参数是Runable或者Callable对象，这时候就没办法直接调用线程的join方法，而是需要使用CountDownLatch了。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>对于请求而言，负载均衡能很好的均摊请求，提高服务端吞吐率和整体性能，多个服务节点部署的方式，也提高了容灾和服务高可用。负载均衡分为:</p>
+<ol>
+<li><p>GSLB</p>
+<p>全局负载均衡，往往按照国家为单位或省为单位来进件负载均衡的。</p>
+<p><img src="/2020/03/31/nginx/nginx-load-balance/duanguangguang.github.io\source\_posts\nginx\nginx-load-balance\gslb.png" alt=""></p>
+<p>北京用户张三，他不可能直接就去请求调度中心节点，先请求北京地区的调度节点，调度节点返回给张三对应的地址，张三再访问应用服务，这个应用服务也在北京。所以这样没有给中心节点造成压力。</p>
+</li>
+<li><p>SLB</p>
+<p>往往调度节点和服务节点在一个逻辑单元里面，或者说是在一个地域里面，那么小的地域就决定了他对部分服务的实时性，响应性是非常好的。</p>
+<p><img src="/2020/03/31/nginx/nginx-load-balance/duanguangguang.github.io\source\_posts\nginx\nginx-load-balance\slb.png" alt=""></p>
+<p>nginx就是一个典型的SLB。</p>
+</li>
+</ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/01/13/concurrent/countdownlatch/#more" rel="contents">
+            <a class="btn" href="/2020/03/31/nginx/nginx-load-balance/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -504,7 +516,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/12/concurrent/copyonwritearraylist/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/nginx/nginx-proxy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -523,7 +535,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/12/concurrent/copyonwritearraylist/" itemprop="url">并发List源码解析：CopyOnWriteArrayList</a></h1>
+                <a class="post-title-link" href="/2020/03/31/nginx/nginx-proxy/" itemprop="url">nginx作为代理服务</a></h1>
         
 
         <div class="post-meta">
@@ -535,8 +547,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-12T13:35:55+08:00">
-                2019-01-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-31T23:22:52+08:00">
+                2020-03-31
               </time>
             
 
@@ -558,8 +570,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -576,9 +588,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/12/concurrent/copyonwritearraylist/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/31/nginx/nginx-proxy/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/12/concurrent/copyonwritearraylist/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/31/nginx/nginx-proxy/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -586,7 +598,7 @@
 
           
           
-             <span id="/2019/01/12/concurrent/copyonwritearraylist/" class="leancloud_visitors" data-flag-title="并发List源码解析：CopyOnWriteArrayList">
+             <span id="/2020/03/31/nginx/nginx-proxy/" class="leancloud_visitors" data-flag-title="nginx作为代理服务">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -618,10 +630,11 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>并发包中的并发List只有CopyOnWriteArrayList，是一个线程安全的ArrayList，对其进行的修改操作都是在底层的一个复制的数组（快照）上进行的，也就是使用了写时复制策略。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>客户端往往无法向服务端直接发起请求的时候，就需要一个代理，代理就实现了客户端和服务端之间的通信。客户端首先会去请求代理，代理服务再去请求服务端，服务端再通过代理返回给客户端。</p>
+<p><img src="/2020/03/31/nginx/nginx-proxy/duanguangguang.github.io\source\_posts\nginx\nginx-proxy\01代理.png" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/01/12/concurrent/copyonwritearraylist/#more" rel="contents">
+            <a class="btn" href="/2020/03/31/nginx/nginx-proxy/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -672,7 +685,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/concurrent/atomic/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/nginx/nginx-static/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -691,7 +704,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/09/concurrent/atomic/" itemprop="url">JDK8新增原子操作类LongAdder</a></h1>
+                <a class="post-title-link" href="/2020/03/31/nginx/nginx-static/" itemprop="url">nginx作为静态资源</a></h1>
         
 
         <div class="post-meta">
@@ -703,8 +716,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-09T21:46:00+08:00">
-                2019-01-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-31T23:22:42+08:00">
+                2020-03-31
               </time>
             
 
@@ -726,8 +739,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -744,9 +757,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/09/concurrent/atomic/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/31/nginx/nginx-static/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/09/concurrent/atomic/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/31/nginx/nginx-static/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -754,7 +767,7 @@
 
           
           
-             <span id="/2019/01/09/concurrent/atomic/" class="leancloud_visitors" data-flag-title="JDK8新增原子操作类LongAdder">
+             <span id="/2020/03/31/nginx/nginx-static/" class="leancloud_visitors" data-flag-title="nginx作为静态资源">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -786,12 +799,37 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>使用AtomicLong时，在高并发下大量线程会同时去竞争更新同一个原子变量，但是由于同时只有一个线程的CAS操作会成功，这就造成了大量线程竞争失败后通过无限循环不断进行自旋尝试CAS的操作，这会浪费CPU资源。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">incrementAndGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">long</span> current = get();</span><br><span class="line">        <span class="keyword">long</span> next = current + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (compareAndSet(current, next))</span><br><span class="line">            <span class="keyword">return</span> next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>因此JDK8新增了一个原子性递增或者递减类LongAdder用来克服在高并发下使用AtomicLong的缺点。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Nginx作为静态资源的HTTP server，他可以接收客户端 REQ:jpeg、htm、flv这种静态资源的请求，然后直接通过静态资源的存储，得到这些文件返回给客户端，这种方式是一个典型的比较高效的传输模式。这种场景常常会应用在静态资源的请求，处理，以及动静分离。那么什么是静态资源？</p>
+<p>非服务器动态运行生成的文件。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>种类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>浏览器端渲染</td>
+<td>HTML、CSS、JS</td>
+</tr>
+<tr>
+<td>图片</td>
+<td>JPEG、GIF、PNG</td>
+</tr>
+<tr>
+<td>视频</td>
+<td>FLV、MPEG</td>
+</tr>
+<tr>
+<td>文件</td>
+<td>TXT等任意下载文件</td>
+</tr>
+</tbody>
+</table>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/01/09/concurrent/atomic/#more" rel="contents">
+            <a class="btn" href="/2020/03/31/nginx/nginx-static/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -842,7 +880,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/08/concurrent/threadlocal/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/nginx/nginx-access-control/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -861,7 +899,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/08/concurrent/threadlocal/" itemprop="url">ThreadLocal</a></h1>
+                <a class="post-title-link" href="/2020/03/28/nginx/nginx-access-control/" itemprop="url">nginx访问控制</a></h1>
         
 
         <div class="post-meta">
@@ -873,8 +911,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-08T20:35:41+08:00">
-                2019-01-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-28T14:33:19+08:00">
+                2020-03-28
               </time>
             
 
@@ -896,8 +934,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -914,9 +952,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/08/concurrent/threadlocal/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/28/nginx/nginx-access-control/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/08/concurrent/threadlocal/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/28/nginx/nginx-access-control/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -924,7 +962,7 @@
 
           
           
-             <span id="/2019/01/08/concurrent/threadlocal/" class="leancloud_visitors" data-flag-title="ThreadLocal">
+             <span id="/2020/03/28/nginx/nginx-access-control/" class="leancloud_visitors" data-flag-title="nginx访问控制">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -956,10 +994,18 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>ThreadLocal是JDK包提供的，它提供了线程本地变量。创建一个ThreadLocal变量后，每个线程都会复制一个变量到自己的本地内存，当多个线程操作这个变量时，实际操作的是自己本地内存里面的变量，从而避免了线程安全问题。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Nginx的访问控制分为：</p>
+<ul>
+<li><p>基于IP的访问控制</p>
+<p><code>http_access_module</code>。</p>
+</li>
+<li><p>基于用户的信任登录</p>
+<p><code>http_auth_basic_module</code>。</p>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/01/08/concurrent/threadlocal/#more" rel="contents">
+            <a class="btn" href="/2020/03/28/nginx/nginx-access-control/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1010,7 +1056,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/07/concurrent/volatile/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/nginx/nginx-request-limit/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1029,7 +1075,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/07/concurrent/volatile/" itemprop="url">volatile关键字</a></h1>
+                <a class="post-title-link" href="/2020/03/28/nginx/nginx-request-limit/" itemprop="url">nginx请求限制</a></h1>
         
 
         <div class="post-meta">
@@ -1041,8 +1087,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-07T22:15:17+08:00">
-                2019-01-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-28T14:32:39+08:00">
+                2020-03-28
               </time>
             
 
@@ -1064,8 +1110,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -1082,9 +1128,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/07/concurrent/volatile/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/28/nginx/nginx-request-limit/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/07/concurrent/volatile/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/28/nginx/nginx-request-limit/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1092,7 +1138,7 @@
 
           
           
-             <span id="/2019/01/07/concurrent/volatile/" class="leancloud_visitors" data-flag-title="volatile关键字">
+             <span id="/2020/03/28/nginx/nginx-request-limit/" class="leancloud_visitors" data-flag-title="nginx请求限制">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1124,12 +1170,41 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>使用锁的方式可以解决共享变量内存可见性问题，但是使用锁太笨重，因为它会带来线程的上下文切换开销。对于解决内存可见性问题，Java还提供了一种弱形式的同步，就是volatile关键字。</p>
-<p>该关键字可以确保对一个变量的更新对其他 线程马上可见。当一个变量被声明为volatile时，线程在写入变量时不会把值缓存在寄存器中，而是会把值刷新回主内存。当其他线程读取该共享变量时，会从主内存重新获取最新值。</p>
-<p>volatile保证内存可见性，但不保证操作的原子性。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Nginx的请求限制分类：</p>
+<ul>
+<li><p>连接频率限制</p>
+<p><code>limit_conn_module</code>。</p>
+</li>
+<li><p>请求频率限制</p>
+<p><code>limit_req_module</code>。</p>
+</li>
+</ul>
+<p>HTTP协议的连接与请求：</p>
+<table>
+<thead>
+<tr>
+<th>HTTP协议版本</th>
+<th>连接关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP1.0</td>
+<td>TCP不能复用</td>
+</tr>
+<tr>
+<td>HTTP1.1</td>
+<td>顺序性TCP复用</td>
+</tr>
+<tr>
+<td>HTTP2.0</td>
+<td>多路复用TCP复用</td>
+</tr>
+</tbody>
+</table>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/01/07/concurrent/volatile/#more" rel="contents">
+            <a class="btn" href="/2020/03/28/nginx/nginx-request-limit/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1180,7 +1255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/concurrent/stampedlock/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/nginx/nginx-model/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1199,7 +1274,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/31/concurrent/stampedlock/" itemprop="url">java并发包锁原理解析（四）：StampedLock</a></h1>
+                <a class="post-title-link" href="/2020/03/28/nginx/nginx-model/" itemprop="url">nginx模块</a></h1>
         
 
         <div class="post-meta">
@@ -1211,8 +1286,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T11:32:53+08:00">
-                2018-12-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-28T14:32:09+08:00">
+                2020-03-28
               </time>
             
 
@@ -1234,8 +1309,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -1252,9 +1327,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/31/concurrent/stampedlock/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/28/nginx/nginx-model/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/31/concurrent/stampedlock/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/28/nginx/nginx-model/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1262,7 +1337,7 @@
 
           
           
-             <span id="/2018/12/31/concurrent/stampedlock/" class="leancloud_visitors" data-flag-title="java并发包锁原理解析（四）：StampedLock">
+             <span id="/2020/03/28/nginx/nginx-model/" class="leancloud_visitors" data-flag-title="nginx模块">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1294,13 +1369,15 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><strong>StampedLock</strong>是java8在java.util.concurrent.locks新增的一个API 。</p>
-<p>该类是一个读写锁的改进，它的思想是读写锁中读不仅不阻塞读，同时也不应该阻塞写：<strong>在读的时候如果发生了写，则应当重读而不是在读的时候直接阻塞写！ </strong></p>
-<p>因为在读线程非常多而写线程比较少的情况下，写线程可能发生饥饿现象，也就是因为大量的读线程存在并且读线程都阻塞写线程，因此写线程可能几乎很少被调度成功！当读执行的时候另一个线程执行了写，则读线程发现数据不一致则执行重读即可。</p>
-<p>所以读写都存在的情况下，使用StampedLock就可以实现一种无障碍操作，即读写之间不会阻塞对方，但是写和写之间还是阻塞的！</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Nginx模块分为：</p>
+<ul>
+<li>Nginx官方模块</li>
+<li>第三方模块</li>
+</ul>
+<p>本节主要介绍Nginx官方模块。主要就是<code>--with</code>。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/31/concurrent/stampedlock/#more" rel="contents">
+            <a class="btn" href="/2020/03/28/nginx/nginx-model/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1351,7 +1428,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/30/concurrent/LockConcept/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/nginx/nginx-logs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1370,7 +1447,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/30/concurrent/LockConcept/" itemprop="url">Java并发包锁原理解析（三）：锁的概述</a></h1>
+                <a class="post-title-link" href="/2020/03/28/nginx/nginx-logs/" itemprop="url">nginx日志</a></h1>
         
 
         <div class="post-meta">
@@ -1382,8 +1459,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-30T15:59:17+08:00">
-                2018-12-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-28T14:31:57+08:00">
+                2020-03-28
               </time>
             
 
@@ -1405,8 +1482,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -1423,9 +1500,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/30/concurrent/LockConcept/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/28/nginx/nginx-logs/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/30/concurrent/LockConcept/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/28/nginx/nginx-logs/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1433,7 +1510,7 @@
 
           
           
-             <span id="/2018/12/30/concurrent/LockConcept/" class="leancloud_visitors" data-flag-title="Java并发包锁原理解析（三）：锁的概述">
+             <span id="/2020/03/28/nginx/nginx-logs/" class="leancloud_visitors" data-flag-title="nginx日志">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1465,11 +1542,16 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Java提供了种类丰富的锁，每种锁因其特性的不同，在适当的场景下能够展现出非常高的效率。本文基于JDK1.8对锁相关源码、使用场景进行举例，介绍主流锁的知识点，以及不同的锁的适用场景。java主流锁目录：</p>
-<p><img src="/2018/12/30/concurrent/LockConcept/lc01.png" alt=""></p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Nginx日志类型主要包括：</p>
+<ul>
+<li>error.log</li>
+<li>access_log</li>
+</ul>
+<p>error.log主要记录nginx处理http请求的错误的状态，以及nginx服务本身运行的错误的状态。会按照不同的级别记录到error.log里面。</p>
+<p>access_log会记录nginx每一次http请求的访问状态，主要用于分析每一次http的请求，以及客户行为进行分析。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/30/concurrent/LockConcept/#more" rel="contents">
+            <a class="btn" href="/2020/03/28/nginx/nginx-logs/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1520,7 +1602,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/30/concurrent/ReadWriteLock/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/nginx/nginx-contents/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1539,7 +1621,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/30/concurrent/ReadWriteLock/" itemprop="url">java并发包锁原理解析（二）：ReadWriteLock</a></h1>
+                <a class="post-title-link" href="/2020/03/28/nginx/nginx-contents/" itemprop="url">nginx目录</a></h1>
         
 
         <div class="post-meta">
@@ -1551,8 +1633,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-30T15:56:24+08:00">
-                2018-12-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-28T14:31:33+08:00">
+                2020-03-28
               </time>
             
 
@@ -1574,8 +1656,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -1592,9 +1674,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/30/concurrent/ReadWriteLock/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/28/nginx/nginx-contents/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/30/concurrent/ReadWriteLock/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/28/nginx/nginx-contents/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1602,7 +1684,7 @@
 
           
           
-             <span id="/2018/12/30/concurrent/ReadWriteLock/" class="leancloud_visitors" data-flag-title="java并发包锁原理解析（二）：ReadWriteLock">
+             <span id="/2020/03/28/nginx/nginx-contents/" class="leancloud_visitors" data-flag-title="nginx目录">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1634,12 +1716,11 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在上文中提到了Lock接口以及对象，使用它，很优雅的控制了竞争资源的安全访问，但是这种锁不区分读写，称这种锁为普通锁。为了提高性能，Java提供了读写锁，在读的地方使用读锁，在写的地方使用写锁，灵活控制，如果没有写锁的情况下，读是无阻塞的，在一定程度上提高了程序的执行效率。</p>
-<p>读写锁允许访问共享数据的并发性高于互斥锁允许的并发性。它利用了这样一个事实：虽然一次只有一个线程可以修改共享数据，但在许多情况下，任何数量的线程都可以同时读取数据。理论上，使用读写锁所允许的并发性的增加将导致相互使用互斥锁的性能提高。实际上，这种并发性的增加只能在多处理器上完全实现，并且只有在共享数据的访问模式合适时才能实现。</p>
-<p>读写锁是适用于写少读多的场景。</p>
+          <h3 id="一、Nginx安装目录"><a href="#一、Nginx安装目录" class="headerlink" title="一、Nginx安装目录"></a>一、Nginx安装目录</h3><p>通过yum安装其实都是装的一个个的rpm包，查找安装的rpm包：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 nginx]# rpm -ql nginx</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/30/concurrent/ReadWriteLock/#more" rel="contents">
+            <a class="btn" href="/2020/03/28/nginx/nginx-contents/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1690,7 +1771,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/30/concurrent/lock/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/nginx/nginx-init/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1709,7 +1790,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/30/concurrent/lock/" itemprop="url">java并发包锁原理解析（一）：Lock</a></h1>
+                <a class="post-title-link" href="/2020/03/28/nginx/nginx-init/" itemprop="url">nginx概述</a></h1>
         
 
         <div class="post-meta">
@@ -1721,8 +1802,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-30T12:47:24+08:00">
-                2018-12-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-28T14:26:10+08:00">
+                2020-03-28
               </time>
             
 
@@ -1744,8 +1825,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
                   </a>
                 </span>
 
@@ -1762,9 +1843,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/30/concurrent/lock/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/28/nginx/nginx-init/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/30/concurrent/lock/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/28/nginx/nginx-init/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1772,7 +1853,7 @@
 
           
           
-             <span id="/2018/12/30/concurrent/lock/" class="leancloud_visitors" data-flag-title="java并发包锁原理解析（一）：Lock">
+             <span id="/2020/03/28/nginx/nginx-init/" class="leancloud_visitors" data-flag-title="nginx概述">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1804,14 +1885,12 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Java 5中引入了新的锁机制—java.util.concurrent.locks中的显式的互斥锁：<strong>Lock接口</strong>，它提供了比synchronized更加广泛的锁定操作。</p>
-<p>Lock接口实现类：ReentrantLock可重入独占锁。</p>
-<p>lock必须被显式地创建、锁定和释放，为了可以使用更多的功能，一般用ReentrantLock为其实例化。</p>
-<p>为了保证锁最终一定会被释放（可能会有异常发生），要把互斥区放在try语句块内，并在finally语句块中释放锁，尤其当有return语句时，return语句必须放在try字句中，以确保unlock（）不会过早发生，从而将数据暴露给第二个任务。因此，采用lock加锁和释放锁的一般形式如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认使用非公平锁，如果要使用公平锁，需要传入参数true</span></span><br><span class="line">Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">lock.lock();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">//更新对象的状态</span></span><br><span class="line">    <span class="comment">//捕获异常，必要时恢复到原来的不变约束</span></span><br><span class="line">    <span class="comment">//如果有return语句，放在这里</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">//锁必须在finally块中释放</span></span><br><span class="line">    lock.unlock();        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。那么什么是中间件服务呢？我们的网站后台往往存在很多的应用服务，对应的是我们的操作系统来驱动我们的硬件，应用于应用之间的互相调用，或者应用于操作系统之间的交互，在很多的应用存在的情况下，存在层次化的应用不够隔离，代码耦合程度高，所以我们需要中间件来为我们代理以及处理一些请求，让应用只负责业务的逻辑处理，这样就出现了中间件服务。</p>
+<p>中间件可以起到与操作系统之间的调用，也可以分发给对应的应用进行相应的逻辑请求，这样整个网站承上启下，层次性的作用就会越发的好。下图是Nginx的中间件架构图示：</p>
+<p><img src="/2020/03/28/nginx/nginx-init/duanguangguang.github.io\source\_posts\nginx\nginx-init\Nginx的中间件架构.png" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/30/concurrent/lock/#more" rel="contents">
+            <a class="btn" href="/2020/03/28/nginx/nginx-init/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1862,7 +1941,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/26/concurrent/synchronized/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/21/centos7/centos-install-mysql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1881,7 +1960,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/26/concurrent/synchronized/" itemprop="url">java内置锁synchronized</a></h1>
+                <a class="post-title-link" href="/2020/03/21/centos7/centos-install-mysql/" itemprop="url">centos7安装mysql5.7</a></h1>
         
 
         <div class="post-meta">
@@ -1893,8 +1972,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-26T20:21:31+08:00">
-                2018-12-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-21T20:23:02+08:00">
+                2020-03-21
               </time>
             
 
@@ -1916,8 +1995,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/Centos7/" itemprop="url" rel="index">
+                    <span itemprop="name">Centos7</span>
                   </a>
                 </span>
 
@@ -1934,9 +2013,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/26/concurrent/synchronized/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/21/centos7/centos-install-mysql/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/26/concurrent/synchronized/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/21/centos7/centos-install-mysql/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1944,7 +2023,7 @@
 
           
           
-             <span id="/2018/12/26/concurrent/synchronized/" class="leancloud_visitors" data-flag-title="java内置锁synchronized">
+             <span id="/2020/03/21/centos7/centos-install-mysql/" class="leancloud_visitors" data-flag-title="centos7安装mysql5.7">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1976,10 +2055,12 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在多线程编程中，线程安全问题是一个最为关键的问题，其核心概念就在于正确性，即当多个线程访问某一共享、可变数据时，始终都不会导致数据破坏以及其他不该出现的结果。而所有的并发模式在解决这个问题时，采用的方案都是序列化访问临界资源 。在 Java 中，提供了两种方式来实现同步互斥访问：synchronized 和 Lock。</p>
+          <h3 id="一、查看MySQL5-7的yum源"><a href="#一、查看MySQL5-7的yum源" class="headerlink" title="一、查看MySQL5.7的yum源"></a>一、查看MySQL5.7的yum源</h3><p>进入MySQL官网，或者直接点开这个地址：<a href="https://dev.mysql.com/downloads/repo/yum/" target="_blank" rel="noopener">https://dev.mysql.com/downloads/repo/yum/</a> 。</p>
+<p><img src="/2020/03/21/centos7/centos-install-mysql/duanguangguang.github.io\source\_posts\centos7\centos-install-mysql\mysql查看yum源.png" alt=""></p>
+<p>之所以选择7这个版本，是因为这个版本里面包含有MySQL5.5,5.6,5.7,8.0版本，最新的8版本里面只有8了。在下载页复制下载链接<a href="https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm" target="_blank" rel="noopener">https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm</a>。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/26/concurrent/synchronized/#more" rel="contents">
+            <a class="btn" href="/2020/03/21/centos7/centos-install-mysql/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2021,7 +2102,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2071,7 +2152,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-count">168</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2082,7 +2163,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2093,7 +2174,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -336,7 +336,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/concurrent/aqs/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/centos7/centos-install-kafka/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -355,7 +355,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/23/concurrent/aqs/" itemprop="url">抽象同步队列AQS</a></h1>
+                <a class="post-title-link" href="/2020/03/20/centos7/centos-install-kafka/" itemprop="url">centos单机安装kafka</a></h1>
         
 
         <div class="post-meta">
@@ -367,8 +367,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T13:41:06+08:00">
-                2018-12-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-20T18:57:01+08:00">
+                2020-03-20
               </time>
             
 
@@ -390,8 +390,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
+                  <a href="/categories/Centos7/" itemprop="url" rel="index">
+                    <span itemprop="name">Centos7</span>
                   </a>
                 </span>
 
@@ -408,9 +408,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/23/concurrent/aqs/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/20/centos7/centos-install-kafka/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/23/concurrent/aqs/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/20/centos7/centos-install-kafka/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -418,7 +418,7 @@
 
           
           
-             <span id="/2018/12/23/concurrent/aqs/" class="leancloud_visitors" data-flag-title="抽象同步队列AQS">
+             <span id="/2020/03/20/centos7/centos-install-kafka/" class="leancloud_visitors" data-flag-title="centos单机安装kafka">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -450,693 +450,20 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><strong>AQS</strong>是抽象同步队列AbstractQueuedSynchronizer的简称，AbstractQueuedSynchronizer 是JUC 中通过 Sync Queue(并发安全的 CLH Queue), Condition Queue(普通的 list) , volatile 变量 state 提供的 控制线程获取统一资源(state) 的 Synchronized 工具，是实现同步器的基础组件，也是并发包中锁的底层的实现。</p>
-<p>AQS定义了一套多线程访问共享资源的同步器框架，许多同步类实现都依赖于它，如ReentrantLock、Semaphore、CountDownLatch等等。</p>
-<p>工作机制：AQS的等待队列是基于链表实现的FIFO的等待队列，队列每个节点只关心其前驱节点的状态，线程唤醒时只唤醒队头等待线程（即head的后继节点，并且等待状态不大于0）。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/23/concurrent/aqs/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/concurrent/cas/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dodd">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dodd">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/concurrent/cas/" itemprop="url">cas</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T18:25:21+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发包/" itemprop="url" rel="index">
-                    <span itemprop="name">并发包</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/22/concurrent/cas/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/22/concurrent/cas/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2018/12/22/concurrent/cas/" class="leancloud_visitors" data-flag-title="cas">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><strong>CAS</strong>即Compare and Swap，是一种非阻塞算法，一个线程的失败或者挂起不应该影响其他线程的失败或挂起的算法。其JDK提供的非阻塞原子性操作，它通过硬件保证了比较-更新的原子性。java.util.concurrent包中借助CAS实现了区别于synchronouse同步锁的一种乐观锁。</p>
-<p>使用synchronized关键字可以实现线程安全性，即内存可见性和原子性，但这样会导致线程上下文切换和增加重新调度的开销。</p>
-<p>java提供了非阻塞的volatile关键字来解决共享变量的可见性问题，这弥补了锁带来的开销问题，但volatile只能保证共享变量的可见性，不能解决读-改-写等的原子性问题。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/22/concurrent/cas/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/07/SpringCloud/configuration/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dodd">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dodd">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/07/SpringCloud/configuration/" itemprop="url">Spring Cloud（七）：分布式配置中心Spring Cloud Config</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-07T18:23:16+08:00">
-                2018-10-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/07/SpringCloud/configuration/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/07/SpringCloud/configuration/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2018/10/07/SpringCloud/configuration/" class="leancloud_visitors" data-flag-title="Spring Cloud（七）：分布式配置中心Spring Cloud Config">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/10/07/SpringCloud/configuration/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/SpringCloud/zuul/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dodd">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dodd">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/05/SpringCloud/zuul/" itemprop="url">Spring Cloud（六）：路由网关Zuul</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-05T18:23:16+08:00">
-                2018-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/05/SpringCloud/zuul/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/05/SpringCloud/zuul/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2018/10/05/SpringCloud/zuul/" class="leancloud_visitors" data-flag-title="Spring Cloud（六）：路由网关Zuul">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/10/05/SpringCloud/zuul/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/04/SpringCloud/feign/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="dodd">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dodd">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/04/SpringCloud/feign/" itemprop="url">Spring Cloud（五）：声明式Feign调用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-04T18:23:16+08:00">
-                2018-10-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/04/SpringCloud/feign/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/04/SpringCloud/feign/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2018/10/04/SpringCloud/feign/" class="leancloud_visitors" data-flag-title="Spring Cloud（五）：声明式Feign调用">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Feign是一个声明式的web服务客户端，它使得写web服务变得更简单。使用Feign,只需要创建一个接口并注解。<br>它具有可插拔的注解特性，包括Feign 注解和JAX-RS注解。<br>总结： </p>
-<ol>
-<li>Feign 采用的是基于接口的注解</li>
-<li><p>Feign 整合了ribbon，具有负载均衡的能力</p>
+          <h3 id="一、安装JDK"><a href="#一、安装JDK" class="headerlink" title="一、安装JDK"></a>一、安装JDK</h3><p>参考：<a href="https://duanguangguang.github.io/2020/03/20/centos7/centos-install-jdk/" target="_blank" rel="noopener">centos安装JDK</a></p>
+<h3 id="二、安装zookeeper"><a href="#二、安装zookeeper" class="headerlink" title="二、安装zookeeper"></a>二、安装zookeeper</h3><p>参考：<a href="https://duanguangguang.github.io/2020/03/20/centos7/centos-install-zookeeper/" target="_blank" rel="noopener">centos安装zookeeper</a></p>
+<h3 id="三、安装kafka"><a href="#三、安装kafka" class="headerlink" title="三、安装kafka"></a>三、安装kafka</h3><ol>
+<li><p>解压kafka</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@common kafka]# tar -zxvf kafka_2.13-2.4.0.tgz</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Feign 整合了Hystrix，具有熔断的能力</p>
+<li><p>修改kafka配置文件</p>
+<p>我的kafka是2.4版本的需要自己创建并配置日志路径</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log.dirs=/home/duan/myhome/soft/kafka/kafka_2.13-<span class="number">2.4</span>.0/logs/kafka</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/10/04/SpringCloud/feign/#more" rel="contents">
+            <a class="btn" href="/2020/03/20/centos7/centos-install-kafka/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1187,7 +514,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/03/SpringCloud/hystix/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/centos7/centos-install-jdk/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1206,7 +533,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/03/SpringCloud/hystix/" itemprop="url">Spring Cloud（四）：断路器Hystrix</a></h1>
+                <a class="post-title-link" href="/2020/03/20/centos7/centos-install-jdk/" itemprop="url">centos安装jdk</a></h1>
         
 
         <div class="post-meta">
@@ -1218,8 +545,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-03T18:23:16+08:00">
-                2018-10-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-20T18:56:53+08:00">
+                2020-03-20
               </time>
             
 
@@ -1241,8 +568,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
+                  <a href="/categories/Centos7/" itemprop="url" rel="index">
+                    <span itemprop="name">Centos7</span>
                   </a>
                 </span>
 
@@ -1259,9 +586,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/10/03/SpringCloud/hystix/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/20/centos7/centos-install-jdk/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/03/SpringCloud/hystix/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/20/centos7/centos-install-jdk/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1269,7 +596,7 @@
 
           
           
-             <span id="/2018/10/03/SpringCloud/hystix/" class="leancloud_visitors" data-flag-title="Spring Cloud（四）：断路器Hystrix">
+             <span id="/2020/03/20/centos7/centos-install-jdk/" class="leancloud_visitors" data-flag-title="centos安装jdk">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1301,10 +628,14 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>雪崩效应：在高并发的情况下，由于单个服务的延迟，可能导致所有的请求都处于延迟状态，甚至在几秒钟就使服务处于负载饱和的状态，资源耗尽，直到不可用，最终导致这个分布式系统都不可用，这就是“雪崩”。Hystrix实现了断路器、线程隔离等一系列服务保护功能。</p>
+          <h3 id="一、卸载openJDK"><a href="#一、卸载openJDK" class="headerlink" title="一、卸载openJDK"></a>一、卸载openJDK</h3><p>CentOS系统默认安装了openjdk的（如果操作系统不是最小安装），查看版本：<code>rpm -qa | grep java</code>或者<code>java -version</code> 。删除系统自带的OpenJDK<code>rpm -e --nodeps</code>xxx`。xxx为查询出来的jdk名字。</p>
+<h3 id="二、安装JDK"><a href="#二、安装JDK" class="headerlink" title="二、安装JDK"></a>二、安装JDK</h3><p>下载JDK到本机，并传输到CentOS上 。</p>
+<p><img src="/2020/03/20/centos7/centos-install-jdk/duanguangguang.github.io\source\_posts\centos7\centos-install-jdk\01.png" alt=""></p>
+<p>解压JDK：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf jdk-<span class="number">8</span>u231-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/10/03/SpringCloud/hystix/#more" rel="contents">
+            <a class="btn" href="/2020/03/20/centos7/centos-install-jdk/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1355,7 +686,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/SpringCloud/ribbon/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/centos7/centos-install-zookeeper/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1374,7 +705,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/02/SpringCloud/ribbon/" itemprop="url">Spring Cloud（三）：客户端负载均衡Ribbon</a></h1>
+                <a class="post-title-link" href="/2020/03/20/centos7/centos-install-zookeeper/" itemprop="url">centos单机安装zookeeper</a></h1>
         
 
         <div class="post-meta">
@@ -1386,8 +717,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-02T18:23:16+08:00">
-                2018-10-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-20T18:18:23+08:00">
+                2020-03-20
               </time>
             
 
@@ -1409,8 +740,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
+                  <a href="/categories/Centos7/" itemprop="url" rel="index">
+                    <span itemprop="name">Centos7</span>
                   </a>
                 </span>
 
@@ -1427,9 +758,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/10/02/SpringCloud/ribbon/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/20/centos7/centos-install-zookeeper/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/02/SpringCloud/ribbon/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/20/centos7/centos-install-zookeeper/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1437,7 +768,7 @@
 
           
           
-             <span id="/2018/10/02/SpringCloud/ribbon/" class="leancloud_visitors" data-flag-title="Spring Cloud（三）：客户端负载均衡Ribbon">
+             <span id="/2020/03/20/centos7/centos-install-zookeeper/" class="leancloud_visitors" data-flag-title="centos单机安装zookeeper">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1469,10 +800,15 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Ribbon是Netflix发布的云中间层服务开源项目，其主要功能是提供客户端侧负载均衡算法。简单的说，Ribbon是一个客户端负载均衡器，我们可以在配置文件中列出Load Balancer后面所有的机器，Ribbon会自动的帮助你基于某种规则（如简单轮询，随机连接等）去连接这些机器，我们也很容易使用Ribbon实现自定义的负载均衡算法。</p>
+          <h3 id="一、下载安装包"><a href="#一、下载安装包" class="headerlink" title="一、下载安装包"></a>一、下载安装包</h3><p>从版本3.5.5开始，带有bin名称的包才是我们想要的下载可以直接使用的里面有编译后的二进制的包，而之前的普通的tar.gz的包里面是只是源码的包无法直接使用。 zookeeper安装需要jdk环境，参考：<a href="https://duanguangguang.github.io/2020/03/20/centos7/centos-install-jdk/" target="_blank" rel="noopener">centos安装JDK</a></p>
+<h3 id="二、下载以及解压"><a href="#二、下载以及解压" class="headerlink" title="二、下载以及解压"></a>二、下载以及解压</h3><p>下载地址：<a href="http://mirror.bit.edu.cn/apache/zookeeper/" target="_blank" rel="noopener">http://mirror.bit.edu.cn/apache/zookeeper/</a> </p>
+<p>解压：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@common backup]# tar -zxvf apache-zookeeper-3.5.7-bin.tar.gz</span><br></pre></td></tr></table></figure>
+<p>目录结构：</p>
+<p><img src="/2020/03/20/centos7/centos-install-zookeeper/duanguangguang.github.io\source\_posts\centos7\centos-install-zookeeper\01zookeeper安装目录结构.png" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/10/02/SpringCloud/ribbon/#more" rel="contents">
+            <a class="btn" href="/2020/03/20/centos7/centos-install-zookeeper/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1523,7 +859,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/29/SpringCloud/eureka/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/centos7/centos-install-redis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1542,7 +878,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/29/SpringCloud/eureka/" itemprop="url">Spring Cloud（二）：服务注册发现Eureka</a></h1>
+                <a class="post-title-link" href="/2020/03/20/centos7/centos-install-redis/" itemprop="url">centos7安装redis</a></h1>
         
 
         <div class="post-meta">
@@ -1554,8 +890,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-29T18:23:16+08:00">
-                2018-09-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-20T17:38:28+08:00">
+                2020-03-20
               </time>
             
 
@@ -1577,8 +913,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
+                  <a href="/categories/Centos7/" itemprop="url" rel="index">
+                    <span itemprop="name">Centos7</span>
                   </a>
                 </span>
 
@@ -1595,9 +931,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/09/29/SpringCloud/eureka/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/20/centos7/centos-install-redis/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/29/SpringCloud/eureka/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/20/centos7/centos-install-redis/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1605,7 +941,7 @@
 
           
           
-             <span id="/2018/09/29/SpringCloud/eureka/" class="leancloud_visitors" data-flag-title="Spring Cloud（二）：服务注册发现Eureka">
+             <span id="/2020/03/20/centos7/centos-install-redis/" class="leancloud_visitors" data-flag-title="centos7安装redis">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1637,10 +973,12 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Eureka是Netflix开发的服务发现框架，本身是一个基于REST的服务，主要用于定位运行在AWS域中的中间层服务，以达到负载均衡和中间层服务故障转移的目的。Spring Cloud将它集成在其子项目spring-cloud-netflix中。</p>
+          <h3 id="一、安装gcc依赖"><a href="#一、安装gcc依赖" class="headerlink" title="一、安装gcc依赖"></a>一、安装gcc依赖</h3><p>由于 redis 是用 C 语言开发，安装之前必先确认是否安装 gcc 环境（gcc -v），如果没有安装，执行以下命令进行安装 。切换到root用户下，执行yum -y install gcc命令： </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@common soft]# yum install -y gcc</span><br></pre></td></tr></table></figure>
+<h3 id="二、下载并解压安装包"><a href="#二、下载并解压安装包" class="headerlink" title="二、下载并解压安装包"></a>二、下载并解压安装包</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@common redis]# wget http://download.redis.io/releases/redis-5.0.3.tar.gz</span><br><span class="line">[root@common redis]# tar -zxvf redis-5.0.3.tar.gz</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/29/SpringCloud/eureka/#more" rel="contents">
+            <a class="btn" href="/2020/03/20/centos7/centos-install-redis/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1691,7 +1029,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/23/SpringCloud/microService/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/14/io/nio/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1710,7 +1048,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/23/SpringCloud/microService/" itemprop="url">Spring Cloud（一）：微服务概述</a></h1>
+                <a class="post-title-link" href="/2019/07/14/io/nio/" itemprop="url">nio</a></h1>
         
 
         <div class="post-meta">
@@ -1722,8 +1060,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-23T18:23:16+08:00">
-                2018-09-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-14T15:14:17+08:00">
+                2019-07-14
               </time>
             
 
@@ -1745,8 +1083,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringCloud</span>
+                  <a href="/categories/IO/" itemprop="url" rel="index">
+                    <span itemprop="name">IO</span>
                   </a>
                 </span>
 
@@ -1763,9 +1101,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/09/23/SpringCloud/microService/#comments" itemprop="discussionUrl">
+                <a href="/2019/07/14/io/nio/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/23/SpringCloud/microService/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/07/14/io/nio/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1773,7 +1111,7 @@
 
           
           
-             <span id="/2018/09/23/SpringCloud/microService/" class="leancloud_visitors" data-flag-title="Spring Cloud（一）：微服务概述">
+             <span id="/2019/07/14/io/nio/" class="leancloud_visitors" data-flag-title="nio">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1805,12 +1143,32 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>总结微服务以及与微服务相关的一些概念。</p>
-<h4 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h4><p><img src="/2018/09/23/SpringCloud/microService/microservice01.png" alt=""></p>
-<p>一个归档包（例如war格式）包含了应用所有功能的应用程序。</p>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><strong>Java NIO（New IO / Non Blocking IO）</strong>，是从Java 1.4版本开始引入的一个新的IO API，可以替代标准的Java IO API。NIO与原来的IO有同样的作用和目的。NIO支持面向缓冲区的、基于通道的IO操作。NIO将以更加高效的方式进行文件的读写操作。NIO 与 IO 的主要区别：</p>
+<table>
+<thead>
+<tr>
+<th>IO</th>
+<th>NIO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>面向流（Stream Oriented）</td>
+<td>面向缓存区（Buffer Oriented）</td>
+</tr>
+<tr>
+<td>阻塞IO（Blocking IO）</td>
+<td>非阻塞IO（Non Blocking IO）</td>
+</tr>
+<tr>
+<td>（无）</td>
+<td>选择器（Selectors）</td>
+</tr>
+</tbody>
+</table>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/23/SpringCloud/microService/#more" rel="contents">
+            <a class="btn" href="/2019/07/14/io/nio/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1861,7 +1219,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/22/mq/activemq/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/27/concurrent/asyn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="dodd">
@@ -1880,7 +1238,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/22/mq/activemq/" itemprop="url">JMS之ActiveMQ</a></h1>
+                <a class="post-title-link" href="/2019/01/27/concurrent/asyn/" itemprop="url">优雅的异步操作</a></h1>
         
 
         <div class="post-meta">
@@ -1892,8 +1250,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-22T09:41:46+08:00">
-                2018-09-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-27T18:14:17+08:00">
+                2019-01-27
               </time>
             
 
@@ -1915,8 +1273,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/消息队列/" itemprop="url" rel="index">
-                    <span itemprop="name">消息队列</span>
+                  <a href="/categories/并发包/" itemprop="url" rel="index">
+                    <span itemprop="name">并发包</span>
                   </a>
                 </span>
 
@@ -1933,9 +1291,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/09/22/mq/activemq/#comments" itemprop="discussionUrl">
+                <a href="/2019/01/27/concurrent/asyn/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/22/mq/activemq/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/01/27/concurrent/asyn/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1943,7 +1301,7 @@
 
           
           
-             <span id="/2018/09/22/mq/activemq/" class="leancloud_visitors" data-flag-title="JMS之ActiveMQ">
+             <span id="/2019/01/27/concurrent/asyn/" class="leancloud_visitors" data-flag-title="优雅的异步操作">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1975,22 +1333,687 @@
 
       
         
-          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><strong>JMS</strong>：<strong>Java消息服务</strong>（<strong>Java Message Service</strong>，<strong>JMS</strong>）</p>
-<ul>
-<li>Java消息服务是一个与具体平台无关的API；</li>
-<li>Java消息服务的规范包括两种消息模式，点对点和发布者／订阅者；</li>
-<li>Java消息服务支持同步和异步的消息处理；</li>
-<li>Java消息服务支持面向事件的方法接收消息，<a href="https://zh.wikipedia.org/wiki/%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88" target="_blank" rel="noopener">事件驱动的程序设计</a>。</li>
-</ul>
-<p><strong>ActiveMQ</strong>：<strong>Apache ActiveMQ</strong></p>
-<ul>
-<li>开源<a href="https://zh.wikipedia.org/w/index.php?title=%E6%B6%88%E6%81%AF%E4%B8%AD%E9%96%93%E4%BB%B6&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">消息中间件</a>；</li>
-<li>纯Java程序</li>
-<li>ActiveMQ管理控制台：<a href="http://127.0.0.1:8161/admin/" target="_blank" rel="noopener">http://127.0.0.1:8161/admin/</a> (admin/admin)</li>
-</ul>
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/22/mq/activemq/#more" rel="contents">
+            <a class="btn" href="/2019/01/27/concurrent/asyn/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/27/concurrent/threadpoolname/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/27/concurrent/threadpoolname/" itemprop="url">优雅的使用线程池</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-27T17:28:48+08:00">
+                2019-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发包/" itemprop="url" rel="index">
+                    <span itemprop="name">并发包</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/27/concurrent/threadpoolname/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/27/concurrent/threadpoolname/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/01/27/concurrent/threadpoolname/" class="leancloud_visitors" data-flag-title="优雅的使用线程池">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>当在一个应用中需要创建多个线程或者线程池时最好给每个线程或者线程池根据业务类型设置具体的名称，以便在出现问题的时候方便进行定位。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/27/concurrent/threadpoolname/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/23/concurrent/ScheduleThreadPoolExecutor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/23/concurrent/ScheduleThreadPoolExecutor/" itemprop="url">Java并发包中线程池ScheduledThreadPoolExecutor原理解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-23T21:41:47+08:00">
+                2019-01-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发包/" itemprop="url" rel="index">
+                    <span itemprop="name">并发包</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/23/concurrent/ScheduleThreadPoolExecutor/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/23/concurrent/ScheduleThreadPoolExecutor/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/01/23/concurrent/ScheduleThreadPoolExecutor/" class="leancloud_visitors" data-flag-title="Java并发包中线程池ScheduledThreadPoolExecutor原理解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>ThreadPoolExecutor是Executors工具类的一部分功能，另一部分是ScheduledThreadPoolExecutor的实现。ScheduledThreadPoolExecutor继承了ThreadPoolExecutor并实现了ScheduledExecutorService接口。线程池队列是DelayedWorkQueue，其和DelayedQueue类似，是一个延迟队列。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/23/concurrent/ScheduleThreadPoolExecutor/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/16/concurrent/threadPoolExecutor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/16/concurrent/threadPoolExecutor/" itemprop="url">Java并发包中线程池ThreadPoolExecutor原理解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-16T22:17:47+08:00">
+                2019-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发包/" itemprop="url" rel="index">
+                    <span itemprop="name">并发包</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/16/concurrent/threadPoolExecutor/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/16/concurrent/threadPoolExecutor/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/01/16/concurrent/threadPoolExecutor/" class="leancloud_visitors" data-flag-title="Java并发包中线程池ThreadPoolExecutor原理解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>线程池主要解决两个问题：</p>
+<ol>
+<li>当执行大量异步任务时线程池能够提供较好的性能。线程池中的线程是可以复用的，避免了线程创建和销毁带来的开销；</li>
+<li>线程池提供了一种资源限制和管理的手段，比如可以限制线程的个数，动态新增线程等ThreadPoolExecutor也保留了一些基本你的统计数据，比如当前线程池完成的任务数目等。</li>
+</ol>
+<p>线程池提供了许多可调参数和可扩展性接口，以满足不同情境的需要。我们可以使用更方便的Executors的工厂方法，比如newCachedThreadPool（线程池线程个数最多可达<code>Integer.MAX_VALUE</code>，线程自动回收）、newFixedThreadPool（固定大小的线程池）和newSingleThreadExecutor（单个线程）等来创建线程池，用户还可以自定义线程池。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/16/concurrent/threadPoolExecutor/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/13/concurrent/countdownlatch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/13/concurrent/countdownlatch/" itemprop="url">Java并发包中线程同步器原理解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-13T14:36:44+08:00">
+                2019-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发包/" itemprop="url" rel="index">
+                    <span itemprop="name">并发包</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/13/concurrent/countdownlatch/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/13/concurrent/countdownlatch/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/01/13/concurrent/countdownlatch/" class="leancloud_visitors" data-flag-title="Java并发包中线程同步器原理解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在日常开发中经常遇到需要在主线程中开启多个线程去并行执行任务，并且主线程需要等待所有子线程执行完毕后再进行汇总的场景，在CountDownLatch出现之前一直都使用join()方法来实现这一点，但是join 方法不够灵活，不能满足不同场景的需要，比如使用ExecutorService线程池来管理线程时传递的参数是Runable或者Callable对象，这时候就没办法直接调用线程的join方法，而是需要使用CountDownLatch了。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/13/concurrent/countdownlatch/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2032,7 +2055,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2082,7 +2105,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-count">168</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2093,7 +2116,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2104,7 +2127,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

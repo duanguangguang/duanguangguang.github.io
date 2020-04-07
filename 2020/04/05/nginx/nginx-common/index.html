@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="介绍">
+<meta name="description" content="介绍介绍nginx常见问题。">
 <meta name="keywords" content="nginx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nginx常见问题">
 <meta property="og:url" content="http://yoursite.com/2020/04/05/nginx/nginx-common/index.html">
 <meta property="og:site_name" content="Dodd">
-<meta property="og:description" content="介绍">
+<meta property="og:description" content="介绍介绍nginx常见问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-05T15:51:43.264Z">
+<meta property="og:image" content="http://yoursite.com/2020/04/05/nginx/nginx-common/duanguangguang.github.io/source/_posts/nginx/nginx-common/获取用户真实IP.png">
+<meta property="og:updated_time" content="2020-04-06T07:44:45.599Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx常见问题">
-<meta name="twitter:description" content="介绍">
+<meta name="twitter:description" content="介绍介绍nginx常见问题。">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/05/nginx/nginx-common/duanguangguang.github.io/source/_posts/nginx/nginx-common/获取用户真实IP.png">
 
 
 
@@ -448,8 +450,61 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><a id="more"></a>
-<h3 id="一、-sub-status模块"><a href="#一、-sub-status模块" class="headerlink" title="一、_sub_status模块"></a>一、_sub_status模块</h3>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>介绍nginx常见问题。</p>
+<a id="more"></a>
+<h3 id="一、server-name优先级"><a href="#一、server-name优先级" class="headerlink" title="一、server_name优先级"></a>一、server_name优先级</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       <span class="number">80</span>;</span><br><span class="line">    server_name  testserver1 node1;</span><br><span class="line">    </span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /opt/app/code1;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       <span class="number">80</span>;</span><br><span class="line">    server_name  testserver2 node2;</span><br><span class="line">    </span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /opt/app/code2;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>比如说两个nginx配置文件如上，一个是test1.conf，一个是test2.conf，配置相同的server_name，即使产生了冲突，nginx的启动也不会有问题。</p>
+<p>对于多个虚拟主机，配置有相同的server_name的话，只是优先读取先读取到的配置（test_server1.conf）。对于IP配置也相同。</p>
+<h3 id="二、location优先级"><a href="#二、location优先级" class="headerlink" title="二、location优先级"></a>二、location优先级</h3><p>location匹配的优先级从上往下是：优先匹配最精准的。</p>
+<ul>
+<li><code>=</code> 进行普通字符精确匹配，完全匹配（匹配到则不继续查找匹配）</li>
+<li><code>^~</code> 表示普通字符匹配，使用前缀匹配（匹配到则不继续查找匹配）</li>
+<li><code>~\~*</code> 表示执行一个正则匹配 （匹配到则继续查找更精确的匹配）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">location = /code1/ &#123;</span><br><span class="line">        rewrite ^(.*)$ /code1/index.html <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    location ~ /code.* &#123;</span><br><span class="line">        rewrite ^(.*)$ /code3/index.html <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    location ^~ /code &#123;</span><br><span class="line">        rewrite ^(.*)$ /code2/index.html <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三、try-files使用"><a href="#三、try-files使用" class="headerlink" title="三、try_files使用"></a>三、try_files使用</h3><p>作用：按顺序检查文件是否存在。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    try_files $uri $uri<span class="comment">//index.html</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>首先查看uri内容本地是否存在，存在的话则解析返回给用户</li>
+<li>没有的话将请求加/，表示将请求进行重定向处理，寻找这个路径下有没有文件</li>
+<li>如果还是没有，则交给index.html来处理</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    root /opt/app/code/cache;</span><br><span class="line">    try_files /cache $uri <span class="meta">@java</span>_page;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">location <span class="meta">@java</span>_page&#123;</span><br><span class="line">    proxy_pass http:<span class="comment">//127.0.0.1:9090;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//192.168.x.xxx/index.html</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>先请求/opt/app/code/cache这个路径下文件是否存在</li>
+<li>不存在则请求@java_page对应的location，转发到<a href="http://127.0.0.1:9090进行处理" target="_blank" rel="noopener">http://127.0.0.1:9090进行处理</a></li>
+</ul>
+<h3 id="四、alias和root区别"><a href="#四、alias和root区别" class="headerlink" title="四、alias和root区别"></a>四、alias和root区别</h3><ol>
+<li><p>root</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location /request_path/image/ &#123;</span><br><span class="line">    root /local_path/image;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求：http://www.imooc.com/request_path/image/cat.png</span></span><br><span class="line">/local_path/image/request_path/image/cat.png</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>alias</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location /request_path/image/ &#123;</span><br><span class="line">    alias /local_path/image;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求：http://www.imooc.com/request_path/image/cat.png</span></span><br><span class="line">/local_path/image/cat.png</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="五、获取用户真实IP"><a href="#五、获取用户真实IP" class="headerlink" title="五、获取用户真实IP"></a>五、获取用户真实IP</h3><p><img src="/2020/04/05/nginx/nginx-common/duanguangguang.github.io\source\_posts\nginx\nginx-common\获取用户真实IP.png" alt=""></p>
+<h3 id="六、Nginx常见错误码"><a href="#六、Nginx常见错误码" class="headerlink" title="六、Nginx常见错误码"></a>六、Nginx常见错误码</h3><ol>
+<li><p>用户上传文件限制：<code>client_max_body_size</code></p>
+<p>Nginx：413 Request Entity Too Large。</p>
+</li>
+<li><p>后端服务无响应</p>
+<p>502 bad gateway。</p>
+</li>
+<li><p>后端服务响应超时</p>
+<p>504 Gateway Time-out。默认60s。</p>
+</li>
+<li><p>403</p>
+<p>访问被拒绝。</p>
+</li>
+<li><p>404</p>
+<p>文件没找到。</p>
+</li>
+<li><p>400</p>
+<p>请求参数错误。</p>
+</li>
+</ol>
+
       
     </div>
     
@@ -668,7 +723,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、-sub-status模块"><span class="nav-number">2.</span> <span class="nav-text">一、_sub_status模块</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、server-name优先级"><span class="nav-number">2.</span> <span class="nav-text">一、server_name优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、location优先级"><span class="nav-number">3.</span> <span class="nav-text">二、location优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、try-files使用"><span class="nav-number">4.</span> <span class="nav-text">三、try_files使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、alias和root区别"><span class="nav-number">5.</span> <span class="nav-text">四、alias和root区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、获取用户真实IP"><span class="nav-number">6.</span> <span class="nav-text">五、获取用户真实IP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、Nginx常见错误码"><span class="nav-number">7.</span> <span class="nav-text">六、Nginx常见错误码</span></a></li></ol></div>
             
 
           </div>

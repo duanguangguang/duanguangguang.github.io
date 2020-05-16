@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="jvm," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍介绍Java类文件结构。Java到.class文件的过程：">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM-CLASS文件结构">
+<meta property="og:url" content="http://yoursite.com/2020/04/18/jvm/jvm-class/index.html">
+<meta property="og:site_name" content="Dodd">
+<meta property="og:description" content="介绍介绍Java类文件结构。Java到.class文件的过程：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/java到class文件.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/class文件组成内容.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/字段表结构.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/class文件格式.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/TestM.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/魔数.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/版本.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/class文件结构之常量池.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/class文件结构常量池.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/常量池表1.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/常量池表2.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/常量池结构表说明.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/访问标志.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/类索引父类索引接口索引.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/字段表集合.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/字段表结构和访问标志.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/全限定名简单名称以及描述符.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/方法表集合.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/属性表结构和虚拟机规范预定义的属性.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/虚拟机规范预定义的属性.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/属性表集合code属性.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/属性表集合异常表结构.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/属性表集合之Exception.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/虚拟机属性值LocalVariableTable.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/属性表之sourcefile.png">
+<meta property="og:updated_time" content="2020-05-16T09:00:07.711Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM-CLASS文件结构">
+<meta name="twitter:description" content="介绍介绍Java类文件结构。Java到.class文件的过程：">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/18/jvm/jvm-class/duanguangguang.github.io/source/_posts/jvm/jvm-class/java到class文件.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/18/jvm/jvm-class/"/>
+
+
+
+
+
+  <title>JVM-CLASS文件结构 | Dodd</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?0bdcd640afabf8c9bf5be9569729144b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dodd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">dont be shy, just try!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-recommend">
+          <a href="/recommend/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            友情链接
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            links
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/18/jvm/jvm-class/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="dodd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dodd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JVM-CLASS文件结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-18T17:14:59+08:00">
+                2020-04-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/18/jvm/jvm-class/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/04/18/jvm/jvm-class/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/04/18/jvm/jvm-class/" class="leancloud_visitors" data-flag-title="JVM-CLASS文件结构">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>介绍Java类文件结构。Java到.class文件的过程：</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\java到class文件.png" alt=""></p>
+<a id="more"></a>
+<h3 id="一、Class文件组成内容"><a href="#一、Class文件组成内容" class="headerlink" title="一、Class文件组成内容"></a>一、Class文件组成内容</h3><p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\class文件组成内容.png" alt=""></p>
+<ul>
+<li><p>无符号数</p>
+<p>就是数值：1,2,3…</p>
+</li>
+<li><p>表</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\字段表结构.png" alt=""></p>
+<p>就是一个结构，表的结构类似：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">xxx_XXX_info&#123;</span><br><span class="line">    u1</span><br><span class="line">    u2</span><br><span class="line">    u4</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="1-Class文件格式"><a href="#1-Class文件格式" class="headerlink" title="1. Class文件格式"></a>1. Class文件格式</h4><p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\class文件格式.png" alt=""></p>
+<ul>
+<li>u1：一个字节</li>
+<li>u2：两个字节</li>
+<li>u4：四个字节</li>
+<li>u8：八个字节</li>
+</ul>
+<p>演示案例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestM</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> m;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">inc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> m + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应的字节码文件：</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\TestM.png" alt=""></p>
+<ol>
+<li><p>魔数</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\魔数.png" alt=""></p>
+<p>第一个u4字节代表这是一个class文件：cafe babe（固定的）。</p>
+</li>
+<li><p>版本</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\版本.png" alt=""></p>
+<p>第二个u4字节代表JDK编译的版本号。</p>
+<ul>
+<li>JDK7：51</li>
+<li>JDK8：52（34是16进制，转换成10进制是52）</li>
+</ul>
+</li>
+<li><p>常量池</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\class文件结构之常量池.png" alt=""></p>
+<ul>
+<li><p>子面量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>字面量就是=右边的东西（3）。</p>
+</li>
+<li><p>符号引用</p>
+<p>包括：</p>
+<ul>
+<li>类和接口的全限定名</li>
+<li>字段的名称和描述符</li>
+<li>方法的名称和描述符</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\class文件结构常量池.png" alt=""></p>
+<p>常量池总共有21个常量（HEX：00 16）（22-1）</p>
+<p>常量池结构表-1</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\常量池表1.png" alt=""></p>
+<p>常量池结构表-2</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\常量池表2.png" alt=""></p>
+<p>分析：</p>
+<ul>
+<li><p>0a：===》10 （对应到常量池结构表查找tag值）代表的Methodref_info</p>
+<p>00 06，00 18 ===》#6，#24</p>
+</li>
+<li><p>09：===》09 代表的Fieldref_info</p>
+<p>03，19 ===》#3，#25</p>
+</li>
+<li><p>07：===》07 代表的Class_info</p>
+<p>1a ===》#26</p>
+</li>
+<li><p>…</p>
+</li>
+</ul>
+<p>验证：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">javap -v TestM.class</span><br><span class="line">    </span><br><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #6.#24         // java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   #2 = Fieldref           #3.#25         // com/example/dodd/jvm/TestM.m:I</span><br><span class="line">   #3 = Class              #26            // com/example/dodd/jvm/TestM</span><br><span class="line">   #4 = Methodref          #3.#24         // com/example/dodd/jvm/TestM."&lt;init&gt;":()V</span><br><span class="line">   #5 = Methodref          #3.#27         // com/example/dodd/jvm/TestM.inc:()I</span><br><span class="line">   #6 = Class              #28            // java/lang/Object</span><br><span class="line">   #7 = Utf8               m</span><br><span class="line">   #8 = Utf8               I</span><br><span class="line">   #9 = Utf8               &lt;init&gt;</span><br><span class="line">  #10 = Utf8               ()V</span><br><span class="line">  #11 = Utf8               Code</span><br><span class="line">  #12 = Utf8               LineNumberTable</span><br><span class="line">  #13 = Utf8               LocalVariableTable</span><br><span class="line">  #14 = Utf8               this</span><br><span class="line">  #15 = Utf8               Lcom/example/dodd/jvm/TestM;</span><br><span class="line">  #16 = Utf8               inc</span><br><span class="line">  #17 = Utf8               ()I</span><br><span class="line">  #18 = Utf8               main</span><br><span class="line">  #19 = Utf8               ([Ljava/lang/String;)V</span><br><span class="line">  #20 = Utf8               args</span><br><span class="line">  #21 = Utf8               [Ljava/lang/String;</span><br><span class="line">  #22 = Utf8               SourceFile</span><br><span class="line">  #23 = Utf8               TestM.java</span><br><span class="line">  #24 = NameAndType        #9:#10         // "&lt;init&gt;":()V</span><br><span class="line">  #25 = NameAndType        #7:#8          // m:I</span><br><span class="line">  #26 = Utf8               com/example/dodd/jvm/TestM</span><br><span class="line">  #27 = NameAndType        #16:#17        // inc:()I</span><br><span class="line">  #28 = Utf8               java/lang/Object</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>init和clinit</p>
+<p>init是实例化初始化方法。使用场景：</p>
+<ul>
+<li>调用new初始化对象的时候</li>
+<li>调用反射的时候newInstance()</li>
+<li>调用clone方法的时候</li>
+<li>ObjectInpustream.getObject()序列化的时候</li>
+</ul>
+<p>clinit是类和接口的初始化。使用场景：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> m = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> m;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        m = <span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所有的类变量初始化语句和静态初始化语句都被java编译收集到一起，采用clinit初始化方式。采用javap命令查看字节码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 类静态变量初始化后出现</span></span><br><span class="line"><span class="keyword">static</span> &#123;&#125;;</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">0</span>, args_size=<span class="number">0</span></span><br><span class="line">         <span class="number">0</span>: iconst_2</span><br><span class="line">         1: putstatic     #3                  // Field a:I</span><br><span class="line">         <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">10</span>: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解读示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> com.example.dodd.jvm.TestM();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: aload_0</span><br><span class="line">         1: invokespecial #1            // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">         <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">8</span>: <span class="number">0</span></span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            <span class="number">0</span>       <span class="number">5</span>     <span class="number">0</span>  <span class="keyword">this</span>   Lcom/example/dodd/jvm/TestM;</span><br></pre></td></tr></table></figure>
+<p>这是TestM的默认构造方法，首先通过invokespecial #1找到虚拟机的第一条指令#1。</p>
+<ul>
+<li><p>第一步，到常量池中找#1常量（#1 = Methodref          #6.#24）</p>
+<p>#6 指向Class_info的索引项（u2类型数据）</p>
+<p>#26 指向NameAndType的索引项（u2类型数据）</p>
+</li>
+<li><p>第二步，找#6号常量（#6号常量是Class：java/lang/Object）</p>
+</li>
+<li><p>第三步，找#24号常量（#9:#10）</p>
+<p>NameAndType的数据结构（u2：名称常量项的索引，u2：描述符常量项的索引）</p>
+</li>
+<li><p>第四步，#9对应\<init></init></p>
+</li>
+<li><p>第五步，#10对应()V</p>
+</li>
+</ul>
+<p>至此，搜索的结果就是：<code>V java/lang/Object.\&lt;init&gt;()</code>。</p>
+</li>
+</ul>
+<p>ps：类名应该多长？不能超过256。</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\常量池结构表说明.png" alt=""></p>
+</li>
+<li><p>访问标志</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\访问标志.png" alt=""></p>
+<ul>
+<li><p>字节码：<code>00 21</code>固定</p>
+<p>0x0001|0x0020=0x0021，这就是为什么字节码是<code>00 21</code>。</p>
+</li>
+</ul>
+</li>
+<li><p>类索引、父类索引、接口计数器、接口1、接口2…</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\类索引父类索引接口索引.png" alt=""></p>
+<p>字节码：<code>00 03 00 06 00 00</code>。</p>
+<ul>
+<li><p><code>00 03</code>代表#3常量索引：<code>com/example/dodd/jvm/TestM</code></p>
+</li>
+<li><p><code>00 06</code>代表#6常量索引：<code>java/lang/Object</code></p>
+</li>
+<li><p><code>00 00</code>代表有几个接口，当前是0个</p>
+</li>
+<li><p>…</p>
+<p>如果有接口，后续字节码表示接口的索引项，如果该类没有实现任何接口，则计数器值为0，后面的接口索引表不再占用任何字节。</p>
+</li>
+</ul>
+</li>
+<li><p>字段表集合</p>
+<p>TestClass.class</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\字段表集合.png" alt=""></p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\字段表结构和访问标志.png" alt=""></p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\全限定名简单名称以及描述符.png" alt=""></p>
+<p>关于方法表查找方法示例：</p>
+<ul>
+<li>1.找到访问控制access_flag（00 01—&gt;public）</li>
+<li>2.找到简单名字name_index（00 17 —&gt; inc）</li>
+<li>3.找到描述符descriptor_index（00 18 —&gt;()I）</li>
+</ul>
+<p>翻译过来：<code>public int inc()</code>。</p>
+<ul>
+<li>4.找到attribute_count（00 01—&gt;代表有一个属性表）</li>
+<li>5.对照属性表attribute_info(u2,u4,u1*length)</li>
+<li>6.找到attribute_name_index（00 11—&gt;Code）</li>
+<li>7.找到attribute_length（00 00 00 be—&gt;190个u1）</li>
+</ul>
+<p>max_stacks：方法的栈深。</p>
+<p>max_locals：方法的本地变量数量。</p>
+<p>args_size：方法的参数有多少个（默认是this（无参也是1），如果方法是static那么就是0）。</p>
+<ul>
+<li><p>8.找到max_stacks最大栈深（00 01—&gt;1 max_stacks）</p>
+</li>
+<li><p>9.找到max_locals最大变量数（00 05—&gt; 5 max_locals）</p>
+</li>
+<li><p>10.找到code_length代码行数（00 00 00 18—&gt;24）</p>
+</li>
+<li><p>11.对应的字节码</p>
+<p><a href="">参考JVM指令表</a></p>
+<ul>
+<li>0x04：iconst_1</li>
+<li>0x3c：istore_1</li>
+<li>putstatic #3：b3 xx xx</li>
+</ul>
+</li>
+<li><p>12.异常表</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from to target</span><br><span class="line"><span class="number">0</span>    <span class="number">4</span>  <span class="number">8</span></span><br><span class="line">index:#2(java/lang/Exception)</span><br></pre></td></tr></table></figure>
+<p>如果没有异常表：</p>
+<ul>
+<li>debug断点的问题</li>
+<li>错误日志没有行号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>方法表集合</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\方法表集合.png" alt=""></p>
+</li>
+<li><p>属性表集合</p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\属性表结构和虚拟机规范预定义的属性.png" alt=""></p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\虚拟机规范预定义的属性.png" alt=""></p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\属性表集合code属性.png" alt=""></p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\属性表集合异常表结构.png" alt=""></p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\属性表集合之Exception.png" alt=""></p>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\虚拟机属性值LocalVariableTable.png" alt=""></p>
+<p>本地变量表（LocalVariableTable）：</p>
+<ul>
+<li>start+length：一个本地变量的作用域</li>
+<li>slot：几个槽来存储</li>
+<li>name：简单名字（变量名对应 ）</li>
+<li>signature：伪泛型，泛型擦除，对泛型的标识</li>
+</ul>
+<p><img src="/2020/04/18/jvm/jvm-class/duanguangguang.github.io\source\_posts\jvm\jvm-class\属性表之sourcefile.png" alt=""></p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jvm/" rel="tag"># jvm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/05/nginx/nginx-summary/" rel="next" title="nginx架构总结">
+                <i class="fa fa-chevron-left"></i> nginx架构总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/18/jvm/jvm-classload/" rel="prev" title="JVM类加载机制">
+                JVM类加载机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="dodd" />
+            
+              <p class="site-author-name" itemprop="name">dodd</p>
+              <p class="site-description motion-element" itemprop="description">不吃狗粮，不喝鸡汤</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">175</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/292033712#5" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/dai-dai-jso#n" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.javachen.com/" title="JavaChen" target="_blank">JavaChen</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="酷壳" target="_blank">酷壳</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、Class文件组成内容"><span class="nav-number">2.</span> <span class="nav-text">一、Class文件组成内容</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Class文件格式"><span class="nav-number">2.1.</span> <span class="nav-text">1. Class文件格式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dodd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://Dodd-desp.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/04/18/jvm/jvm-class/';
+          this.page.identifier = '2020/04/18/jvm/jvm-class/';
+          this.page.title = 'JVM-CLASS文件结构';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://Dodd-desp.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("34jR4GSilDvBVoWfFMY8Ac6d-gzGzoHsz", "iyxBvlbvBfa67c8j4UeKkWog");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

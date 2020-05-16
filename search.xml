@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[JVM调优实战]]></title>
+    <url>%2F2020%2F04%2F18%2Fjvm%2Fjvm-optime%2F</url>
+    <content type="text"><![CDATA[介绍介绍JVM调优。 非堆内存： 堆外内存 文件句柄 Socket句柄 数据库连接 一、JVM调优原则 降低Full GC的频率，一天有1-2次，控制在晚上，重启服务器或者定时任务出发Full GC 确保大多数对象朝生夕死 提高大对象进入老年代的门槛（-XX:MaxTenuringThreshold=15） -Xms500m -Xmx500m设置成一样 最小堆内存，最大堆内存，减少扩容过程耗时 CMSInitiatingOccupancyFraction=（老年代-Eden-1个Survivor）/（老年的-新生代）*100 设置CMS收集器在老年代空间被使用多少后出发垃圾收集。 CMS调优示例 12345-server -Xmn500m -Xms1200m -Xmx1200m -XX:PermSize=256m -XX:MaxPermSize=256m-XX:SurvivorRation=1 -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSCompactAtFullCollection -XX:+CMSFullGCsBeforeCompaction=5-XX:+HeapDumpOnOutOfMemoryError -Xloggc:log/gc.log -XX:+PrintGCDetails-XX:+CMSParallelRamarkEnabled jstat -gc 2924 jstat -gccause 2924 1000 jstat -class 2924]]></content>
+      <categories>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[JVM字节码执行引擎]]></title>
+    <url>%2F2020%2F04%2F18%2Fjvm%2Fjvm-butecode%2F</url>
+    <content type="text"><![CDATA[介绍介绍JVM字节码执行引擎。 一、字节码执行引擎 二、运行时栈帧结构 三、局部变量表 问题：long和double在32位操作系统是不是原子操作？ 因为slot存放的是32位内的数据类型，在多线程情况下分高低位赋值和更新，不是原子性操作。 四、操作数栈 五、方法返回地址 六、方法调用 动态链接 静态链接 符号引用 —&gt; 直接引用 非虚方法 invokestatic：静态方法 invokespecial：构造函数 invokevirtual：虚函数调用 虚方法 需要我们在执行阶段确定需要执行的版本。 七、虚拟机动态分派机制 虚方法表 一般是在类加载的阶段进行初始化。]]></content>
+      <categories>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[JVM内存分配与回收策略]]></title>
+    <url>%2F2020%2F04%2F18%2Fjvm%2Fjvm-ram%2F</url>
+    <content type="text"><![CDATA[介绍介绍JVM内存分配和回收策略。 一、内存分配 对象首先会进入Eden区 大对象直接进入老年代（示例：TestPolicy2） -XX:PretenureSizeThreshold=n，如果对象大于这个阈值，则直接进入老年代。 注意：该参数只能在ParNew和Serial这两款垃圾收集器起作用 -XX:SurvivoRatio=8 新生代：Eden+Survivor0（S0）+Survivor1（S1） = Xmn -Xmn100m -XX:SurvivoRatio=8，请问Eden区多大？ Eden：S0：S1 = SurvivoRatio：1：1 答案：100*（8/（8+1+1）） = 80M 长期存活的对象进入老年代（示例：TestPolicy3） -XX:MaxTenuringThreshold，一个对象经历过多少次GC（MinorGC）会进入老年代，默认值15 对象年龄的动态判断 示例同TestPolicy3，去掉VM参数-XX:TargetSurvivorRatio=90。 空间分配担保 HandlePromotionFailure，检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试着进行一次Minor GC；如果小于，或者设置不允许冒险，那这时也要改为进行一次Full GC。 在Minor GC之前，检查老年代最大可用连续空间是否大于新生代所有对象的大小 内存够，执行Minor GC 如果空间不够，检查HandlePromotionFailure是否开启 如果没有开启，这个时候执行Full GC 如果开启了，检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小 如果大于，执行Minor GC 如果小于，执行ull GC 目的：减少Full GC 内存管理参数]]></content>
+      <categories>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[JVM垃圾回收机制]]></title>
+    <url>%2F2020%2F04%2F18%2Fjvm%2Fjvm-gc%2F</url>
+    <content type="text"><![CDATA[介绍介绍JVM内存回收机制。对什么区域进行垃圾回收？ 堆 方法区 栈是线程私有的，所有不进行回收。 查看GC回收情况：-XX:+PrintGC。 查看GC回收详情：-XX:+PrintGCDetails。 一、什么情况下回收？ 引用计数 给对象添加一个引用计数器，每当对这个对象进行一次引用，计数器就加1；每当引用失效的时候，引用计数器就减1。当这个引用计数器等于0的时候，表示这个对象不会再被引用了。 可达性分析 二、Java的引用类型 强引用 在我们的代码中有明显的new Object()这类引用，只要这种引用还存在，垃圾回收器就不会回收它，就算内存不够。抛出OutOfMemoryError也不会回收这种对象。 软引用 如果内存够用的情况下，不会回收。如果内存不够用了才进行回收。 弱引用 生存到下一次垃圾回收之前，无论当前内存是否够用，都回收掉被弱引用关联的对象。 虚引用 不会对对象的生命周期有任何影响，也无法通过它得到对象的实例，唯一的作用也就是在对象被垃圾回收前收到一个系统通知。 三、标记清除算法 四、复制算法 五、标记整理算法 六、分代算法 七、JVM内存区域示意图 八、JVM部分内存参数 九、安全点Safepoint 十、Serial收集器 单线程，新生代和老年代都会STW。 十一、ParNew收集器 只对新生代并行收集，对老年代还是单线程收集，收集过程中STW。 十二、Parallel Scavenge收集器 并行多线程收集器，他和ParNew的区别是用户可以控制GC时用户线程停顿的时间。 吞吐量=用户代码执行时间/（GC时间+用户代码执行时间）。 十三、Serial Old收集器 十四、Parallel Old收集器 老年代收集器的多线程版本。 十五、CMS收集器 步骤： 初始标记（STW） 扫描GCRoot对象。 并发标记 标记GCRoot对象的子对象。 重新标记（STW） 进行可达性分析。 并发清除 特点： 低停顿 参数： -XX:+UseCNSCompactAtFullCollection：GC执行完后做一次整理操作 -XX:+CMSFullGCsBeforeCompaction：执行多少次FULLGC要做一次整理操作 默认：68%CMS默认空间（查资料） -XX:+CMSInitiatingOccupancyFraction：用来设置CMS空间参数。 MinorGC针对新生代 MajorGC FullGC针对老年代，MajorGC的时候会同时执行MinorGC（Parallel Scavenge除外） FullGC=MajorGC+MinorGC CMS回收线程默认数量：（CPU数量+3）/4。 执行的任务对CPU要求比较高，CPU核心数量又比较少。 十六、G1收集器 也是属于分代收集器，只不过把内存划分为多个Region。 特点： 空间整合 算法： 既属于标记整理，也属于复制 YoungGC: 扫描根GC Roots 更新RememberSet记录回收对象的数据结构 检测RememberSet哪些数据是要从年轻代到老年代 拷贝对象，要么往幸存代，要么往老年代 清理工作 Mixed GC 十七、其他 JDK1.7/1.8默认的垃圾回收器：Parallel Scavenge（新生代）+Parallel Old JDK1.9默认的垃圾回收器：G1]]></content>
+      <categories>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[JVM运行时数据区]]></title>
+    <url>%2F2020%2F04%2F18%2Fjvm%2Fjvm-data%2F</url>
+    <content type="text"><![CDATA[介绍介绍JVM内存区域，即运行时数据区。JVM内存结构规范图如下： 静态编译 把Java文件编译成字节码Class文件，这个时候Class文件以静态方式存在。 类加载器 把Class字节码文件加载到内存中。 其他 类的元数据：简单名字 + 描述符放在方法区中。 new的对象放在堆中。 一、运行时数据区 可以简单理解线程共享和私有，方法区和堆是存数据的地方，栈包括虚拟机栈，本地方法栈和程序计数器是执行逻辑的地方。 二、堆 三、方法区 JIT：热点代码编译后存储存在方法区。 四、程序计数器 程序计数器作用 五、栈 六、JVM栈之局部变量表 七、JVM堆栈和方法区 八、JVM执行流程]]></content>
+      <categories>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[JVM类加载机制]]></title>
+    <url>%2F2020%2F04%2F18%2Fjvm%2Fjvm-classload%2F</url>
+    <content type="text"><![CDATA[介绍介绍JVM类加载机制。类加载机制生命周期： 一、加载class文件到内存步骤第一步：加载加载需要做三件事情： 这个文件在哪个位置？是jar包还是class文件（格式）？ 12java TestClassjava -jar 获取二进制字节流。 静态存储结构转化为方法区运行时数据结构 在java堆中生成一个Class对象，相对于一个句柄，去访问方法区 第二步：验证 验证Class文件的标识：魔数Magic Number 验证Class文件版本号 验证常量池 常量类型（14个） 常量类型数据结构是否正确 UTF8是否符合标准 Class文件的每个部分（字段表、方法表等）是否正确 元数据验证 final的验证 父类验证 继承验证 字节码验证 指令验证 符号引用验证 通过符号引用是否能够找到字段、方法、类 第三步：准备为类变量分配内存病区设置类变量的初始化阶段。只对static类变量进行内存分配。 类变量：一般称为静态变量 实例变量：当对象被实例化的时候，实例变量就跟着确定，随着对象销毁而销毁 12345static int n = 2;//初始化值是0，而不是2.因为这个时候还没执行任何java方法（&lt;clinit&gt;）static final int n = 2;//这个对应到常量池，ConstantValue，在准备阶段n必须被赋值为2 第四步：解析队符号引用进行解析。把符号引用指向直接引用。 直接引用：指向目标的指针，或者一个偏移量 符号引用：以字面量形式定义在常量池中 主要涉及： 类 接口 字段 方法（接口方法、类方法） 1234567CONSTANT_Class_infoCONSTANT_Fieldref_infoCONSTANT_Methodref_infoCONSTANT_InterfaceMethodref_infoCONSTANT_MethodType_infoCONSTANT_MethodHandler_info（方法虚表：vtable，接口虚表：itable）CONSTANT_InvokeDynamic_info 匹配规则：简单名字+描述符，同时满足。 字段解析 123class A extends B implements C,D &#123; private String str; //字段的解析&#125; 解析字段的顺序：A---&gt;C,D---&gt;B---&gt;Object。 在本类中去找有没有匹配的字段，找到则返回 如果类有接口，往上层接口找匹配的字段，没有则下一步 搜索父类查找有没有匹配的字段 最后是到Object基类查找 如果没找到：java.lang.NoSuchFieldError。 如果找到了，但是没有权限（private）：java.lang.IllegalAccessError 类方法解析 123class A extends B implements C,D &#123; private void inc(); //方法的解析&#125; 方法解析顺序：A—&gt;B—&gt;C,D—&gt;Object`。 在本类中去找有没有匹配的方法 父类中去找匹配的方法 接口列表中去找匹配的方法 如果没找到：java.lang.NoSuchMethodError 如果找到了，但是没有权限（private）：java.lang.IllegalAccessError 接口方法解析 在本类中查找有没有匹配的方法，找到则返回 父类接口递归查找 如果没找到：java.lang.NoSuchMethodError 接口都是public，不需要进行权限检查 第五步：初始化12345678910//&lt;init&gt;：类的实例构造器，类的初始化//&lt;clinit&gt;：静态变量，静态块的初始化，没有静态变量和静态块，则没有该初始化逻辑class A &#123; static int i = 2; //&lt;clinit&gt; static &#123; //&lt;clinit&gt; System.out.println(""); &#125; int n; //&lt;init&gt;&#125; 第六步：使用第七步：卸载二、类加载器 机制：双亲委派，目的：安全 父类加载的不给子类加载 一个类只能加载一次 三、双亲委派模式 为什么需要双亲委任？ 黑客自定义一个java.util.List类，该List类具有系统的List类一样的功能，只是在某个函数稍做修改。这个函数经常使用，假如在这个函数中植入一些“病毒代码”，并且通过自定义类加载器加入JVM中。 四、自定义类加载器自定义类加载器打破双亲委任模式。 12345678910111213141516171819202122232425262728293031323334353637383940414243public class CustomizeClassLoader &#123; public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException &#123; // 自定义类加载器 ClassLoader loader = new ClassLoader() &#123; @Override public Class&lt;?&gt; loadClass(String name) throws ClassNotFoundException &#123; try &#123; String fileName = name.substring(name.lastIndexOf(".") + 1) + ".class"; InputStream is = getClass().getResourceAsStream(fileName); if (is == null) &#123; return super.loadClass(name); &#125; byte[] b = new byte[is.available()]; is.read(b); return defineClass(name, b, 0, b.length); &#125; catch (IOException e) &#123; throw new ClassNotFoundException(); &#125; &#125; &#125;; String className = "com.example.dodd.jvm.CustomizeClassLoader"; Object o1 = CustomizeClassLoader.class.getClassLoader().loadClass(className).newInstance(); Object o2 = loader.loadClass(className).newInstance(); System.out.println(o1 == o2); System.out.println(o1.equals(o2)); // 判断两个对象相不相等，最重要的条件是不是一个类加载器 System.out.println(o1 instanceof CustomizeClassLoader); System.out.println(o2 instanceof CustomizeClassLoader); System.out.println(o1.getClass().getClassLoader()); System.out.println(o2.getClass().getClassLoader()); &#125;&#125;// false// false// true// false// sun.misc.Launcher$AppClassLoader@18b4aac2// com.example.dodd.jvm.CustomizeClassLoader$1@2f2c9b19]]></content>
+      <categories>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[JVM-CLASS文件结构]]></title>
+    <url>%2F2020%2F04%2F18%2Fjvm%2Fjvm-class%2F</url>
+    <content type="text"><![CDATA[介绍介绍Java类文件结构。Java到.class文件的过程： 一、Class文件组成内容 无符号数 就是数值：1,2,3… 表 就是一个结构，表的结构类似： 123456xxx_XXX_info&#123; u1 u2 u4 ...&#125; 1. Class文件格式 u1：一个字节 u2：两个字节 u4：四个字节 u8：八个字节 演示案例： 1234567public class TestM &#123; private int m; public int inc() &#123; return m + 1; &#125;&#125; 对应的字节码文件： 魔数 第一个u4字节代表这是一个class文件：cafe babe（固定的）。 版本 第二个u4字节代表JDK编译的版本号。 JDK7：51 JDK8：52（34是16进制，转换成10进制是52） 常量池 子面量 1int i = 3; 字面量就是=右边的东西（3）。 符号引用 包括： 类和接口的全限定名 字段的名称和描述符 方法的名称和描述符 常量池总共有21个常量（HEX：00 16）（22-1） 常量池结构表-1 常量池结构表-2 分析： 0a：===》10 （对应到常量池结构表查找tag值）代表的Methodref_info 00 06，00 18 ===》#6，#24 09：===》09 代表的Fieldref_info 03，19 ===》#3，#25 07：===》07 代表的Class_info 1a ===》#26 … 验证： 12345678910111213141516171819202122232425262728293031javap -v TestM.class Constant pool: #1 = Methodref #6.#24 // java/lang/Object."&lt;init&gt;":()V #2 = Fieldref #3.#25 // com/example/dodd/jvm/TestM.m:I #3 = Class #26 // com/example/dodd/jvm/TestM #4 = Methodref #3.#24 // com/example/dodd/jvm/TestM."&lt;init&gt;":()V #5 = Methodref #3.#27 // com/example/dodd/jvm/TestM.inc:()I #6 = Class #28 // java/lang/Object #7 = Utf8 m #8 = Utf8 I #9 = Utf8 &lt;init&gt; #10 = Utf8 ()V #11 = Utf8 Code #12 = Utf8 LineNumberTable #13 = Utf8 LocalVariableTable #14 = Utf8 this #15 = Utf8 Lcom/example/dodd/jvm/TestM; #16 = Utf8 inc #17 = Utf8 ()I #18 = Utf8 main #19 = Utf8 ([Ljava/lang/String;)V #20 = Utf8 args #21 = Utf8 [Ljava/lang/String; #22 = Utf8 SourceFile #23 = Utf8 TestM.java #24 = NameAndType #9:#10 // "&lt;init&gt;":()V #25 = NameAndType #7:#8 // m:I #26 = Utf8 com/example/dodd/jvm/TestM #27 = NameAndType #16:#17 // inc:()I #28 = Utf8 java/lang/Object init和clinit init是实例化初始化方法。使用场景： 调用new初始化对象的时候 调用反射的时候newInstance() 调用clone方法的时候 ObjectInpustream.getObject()序列化的时候 clinit是类和接口的初始化。使用场景： 12345678910class Test&#123; static int m = 3;&#125;class Test&#123; static int m; static&#123; m = 3; &#125;&#125; 所有的类变量初始化语句和静态初始化语句都被java编译收集到一起，采用clinit初始化方式。采用javap命令查看字节码： 1234567891011// 类静态变量初始化后出现static &#123;&#125;; descriptor: ()V flags: ACC_STATIC Code: stack=1, locals=0, args_size=0 0: iconst_2 1: putstatic #3 // Field a:I 4: return LineNumberTable: line 10: 0 解读示例： 12345678910111213public com.example.dodd.jvm.TestM(); descriptor: ()V flags: ACC_PUBLIC Code: stack=1, locals=1, args_size=1 0: aload_0 1: invokespecial #1 // Method java/lang/Object."&lt;init&gt;":()V 4: return LineNumberTable: line 8: 0 LocalVariableTable: Start Length Slot Name Signature 0 5 0 this Lcom/example/dodd/jvm/TestM; 这是TestM的默认构造方法，首先通过invokespecial #1找到虚拟机的第一条指令#1。 第一步，到常量池中找#1常量（#1 = Methodref #6.#24） #6 指向Class_info的索引项（u2类型数据） #26 指向NameAndType的索引项（u2类型数据） 第二步，找#6号常量（#6号常量是Class：java/lang/Object） 第三步，找#24号常量（#9:#10） NameAndType的数据结构（u2：名称常量项的索引，u2：描述符常量项的索引） 第四步，#9对应\ 第五步，#10对应()V 至此，搜索的结果就是：V java/lang/Object.\&lt;init&gt;()。 ps：类名应该多长？不能超过256。 访问标志 字节码：00 21固定 0x0001|0x0020=0x0021，这就是为什么字节码是00 21。 类索引、父类索引、接口计数器、接口1、接口2… 字节码：00 03 00 06 00 00。 00 03代表#3常量索引：com/example/dodd/jvm/TestM 00 06代表#6常量索引：java/lang/Object 00 00代表有几个接口，当前是0个 … 如果有接口，后续字节码表示接口的索引项，如果该类没有实现任何接口，则计数器值为0，后面的接口索引表不再占用任何字节。 字段表集合 TestClass.class 关于方法表查找方法示例： 1.找到访问控制access_flag（00 01—&gt;public） 2.找到简单名字name_index（00 17 —&gt; inc） 3.找到描述符descriptor_index（00 18 —&gt;()I） 翻译过来：public int inc()。 4.找到attribute_count（00 01—&gt;代表有一个属性表） 5.对照属性表attribute_info(u2,u4,u1*length) 6.找到attribute_name_index（00 11—&gt;Code） 7.找到attribute_length（00 00 00 be—&gt;190个u1） max_stacks：方法的栈深。 max_locals：方法的本地变量数量。 args_size：方法的参数有多少个（默认是this（无参也是1），如果方法是static那么就是0）。 8.找到max_stacks最大栈深（00 01—&gt;1 max_stacks） 9.找到max_locals最大变量数（00 05—&gt; 5 max_locals） 10.找到code_length代码行数（00 00 00 18—&gt;24） 11.对应的字节码 参考JVM指令表 0x04：iconst_1 0x3c：istore_1 putstatic #3：b3 xx xx 12.异常表 123from to target0 4 8index:#2(java/lang/Exception) 如果没有异常表： debug断点的问题 错误日志没有行号 方法表集合 属性表集合 本地变量表（LocalVariableTable）： start+length：一个本地变量的作用域 slot：几个槽来存储 name：简单名字（变量名对应 ） signature：伪泛型，泛型擦除，对泛型的标识]]></content>
+      <categories>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[nginx架构总结]]></title>
     <url>%2F2020%2F04%2F05%2Fnginx%2Fnginx-summary%2F</url>
     <content type="text"><![CDATA[一、定义Nginx在服务体系中的角色 二、静态资源服务的功能设计 三、Nginx作为代理服务]]></content>
